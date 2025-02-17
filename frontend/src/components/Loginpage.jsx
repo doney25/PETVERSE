@@ -10,7 +10,8 @@ const LoginPage = ({ setUser }) => {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const { data } = await axios.post("http://localhost:5500/api/users/login", { email, password });
+            // Use correct backend port
+            const { data } = await axios.post("http://localhost:5500/api/users/login", { email, password }); 
             localStorage.setItem("token", data.token);
             // setUser(data.user);
             setSuccessMessage("Login successful!");
