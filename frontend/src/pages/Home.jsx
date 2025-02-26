@@ -1,8 +1,11 @@
+import Header from "@/components/Header";
 import React from "react";
 
 const Home = () => {
   return (
-    <div className="bg-gray-100 min-h-screen">
+    <>
+      <Header />
+      <div className="bg-gray-100 min-h-screen">
       {/* Hero Section */}
       <div className="bg-orange-500 text-white py-20 text-center">
         <h1 className="text-5xl font-bold">Find Your Perfect Pet Companion</h1>
@@ -43,6 +46,7 @@ const Home = () => {
         </button>
       </div>
     </div>
+    </>
   );
 };
 
