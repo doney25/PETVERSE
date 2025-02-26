@@ -16,7 +16,7 @@ const LoginPage = ({ setUser }) => {
         setSuccessMessage("");
 
         try {
-            const { data } = await axios.post("http://localhost:5500/api/users/login", { email, password });
+            const { data } = await axios.post("http://localhost:5173/api/users/login", { email, password });
             localStorage.setItem("token", data.token);
             setSuccessMessage("Login successful!");
             setUser(data.user);
@@ -78,3 +78,4 @@ const LoginPage = ({ setUser }) => {
 };
 
 export default LoginPage;
+ 

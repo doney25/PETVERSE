@@ -1,7 +1,8 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+
 import LoginPage from "./components/Loginpage";  // Ensure correct casing
 import SignupPage from "./components/SignupPage"; // Import Signup Page
+import Home from "./components/Homepage";
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <h1>Welcome to PETVERSE</h1>  {/* Add this to check if anything appears */}
       <LoginPage />
       <SignupPage/>
+      <Home/>
     </div>
   );
 }

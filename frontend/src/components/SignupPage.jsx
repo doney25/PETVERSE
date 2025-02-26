@@ -24,9 +24,10 @@ const SignupPage = () => {
         }
 
         try {
-            const { data } = await axios.post("http://localhost:5500/api/users/signup", { name, email, password });
+            const { data } = await axios.post("http://localhost:5501/api/users/signup", { name, email, password });
             setSuccessMessage("Signup successful! You can now log in.");
         } catch (err) {
+            console.log("Signup error:", err); // Debugging
             setError(err.response?.data?.error || "Signup failed");
         } finally {
             setLoading(false);

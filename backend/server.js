@@ -10,7 +10,7 @@ const app = express()
 //Middleware
 app.use(express.json())
 app.use(cors({
-    origin: 'http://localhost:5173',  
+    origin: 'http://localhost:5501',  
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true  
 }))
@@ -18,7 +18,7 @@ app.use('/pets', petRouter)
 app.use('/api/users', userRouter);
 dotenv.config();
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT ;
 
 //Routes
 app.get('/', (req, res) => {
