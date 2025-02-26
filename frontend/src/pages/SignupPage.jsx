@@ -1,27 +1,33 @@
 import { useState } from "react";
 import axios from "axios";
-import { Button } from "./ui/button";
+import { Button } from "../components/ui/button";
 
-const LoginPage = ({ setUser }) => {
+const SignupPage = () => {
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const handleLogin = async (e) => {
+    const handleSignup = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError("");
         setSuccessMessage("");
 
+        if (password !== confirmPassword) {
+            setError("Passwords do not match!");
+            setLoading(false);
+            return;
+        }
+
         try {
-            const { data } = await axios.post("http://localhost:5500/api/users/login", { email, password });
-            localStorage.setItem("token", data.token);
-            setSuccessMessage("Login successful!");
-            setUser(data.user);
+            const { data } = await axios.post("http://localhost:5500/api/users/signup", { name, email, password });
+            setSuccessMessage("Signup successful! You can now log in.");
         } catch (err) {
-            setError(err.response?.data?.error || "Login failed");
+            setError(err.response?.data?.error || "Signup failed");
         } finally {
             setLoading(false);
         }
@@ -30,12 +36,25 @@ const LoginPage = ({ setUser }) => {
     return (
         <div className="flex min-h-screen items-center justify-center bg-gray-100">
             <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg">
-                <h2 className="text-3xl font-bold text-center text-gray-800">Login</h2>
+                <h2 className="text-3xl font-bold text-center text-gray-800">Sign Up</h2>
+                <p className="text-gray-500 text-center mt-1">Create your PETVERSE account</p>
 
                 {error && <p className="text-red-500 text-sm mt-2 text-center">{error}</p>}
                 {successMessage && <p className="text-green-500 text-sm mt-2 text-center">{successMessage}</p>}
 
-                <form onSubmit={handleLogin} className="mt-6">
+                <form onSubmit={handleSignup} className="mt-6">
+                    <div className="mb-4">
+                        <label className="block text-gray-700 font-medium">Name</label>
+                        <input
+                            type="text"
+                            placeholder="Enter your name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                            className="w-full px-4 py-2 mt-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        />
+                    </div>
+
                     <div className="mb-4">
                         <label className="block text-gray-700 font-medium">Email</label>
                         <input
@@ -52,9 +71,21 @@ const LoginPage = ({ setUser }) => {
                         <label className="block text-gray-700 font-medium">Password</label>
                         <input
                             type="password"
-                            placeholder="Enter your password"
+                            placeholder="Create a password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            required
+                            className="w-full px-4 py-2 mt-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block text-gray-700 font-medium">Confirm Password</label>
+                        <input
+                            type="password"
+                            placeholder="Confirm your password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
                             required
                             className="w-full px-4 py-2 mt-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                         />
@@ -65,16 +96,16 @@ const LoginPage = ({ setUser }) => {
                         type="submit"
                         disabled={loading}
                     >
-                        {loading ? "Logging in..." : "Log In"}
+                        {loading ? "Signing up..." : "Sign Up"}
                     </Button>
                 </form>
 
                 <p className="text-center text-gray-500 mt-4">
-                    Don't have an account? <a href="/signup" className="text-blue-600 hover:underline">Sign up</a>
+                    Already have an account? <a href="/login" className="text-blue-600 hover:underline">Log in</a>
                 </p>
             </div>
         </div>
     );
 };
 
-export default LoginPage;
+export default SignupPage;
