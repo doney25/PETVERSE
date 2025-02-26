@@ -1,7 +1,7 @@
-import e from "express";
+import express from "express";
 import { createPet, updatePet, showPets, deletePet } from "../controllers/pets.controller.js";
 
-const router = e.Router()
+const router = express.Router()
 
 router.get('/',showPets)
 router.post('/',createPet)
