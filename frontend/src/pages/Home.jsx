@@ -23,7 +23,7 @@ const Home = () => {
           {[1, 2, 3].map((pet) => (
             <div key={pet} className="bg-white shadow-lg rounded-lg p-4">
               <img
-                src={`https://placekitten.com/300/200`} // Replace with real images
+                src={`https://img.freepik.com/free-photo/adorable-kittens-with-fuzzy-hair-sitting-white-surface-with-two-guinea-pigs_181624-43705.jpg?t=st=1740594919~exp=1740598519~hmac=7352bd4042997e1132ef92db7fdf78d424d09247fd54eaf26a35a6850024ca5b&w=1380`} // Replace with real images
                 alt="Pet"
                 className="w-full h-40 object-cover rounded-md"
               />

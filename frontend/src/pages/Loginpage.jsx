@@ -17,7 +17,7 @@ const LoginPage = ({ setUser }) => {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:5500/api/users/login",
+        "http://localhost:5501/api/users/login",
         { email, password }
       );
       localStorage.setItem("token", data.token);
@@ -90,4 +90,4 @@ const LoginPage = ({ setUser }) => {
   );
 };
 
-export default LoginPage;
+export default LoginPage; 

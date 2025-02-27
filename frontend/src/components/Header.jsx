@@ -60,7 +60,7 @@ export default function Header() {
           </a>
         </nav>
 
-        {/* Search Bar */}
+        {/* Buttons */}
         <div className="flex items-center space-x-4">
           {/* Cart Button */}
           <Button
