@@ -4,11 +4,11 @@ import User from "../models/user.model.js";
 
 //SignUp
 const signUp = async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
     try {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-        const newUser = new User({ name, email, password: hashedPassword });
+        const newUser = new User({ name, email, password: hashedPassword, role });
         await newUser.save();
         res.status(201).json({ message: "User registered successfully" });
     } catch (err) {
@@ -27,7 +27,7 @@ const login = async (req, res) => {
         if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        res.json({ token, user: { id: user._id, name: user.name, email: user.email } });
+        res.json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
