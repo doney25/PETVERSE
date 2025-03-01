@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Button } from "../components/ui/button";
 import { Link } from "react-router-dom";
+import { RadioGroup } from "@/components/ui/radio-group";
 
 const SignupPage = () => {
   const [name, setName] = useState("");
@@ -25,11 +26,18 @@ const SignupPage = () => {
       return;
     }
 
+    if (!role) {
+      setError("Please select a role.");
+      setLoading(false);
+      return;
+    }
+
     try {
       await axios.post("http://localhost:5501/api/users/signup", {
         name,
         email,
         password,
+        role
       });
       setSuccessMessage("Signup successful! You can now log in.");
     } catch (err) {
@@ -59,6 +67,42 @@ const SignupPage = () => {
         )}
 
         <form onSubmit={handleSignup} className="mt-6">
+          Who are you?
+          <RadioGroup
+            value={role}
+            onChange={(e) => {
+              setRole(e.target.value)}}
+            className="flex gap-4 w-full my-2"
+          >
+            <label
+              htmlFor="buyer"
+              className={`px-6 py-2 rounded-lg border cursor-pointer flex-1 text-center ${role === 'buyer' ? 'bg-blue-700 text-white' : 'bg-gray-200'}`}
+            >
+              Buyer
+              <input
+                type="radio"
+                id="buyer"
+                name="role"
+                value="buyer"
+                className="hidden"
+              />
+            </label>
+
+            <label
+              htmlFor="seller"
+              className={`px-6 py-2 rounded-lg border cursor-pointer flex-1 text-center ${role === 'seller' ? 'bg-blue-700 text-white' : 'bg-gray-200'}`}
+            >
+              Seller
+              <input
+                type="radio"
+                id="seller"
+                name="role"
+                value="seller"
+                className="hidden"
+              />
+            </label>
+          </RadioGroup>
+
           <div className="mb-4">
             <label className="block text-gray-700 font-medium">Name</label>
             <input
