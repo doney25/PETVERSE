@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; 
 import { Button } from "../components/ui/button";
 
 const LoginPage = ({ setUser }) => {
@@ -9,6 +10,7 @@ const LoginPage = ({ setUser }) => {
   const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const navigate = useNavigate();
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -23,6 +25,10 @@ const LoginPage = ({ setUser }) => {
       localStorage.setItem("token", data.token);
       setSuccessMessage("Login successful!");
       setError("");
+      setTimeout(() => {
+        navigate("/home");
+      }, 1000);
+      
     } catch (err) {
       setError(err.response?.data?.error || "Login failed");
       setSuccessMessage("");
