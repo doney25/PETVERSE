@@ -1,9 +1,18 @@
 import Header from "@/components/Header";
 import PetCard from "@/components/PetCard";
 import pets from "@/petsdata";
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate()
+  
+  useEffect(() => {
+    if (localStorage.getItem("userRole")) {
+      navigate('/dashboard')
+    }
+  }, [navigate])
+  
   return (
     <>
       <Header />

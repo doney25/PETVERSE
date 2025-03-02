@@ -37,15 +37,7 @@ const login = async (req, res) => {
         email: user.email,
         role: user.role,
       },
-    });
-
-    if (user.role === "buyer") {
-      res.redirect("/buyer-dashboard");
-    } else if (user.role === "seller") {
-      res.redirect("/seller-dashboard");
-    } else if (user.role === "admin") {
-      res.redirect("/admin-dashboard");
-    }
+    });    
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

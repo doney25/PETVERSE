@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; 
-import { Button } from "../components/ui/button";
+import { Button } from "@/components/ui/button";
 
 const LoginPage = ({ setUser }) => {
   const [email, setEmail] = useState("");
@@ -22,13 +22,12 @@ const LoginPage = ({ setUser }) => {
         "http://localhost:5501/api/users/login",
         { email, password }
       );
+      console.log(data)
       localStorage.setItem("token", data.token);
+      localStorage.setItem("userRole", data.user.role);
       setSuccessMessage("Login successful!");
       setError("");
-      setTimeout(() => {
-        navigate("/home");
-      }, 1000);
-      
+      navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.error || "Login failed");
       setSuccessMessage("");

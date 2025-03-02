@@ -28,8 +28,7 @@ io.on('connection', (socket) => {
   console.log('New client connected:', socket.id);
 
   socket.on('joinRoom', ({ buyerId, sellerId }) => {
-      const room = [buyerId, sellerId].sort().join('_'); // Unique room for buyer & seller
-      socket.join(room);
+      const room = [buyerId, sellerId].sort().join('_'); 
       console.log(`User joined room: ${room}`);
   });
 
