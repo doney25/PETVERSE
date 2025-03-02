@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const LoginPage = ({ setUser }) => {
@@ -24,6 +24,9 @@ const LoginPage = ({ setUser }) => {
       );
       localStorage.setItem("token", data.token);
       localStorage.setItem("userRole", data.user.role);
+      localStorage.setItem("user", JSON.stringify({ name: data.user.name }));
+
+      setUser(data.user.name);
       setSuccessMessage("Login successful!");
       setError("");
       navigate("/dashboard");
@@ -43,6 +46,7 @@ const LoginPage = ({ setUser }) => {
         {error && (
           <p className="text-red-500 text-sm mt-2 text-center">{error}</p>
         )}
+
         {successMessage && (
           <p className="text-green-500 text-sm mt-2 text-center">
             {successMessage}
@@ -94,4 +98,4 @@ const LoginPage = ({ setUser }) => {
   );
 };
 
-export default LoginPage; 
+export default LoginPage;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
 import {
   ShoppingCartIcon,
@@ -10,9 +10,24 @@ import { Link } from "react-router-dom";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [userName, setUserName] = useState(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUserName(JSON.parse(storedUser).name);
+    }
+  }, []);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    setUserName(null);
+    window.location.reload(); // Reload page to update state
   };
 
   return (
@@ -25,7 +40,7 @@ export default function Header() {
             onClick={toggleMenu}
           >
             {isMenuOpen ? (
-              <XIcon className="w-6 h-6" />
+              <XIcon className="w-10 h-6" />
             ) : (
               <MenuIcon className="w-6 h-6" />
             )}
@@ -33,15 +48,14 @@ export default function Header() {
         </div>
 
         {/* Logo Section */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center w-32 space-x-4">
           <Link to="/">
             <img
-              src="/logo.jpg" // Add your logo image here
+              src="/petverse logo 5.jpeg" // Add your logo image here
               alt="Petverse Logo"
-              className="h-10"
+              className="h-12 w-32 object-contain"
             />
           </Link>
-          {/* <span className="text-2xl font-bold text-gray-800">Petverse</span> */}
         </div>
 
         {/* Navigation Links */}
@@ -60,7 +74,7 @@ export default function Header() {
           </a>
         </nav>
 
-        {/* Buttons */}
+        {/* Right Section: Cart + Login/Logout */}
         <div className="flex items-center space-x-4">
           {/* Cart Button */}
           <Button
@@ -71,16 +85,31 @@ export default function Header() {
             <span>Cart</span>
           </Button>
 
-          <Link to="/login">
-            {/* Login Button */}
-            <Button
-              variant="primary"
-              className="flex items-center space-x-2 text-gray-600 hover:text-blue-500"
-            >
-              <LoginIcon className="w-5 h-5" />
-              <span>Log In</span>
-            </Button>
-          </Link>
+          {/* Login / User Info */}
+
+          {userName ? (
+            <div className="flex items-center space-x-4">
+              <span className="text-orange-500 font-semibold">{userName}</span>
+
+              <Button
+                onClick={handleLogout}
+                className="bg-red-500 text-white px-4 py-2 rounded-full"
+              >
+                Logout
+              </Button>
+            </div>
+          ) : (
+            <Link to="/login">
+              <Button
+                variant="primary"
+                className="flex items-center space-x-2 text-gray-600 hover:text-blue-500"
+              >
+                <LoginIcon className="w-5 h-5" />
+
+                <span>Log In</span>
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
 
@@ -104,12 +133,20 @@ export default function Header() {
           >
             About Us
           </a>
-          <a
-            href="#contact"
-            className="block py-2 text-gray-200 hover:text-blue-500"
-          >
-            Contact
-          </a>
+          {userName ? (
+            <button
+              onClick={handleLogout}
+              className="block w-full text-left py-2 text-gray-200 hover:text-red-500"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link to="/login">
+              <a className="block py-2 text-gray-200 hover:text-blue-500">
+                Login
+              </a>
+            </Link>
+          )}
           <a
             href="#contact"
             className="block py-2 text-gray-200 hover:text-blue-500"
