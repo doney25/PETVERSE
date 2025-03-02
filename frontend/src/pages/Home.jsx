@@ -19,9 +19,7 @@ const Home = () => {
         {/* Top Bar with User Button */}
         <div className="flex justify-between items-center px-6 py-4 bg-white shadow-md">
           <h1 className="text-2xl font-bold text-orange-500">PETVERSE</h1>
-          <button className="bg-orange-500 text-white px-4 py-2 rounded-full">
-            {userName}
-          </button>
+          
         </div>
 
         {/* Hero Section (Reduced Height) */}
