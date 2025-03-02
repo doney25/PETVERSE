@@ -26,11 +26,21 @@ const login = async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
 
+        // Create JWT token
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        res.json({ token, user: { id: user._id, name: user.name, email: user.email } });
-       // res.json({message:'login successful!',token});
+
+        // Return token and user data (including name)
+        res.json({ 
+            token, 
+            user: { 
+                id: user._id, 
+                name: user.name,  // ✅ User's name included 
+                email: user.email 
+            } 
+        });
+        
     } catch (err) {
-        res.status(500).json({message: err.message});
+        res.status(500).json({ message: err.message });
     }
 }
 

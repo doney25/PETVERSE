@@ -12,7 +12,7 @@ const PetDetails = () => {
 
   return (
     <div className="max-w-4xl mx-auto py-10">
-      <img src={pet.image} alt={pet.name} className="w-full h-80 object-cover rounded-md" />
+      <img src={pet.image} alt={pet.name} className="w-80 h-80 object-cover rounded-md" />
       <h1 className="text-4xl font-bold mt-4">{pet.name}</h1>
       <p className="text-gray-600 mt-2">Breed: {pet.breed}</p>
       <p className="mt-4">{pet.description}</p>
