@@ -50,7 +50,7 @@ app.get('/', (req, res) => {
 })
 
 //Connection to DB
-mongoose.connect(process.env.MONGO_URL)
+mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('Connection Successful.')
     app.listen(PORT, () => {

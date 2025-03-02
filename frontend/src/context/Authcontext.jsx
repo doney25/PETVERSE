@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
         const token = localStorage.getItem("token");
         if (token) {
             const decoded = jwtDecode(token);
-            axios.get("http://localhost:5500/api/users/profile", {
+            axios.get("http://localhost:5501/api/users/profile", {
                 headers: { Authorization: token },
             }).then(({ data }) => setUser(data))
               .catch(() => setUser(null));

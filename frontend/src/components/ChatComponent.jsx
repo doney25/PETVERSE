@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:5000"); // Adjust for production
+// const socket = io("http://localhost:5501"); // Adjust for production
 
 const ChatComponent = ({ buyerId, sellerId }) => {
     const [message, setMessage] = useState("");
