@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button } from "../components/ui/button";
+import { Button } from "../ui/button";
 import {
   ShoppingCartIcon,
   LoginIcon,
@@ -33,7 +33,6 @@ export default function Header() {
   return (
     <header className="bg-white shadow-md">
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-        {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center justify-start">
           <Button
             variant="outline"
@@ -52,7 +51,7 @@ export default function Header() {
         <div className="flex items-center w-32 space-x-4">
           <Link to="/">
             <img
-              src="/petverse logo 5.jpeg"
+              src="/petverse logo 5.jpeg" // Add your logo image here
               alt="Petverse Logo"
               className="h-12 w-32 object-contain"
             />
@@ -87,9 +86,11 @@ export default function Header() {
           </Button>
 
           {/* Login / User Info */}
+
           {userName ? (
             <div className="flex items-center space-x-4">
               <span className="text-orange-500 font-semibold">{userName}</span>
+
               <Button
                 onClick={handleLogout}
                 className="bg-red-500 text-white px-4 py-2 rounded-full"
@@ -104,6 +105,7 @@ export default function Header() {
                 className="flex items-center space-x-2 text-gray-600 hover:text-blue-500"
               >
                 <LoginIcon className="w-5 h-5" />
+
                 <span>Log In</span>
               </Button>
             </Link>
@@ -111,7 +113,6 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
       {isMenuOpen && (
         <div className="md:hidden bg-gray-800 dark:bg-gray-900 text-white py-4 px-6">
           <a
@@ -132,12 +133,6 @@ export default function Header() {
           >
             About Us
           </a>
-          <a
-            href="#contact"
-            className="block py-2 text-gray-200 hover:text-blue-500"
-          >
-            Contact
-          </a>
           {userName ? (
             <button
               onClick={handleLogout}
@@ -152,6 +147,12 @@ export default function Header() {
               </a>
             </Link>
           )}
+          <a
+            href="#contact"
+            className="block py-2 text-gray-200 hover:text-blue-500"
+          >
+            Login
+          </a>
         </div>
       )}
     </header>

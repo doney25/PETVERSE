@@ -9,7 +9,7 @@ const showPets = async (req, res) => {
       data: allPets
     })
   }catch (error){
-    res.status(500).send({message: err.message})
+    res.status(500).send({message: error.message})
   }
 }
 
@@ -30,7 +30,7 @@ const createPet = async (req, res) => {
     const newPet = await Pet.create(req.body)
     return res.status(201).send(newPet)
   }catch(error) {
-    res.status(500).send({message: err.message})
+    res.status(500).send({message: error.message})
   }
 }
 
@@ -56,7 +56,7 @@ const updatePet = async (req, res) => {
     return res.status(201).send({message: "Pet updated Successfully!"})
   }
   catch (error) {
-    res.status(500).send({message: err.message})
+    res.status(500).send({message: error.message})
   }
 }
 
@@ -70,7 +70,7 @@ const deletePet = async (req, res) => {
     }
     res.status(201).send({message: "Pet deleted Successfully!"})
   } catch(error) {
-    res.status(500).send({message: err.message})
+    res.status(500).send({message: error.message})
   }
 }
 

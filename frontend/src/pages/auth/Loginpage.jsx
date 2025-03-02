@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; 
-import { Button } from "../components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const LoginPage = ({ setUser }) => {
   const [email, setEmail] = useState("");
@@ -11,7 +11,6 @@ const LoginPage = ({ setUser }) => {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -23,21 +22,14 @@ const LoginPage = ({ setUser }) => {
         "http://localhost:5501/api/users/login",
         { email, password }
       );
-
-      // Store token and user name in localStorage
       localStorage.setItem("token", data.token);
+      localStorage.setItem("userRole", data.user.role);
       localStorage.setItem("user", JSON.stringify({ name: data.user.name }));
 
-      // Update state with user name (for navbar)
       setUser(data.user.name);
-
       setSuccessMessage("Login successful!");
       setError("");
-
-      setTimeout(() => {
-        navigate("/home");
-      }, 1000);
-      
+      navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.error || "Login failed");
       setSuccessMessage("");
@@ -51,8 +43,15 @@ const LoginPage = ({ setUser }) => {
       <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg">
         <h2 className="text-3xl font-bold text-center text-gray-800">Login</h2>
 
-        {error && <p className="text-red-500 text-sm mt-2 text-center">{error}</p>}
-        {successMessage && <p className="text-green-500 text-sm mt-2 text-center">{successMessage}</p>}
+        {error && (
+          <p className="text-red-500 text-sm mt-2 text-center">{error}</p>
+        )}
+
+        {successMessage && (
+          <p className="text-green-500 text-sm mt-2 text-center">
+            {successMessage}
+          </p>
+        )}
 
         <form onSubmit={handleLogin} className="mt-6">
           <div className="mb-4">

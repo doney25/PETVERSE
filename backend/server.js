@@ -28,8 +28,7 @@ io.on('connection', (socket) => {
   console.log('New client connected:', socket.id);
 
   socket.on('joinRoom', ({ buyerId, sellerId }) => {
-      const room = [buyerId, sellerId].sort().join('_'); // Unique room for buyer & seller
-      socket.join(room);
+      const room = [buyerId, sellerId].sort().join('_'); 
       console.log(`User joined room: ${room}`);
   });
 
@@ -50,7 +49,7 @@ app.get('/', (req, res) => {
 })
 
 //Connection to DB
-mongoose.connect(process.env.MONGO_URL)
+mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('Connection Successful.')
     app.listen(PORT, () => {
@@ -58,5 +57,5 @@ mongoose.connect(process.env.MONGO_URL)
     })
   })
   .catch((error) => {
-    console.log({message: err.message})
+    console.log({message: error.message})
   })
