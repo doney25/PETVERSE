@@ -18,7 +18,7 @@ const Pets = new mongoose.Schema(
       trim: true
     },
     age: {
-      type: Number,
+      type: String,
       required: true,
       min: 0
     },

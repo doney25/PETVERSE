@@ -22,7 +22,6 @@ const LoginPage = ({ setUser }) => {
         "http://localhost:5501/api/users/login",
         { email, password }
       );
-      console.log(data)
       localStorage.setItem("token", data.token);
       localStorage.setItem("userRole", data.user.role);
       setSuccessMessage("Login successful!");

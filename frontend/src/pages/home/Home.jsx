@@ -1,4 +1,4 @@
-import Header from "@/components/Header";
+import Header from "@/components/layout/Header";
 import PetCard from "@/components/PetCard";
 import pets from "@/petsdata";
 import React, { useEffect } from "react";
