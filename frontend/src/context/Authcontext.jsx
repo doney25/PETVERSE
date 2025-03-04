@@ -1,31 +1,23 @@
-import { createContext, useState, useEffect } from "react";
-import axios from "axios";
-import jwtDecode from "jwt-decode";
+import { createContext, useState } from "react";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);
+  const [role, setRole] = useState(null);
 
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            const decoded = jwtDecode(token);
-            axios.get("http://localhost:5501/api/users/profile", {
-                headers: { Authorization: token },
-            }).then(({ data }) => setUser(data))
-              .catch(() => setUser(null));
-        }
-    }, []);
+  const logout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("userRole");
+    setUser(null);
+    setRole(null);
+    // window.location.reload();
+  };
 
-    const logout = () => {
-        localStorage.removeItem("token");
-        setUser(null);
-    };
-
-    return (
-        <AuthContext.Provider value={{ user, setUser, logout }}>
-            {children}
-        </AuthContext.Provider>
-    );
+  return (
+    <AuthContext.Provider value={{ user, setUser, role, setRole, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };

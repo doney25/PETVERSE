@@ -1,20 +1,17 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useContext } from "react";
+import { AuthContext } from "@/context/Authcontext";
 
 const Admin = () => {
   const navigate = useNavigate();
-
-  const handleLogout = () => {
-    localStorage.removeItem("token"); // Remove authentication token
-    localStorage.removeItem("userRole"); // Remove role
-    navigate("/"); // Redirect to login page
-  };
+  const { logout } = useContext(AuthContext);
 
   return (
     <div className="p-6 flex flex-col items-center">
       <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
-      
+
       <div className="grid grid-cols-3 gap-6 w-full max-w-4xl">
         <Card>
           <CardHeader>
@@ -47,7 +44,14 @@ const Admin = () => {
         </Card>
       </div>
 
-      <Button className="mt-8" variant="destructive" onClick={handleLogout}>
+      <Button
+        className="mt-8"
+        variant="destructive"
+        onClick={async () => {
+          await logout();
+          navigate("/");
+        }}
+      >
         Logout
       </Button>
     </div>
