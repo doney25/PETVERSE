@@ -12,7 +12,7 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const { setUser, setRole } = useContext(AuthContext)
+  const { setUserName, setUserRole } = useContext(AuthContext)
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -26,14 +26,15 @@ const LoginPage = () => {
       );
       localStorage.setItem("token", data.token);
       localStorage.setItem("userRole", data.user.role);
-      localStorage.setItem("user", JSON.stringify({ name: data.user.name }));
+      localStorage.setItem("userName", data.user.name);
 
-      setUser(data.user.name);
-      setRole(data.user.role);
+      setUserName(data.user.name);
+      setUserRole(data.user.role);
       setSuccessMessage("Login successful!");
       setError("");
       navigate("/dashboard");
     } catch (err) {
+      console.log(err)
       setError(err.response?.data?.error || "Login failed");
       setSuccessMessage("");
     } finally {

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Buyer from "./Buyer";
 import Seller from "./Seller";
@@ -6,20 +6,24 @@ import Admin from "./Admin";
 import { AuthContext } from "@/context/Authcontext";
 
 const Dashboard = () => {
-  const { role } = useContext(AuthContext)
+  const { userRole, setUserRole } = useContext(AuthContext)
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!role) {
+    const storedRole = localStorage.getItem("userRole");
+    if (storedRole) {
+      setUserRole(storedRole);
+    }
+    if (!storedRole) {
       navigate("/login");
     }
-  }, [role, navigate]);
+  }, [userRole, navigate]);
 
   return (
     <>
-      {role === "buyer" && <Buyer />}
-      {role === "seller" && <Seller />}
-      {role === "admin" && <Admin />}
+      {userRole === "buyer" && <Buyer />}
+      {userRole === "seller" && <Seller />}
+      {userRole === "admin" && <Admin />}
     </>
   );
 };

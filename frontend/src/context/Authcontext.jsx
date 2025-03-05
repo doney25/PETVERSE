@@ -1,22 +1,30 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [role, setRole] = useState(null);
+  const [userName, setUserName] = useState(null);
+  const [userRole, setUserRole] = useState(null);
+
+  useEffect(() => {
+    const storedRole = localStorage.getItem("userRole");
+    const storedName = localStorage.getItem("userName");
+    if (storedRole || storedName) {
+      setUserRole(storedRole);
+      setUserName(storedName.name);
+    }
+  }, []);
 
   const logout = () => {
-    localStorage.removeItem("user");
+    localStorage.removeItem("userName");
     localStorage.removeItem("token");
     localStorage.removeItem("userRole");
-    setUser(null);
-    setRole(null);
-    // window.location.reload();
+    setUserName(null);
+    setUserRole(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, role, setRole, logout }}>
+    <AuthContext.Provider value={{ userName, setUserName, userRole, setUserRole, logout }}>
       {children}
     </AuthContext.Provider>
   );
