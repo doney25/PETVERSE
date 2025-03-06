@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 
-const AddPets = ({ isOpen, onClose }) => {
+const AddPets = () => {
   const [name, setName] = React.useState("")
   const [category, setCategory] = React.useState("")
   const [breed, setBreed] = React.useState("")
@@ -14,6 +14,8 @@ const AddPets = ({ isOpen, onClose }) => {
   const [price, setPrice] = React.useState("")
   const [description, setDescription] = React.useState("")
   const [image, setImage] = React.useState(null)
+  const [isOpen, setIsOpen] = useState(false)
+
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -41,7 +43,7 @@ const AddPets = ({ isOpen, onClose }) => {
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={() => {setIsOpen(true)}} onOpenChange={() => {setIsOpen(false)}} >
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add New Pet</DialogTitle>

@@ -11,6 +11,8 @@ import {
 import { Store } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "@/context/Authcontext";
+import ManagePets from "@/components/seller/ManagePets";
+import Home from "@/components/seller/Home";
 
 export default function Seller() {
   const [activeTab, setActiveTab] = useState("home");
@@ -52,7 +54,7 @@ export default function Seller() {
               onClick={() => handleTabChange("petListings")}
             >
               <ViewListIcon className="w-5 h-5 mr-2" />
-              Pet Listings
+              Manage Pet Listings
             </Button>
             <Button
               variant="outline"
@@ -106,8 +108,8 @@ export default function Seller() {
 
       {/* Main Content */}
       <div className="flex-1 p-8 bg-gray-100">
-        {activeTab === "home" && <div>Home Content</div>}
-        {activeTab === "petListings" && <div>Pet Listings Content</div>}
+        {activeTab === "home" && <Home /> }
+        {activeTab === "petListings" && <ManagePets/> }
         {activeTab === "orders" && <div>Orders Content</div>}
         {activeTab === "communication" && <div>Communication Content</div>}
         {activeTab === "petHealth" && <div>Pet Health Records Content</div>}

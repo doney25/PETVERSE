@@ -1,5 +1,5 @@
 import Header from "@/components/layout/Header";
-import PetCard from "@/components/PetCard";
+import PetCard from "@/components/layout/PetCard";
 import pets from "@/petsdata";
 import React, { useState } from "react";
 

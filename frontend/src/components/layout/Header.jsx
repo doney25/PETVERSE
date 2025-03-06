@@ -19,14 +19,7 @@ export default function Header() {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-
-  // useEffect(() => {
-  //   const storedName = localStorage.getItem("userName")
-  //   if (storedName) {
-  //     userName = storedName
-  //   }
-  // }, []);
-
+  
   return (
     <header className="bg-white shadow-md">
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
