@@ -1,57 +1,116 @@
-import { useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  ViewListIcon,
+  ClipboardIcon,
+  HeartIcon,
+  LogoutIcon,
+  HomeIcon,
+} from "@heroicons/react/outline";
+import { Shield, Bell } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "@/context/Authcontext";
 
-const Admin = () => {
+export default function Seller() {
+  const [activeTab, setActiveTab] = useState("home");
   const navigate = useNavigate();
+  const { logout } = useContext(AuthContext);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token"); // Remove authentication token
-    localStorage.removeItem("userRole"); // Remove role
-    navigate("/"); // Redirect to login page
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
   };
 
   return (
-    <div className="p-6 flex flex-col items-center">
-      <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
-      
-      <div className="grid grid-cols-3 gap-6 w-full max-w-4xl">
-        <Card>
-          <CardHeader>
-            <CardTitle>Manage Users</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>View, edit, and remove users from the system.</p>
-            <Button className="mt-4">Manage Users</Button>
-          </CardContent>
-        </Card>
+    <div className="flex">
+      {/* Sidebar */}
+      <div className="w-64 h-screen bg-gray-800 text-white p-6 flex flex-col">
+        <div className="flex-grow">
+          {/* Sidebar Header */}
+          <div className="flex items-center space-x-2 mb-3">
+            <Shield className="w-6 h-6 mb-3" />
+            <span className="text-lg font-semibold mb-3">Admin Dashboard</span>
+          </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Manage Sellers</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>Approve or reject seller registrations.</p>
-            <Button className="mt-4">Review Sellers</Button>
-          </CardContent>
-        </Card>
+          {/* Sidebar Menu */}
+          <div className="space-y-4">
+            <Button
+              variant="outline"
+              className={`w-full flex items-center justify-start text-black hover:bg-blue-500 hover:text-white transition-all duration-300 ${
+                activeTab === "home" ? "bg-blue-400" : ""
+              }`}
+              onClick={() => handleTabChange("home")}
+            >
+              <HomeIcon className="w-5 h-5 mr-2" />
+              Home
+            </Button>
+            <Button
+              variant="outline"
+              className={`w-full flex items-center justify-start text-black hover:bg-blue-500 hover:text-white transition-all duration-300 ${
+                activeTab === "petListings" ? "bg-blue-400" : ""
+              }`}
+              onClick={() => handleTabChange("petListings")}
+            >
+              <ViewListIcon className="w-5 h-5 mr-2" />
+              Pet Listings
+            </Button>
+            <Button
+              variant="outline"
+              className={`w-full flex items-center justify-start text-black hover:bg-blue-500 hover:text-white transition-all duration-300 ${
+                activeTab === "orders" ? "bg-blue-400" : ""
+              }`}
+              onClick={() => handleTabChange("orders")}
+            >
+              <ClipboardIcon className="w-5 h-5 mr-2" />
+              Orders
+            </Button>
+            <Button
+              variant="outline"
+              className={`w-full flex items-center justify-start text-black hover:bg-blue-500 hover:text-white transition-all duration-300 ${
+                activeTab === "notification" ? "bg-blue-400" : ""
+              }`}
+              onClick={() => handleTabChange("notification")}
+            >
+              <Bell className="w-5 h-5 mr-2" />
+              Notification
+            </Button>
+            <Button
+              variant="outline"
+              className={`w-full flex items-center justify-start text-black hover:bg-blue-500 hover:text-white transition-all duration-300 ${
+                activeTab === "petHealth" ? "bg-blue-400" : ""
+              }`}
+              onClick={() => handleTabChange("petHealth")}
+            >
+              <HeartIcon className="w-5 h-5 mr-2" />
+              Pet Health Records
+            </Button>
+          </div>
+        </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Site Analytics</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>View sales reports and website statistics.</p>
-            <Button className="mt-4">View Analytics</Button>
-          </CardContent>
-        </Card>
+        {/* Logout Button at the Bottom */}
+        <div className="mt-auto">
+          <Button
+            className="w-full flex items-center justify-start"
+            variant="destructive"
+            onClick={async () => {
+              // Assuming the logout function is properly defined
+              await logout();
+              navigate("/"); // Redirect to the home page or login
+            }}
+          >
+            <LogoutIcon className="w-5 h-5 mr-2" />
+            Logout
+          </Button>
+        </div>
       </div>
 
-      <Button className="mt-8" variant="destructive" onClick={handleLogout}>
-        Logout
-      </Button>
+      {/* Main Content */}
+      <div className="flex-1 p-8 bg-gray-100">
+        {activeTab === "home" && <div>Home Content</div>}
+        {activeTab === "petListings" && <div>Pet Listings Content</div>}
+        {activeTab === "orders" && <div>Orders Content</div>}
+        {activeTab === "notification" && <div>Notification Content</div>}
+        {activeTab === "petHealth" && <div>Pet Health Records Content</div>}
+      </div>
     </div>
   );
-};
-
-export default Admin;
+}

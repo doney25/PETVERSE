@@ -1,35 +1,25 @@
-import { useState, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Button } from "../ui/button";
 import {
   ShoppingCartIcon,
   LoginIcon,
+  LogoutIcon,
   XIcon,
   MenuIcon,
 } from "@heroicons/react/outline";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "@/context/Authcontext";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [userName, setUserName] = useState(null);
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUserName(JSON.parse(storedUser).name);
-    }
-  }, []);
+  const navigate = useNavigate();
+  const { logout } = useContext(AuthContext);
+  const userName = ""
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    setUserName(null);
-    window.location.reload(); // Reload page to update state
-  };
-
+  
   return (
     <header className="bg-white shadow-md">
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
@@ -87,14 +77,18 @@ export default function Header() {
 
           {/* Login / User Info */}
 
-          {userName ? (
+          {localStorage.getItem("userName") ? (
             <div className="flex items-center space-x-4">
-              <span className="text-orange-500 font-semibold">{userName}</span>
+              <span className="text-orange-500 font-semibold">{localStorage.getItem("userName")}</span>
 
               <Button
-                onClick={handleLogout}
+                onClick={async () => {
+                  await logout();
+                  navigate("/");
+                }}
                 className="bg-red-500 text-white px-4 py-2 rounded-full"
               >
+                <LogoutIcon />
                 Logout
               </Button>
             </div>
@@ -102,7 +96,7 @@ export default function Header() {
             <Link to="/login">
               <Button
                 variant="primary"
-                className="flex items-center space-x-2 text-gray-600 hover:text-blue-500"
+                className="bg-red-500 text-white px-4 py-2 rounded-full"
               >
                 <LoginIcon className="w-5 h-5" />
 
@@ -134,12 +128,15 @@ export default function Header() {
             About Us
           </a>
           {userName ? (
-            <button
-              onClick={handleLogout}
+            <Button
+              onClick={async () => {
+                await logout();
+                navigate("/");
+              }}
               className="block w-full text-left py-2 text-gray-200 hover:text-red-500"
             >
               Logout
-            </button>
+            </Button>
           ) : (
             <Link to="/login">
               <a className="block py-2 text-gray-200 hover:text-blue-500">
@@ -147,12 +144,6 @@ export default function Header() {
               </a>
             </Link>
           )}
-          <a
-            href="#contact"
-            className="block py-2 text-gray-200 hover:text-blue-500"
-          >
-            Login
-          </a>
         </div>
       )}
     </header>

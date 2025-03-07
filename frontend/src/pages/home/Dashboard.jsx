@@ -1,25 +1,23 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Buyer from "./Buyer";
 import Seller from "./Seller";
 import Admin from "./Admin";
+import { AuthContext } from "@/context/Authcontext";
 
 const Dashboard = () => {
-  const [userRole, setUserRole] = useState(null);
+  const { userRole, setUserRole } = useContext(AuthContext)
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch role from localStorage (or API if needed)
-    const role = localStorage.getItem("userRole");
-
-    if (!role) {
-      navigate("/login"); // Redirect if no role is found
-    } else {
-      setUserRole(role);
+    const storedRole = localStorage.getItem("userRole");
+    if (storedRole) {
+      setUserRole(storedRole);
     }
-  }, [navigate]);
-
-  if (!userRole) return <p>Loading...</p>;
+    if (!storedRole) {
+      navigate("/login");
+    }
+  }, [userRole, navigate]);
 
   return (
     <>

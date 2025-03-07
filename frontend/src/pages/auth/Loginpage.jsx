@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { AuthContext } from "@/context/Authcontext";
 
-const LoginPage = ({ setUser }) => {
+const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -11,6 +12,7 @@ const LoginPage = ({ setUser }) => {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const { setUserName, setUserRole } = useContext(AuthContext)
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -24,13 +26,15 @@ const LoginPage = ({ setUser }) => {
       );
       localStorage.setItem("token", data.token);
       localStorage.setItem("userRole", data.user.role);
-      localStorage.setItem("user", JSON.stringify({ name: data.user.name }));
+      localStorage.setItem("userName", data.user.name);
 
-      setUser(data.user.name);
+      setUserName(data.user.name);
+      setUserRole(data.user.role);
       setSuccessMessage("Login successful!");
       setError("");
       navigate("/dashboard");
     } catch (err) {
+      console.log(err)
       setError(err.response?.data?.error || "Login failed");
       setSuccessMessage("");
     } finally {

@@ -1,5 +1,5 @@
 import Header from "@/components/layout/Header";
-import PetCard from "@/components/PetCard";
+import PetCard from "@/components/layout/PetCard";
 import pets from "@/petsdata";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,6 @@ const Home = () => {
   const navigate = useNavigate();
 
   const [searchQuery, setSearchQuery] = useState("");
-  const userName = " "; // Replace this with the actual signed-in user's name
   // Filter pets based on the search query
   const filteredPets = pets.filter((pet) =>
     pet.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -24,15 +23,6 @@ const Home = () => {
     <>
       <Header />
       <div className="bg-gray-100 min-h-screen">
-        {/* Top Bar with User Button */}
-
-        <div className="flex justify-between items-center px-6 py-4 bg-white shadow-md">
-          <h1 className="text-2xl font-bold text-orange-500">PETVERSE</h1>
-
-          <button className="bg-orange-500 text-white px-4 py-2 rounded-full">
-            {userName}
-          </button>
-        </div>
 
         {/* Hero Section (Reduced Height) */}
 
