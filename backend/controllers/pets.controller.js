@@ -15,6 +15,7 @@ const showPets = async (req, res) => {
 
 //Create a pet
 const createPet = async (req, res) => {
+  console.log("Received data:", req.body);
   try{
     if(!req.body.name ||
       !req.body.category ||
@@ -25,7 +26,7 @@ const createPet = async (req, res) => {
       !req.body.image ||
       req.body.available === undefined
     ) {
-      return res.status(500).send({error: error.message})
+      return res.status(400).send({ error: "All fields are required" })
     }
     const newPet = await Pet.create(req.body)
     return res.status(201).send(newPet)
@@ -46,14 +47,14 @@ const updatePet = async (req, res) => {
       !req.body.image ||
       req.body.available === undefined
     ) {
-      return res.status(500).send({error: error.message})
+      return res.status(400).send({ error: "All fields are required" })
     }
     const {id} = req.params
-    const updated_pet = await Pet.findByIdAndUpdate(id, req.body)
+    const updated_pet = await Pet.findByIdAndUpdate(id, req.body, { new: true })
     if (!updated_pet) {
       return res.status(404).send({message: "Pet not found."})
     }
-    return res.status(201).send({message: "Pet updated Successfully!"})
+    return res.status(200).send({message: "Pet updated Successfully!"})
   }
   catch (error) {
     res.status(500).send({message: error.message})

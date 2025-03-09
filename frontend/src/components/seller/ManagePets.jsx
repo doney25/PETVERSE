@@ -5,6 +5,8 @@ import PetCard from "../layout/PetCard";
 const ManagePets = () => {
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(false);
+  const sellerId = localStorage.getItem("userId")
+  const filteredPets = pets.filter((pet) => String(pet.seller) === sellerId);
 
   useEffect(() => {
     setLoading(true);
@@ -23,7 +25,7 @@ const ManagePets = () => {
     <div className="p-6 space-y-6">
       <h2 className="text-2xl mb-3">Active Listings</h2>
       <div className="flex">
-        {pets.length === 0 ? (
+        {filteredPets.length === 0 ? (
           <h2>There are no Listings currently</h2>
         ) : (
           <PetCard pets={pets} />

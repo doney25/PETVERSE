@@ -10,9 +10,9 @@ const PetCard = ({ pets }) => {
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       { pets.map((pet) => {
         return (
-          <div key={pet.id} className="bg-white shadow-lg rounded-lg p-4">
+          <div key={pet._id} className="bg-white shadow-lg rounded-lg p-4">
             <img
-              src={pet.image}
+              src={`http://localhost:5501${pet.image[0]}`}
               alt={pet.name}
               className="w-full h-40 object-cover rounded-md"
             />
