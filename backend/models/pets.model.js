@@ -44,6 +44,10 @@ const Pets = new mongoose.Schema(
       type: String,
       required: true,
     },
+    sellerId: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,

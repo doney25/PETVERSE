@@ -48,6 +48,7 @@ export default function Home() {
   const handleSubmit = async () => {
     const uploadedImageUrls = await handleImageUpload();
     const sellerId = localStorage.getItem('userId')
+    const sellerName = localStorage.getItem('userName')
     const petData = {
       name,
       category,
@@ -57,7 +58,8 @@ export default function Home() {
       image: uploadedImageUrls,
       description,
       available: true,
-      seller: sellerId
+      sellerId: sellerId,
+      seller: sellerName
     };
     axios
       .post("http://localhost:5501/pets", petData)
