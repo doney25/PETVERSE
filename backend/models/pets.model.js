@@ -5,40 +5,51 @@ const Pets = new mongoose.Schema(
     name: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
-    category: { 
-      type: String, 
+    category: {
+      type: String,
       enum: ["dog", "cat", "bird", "other"],
-      default: "other"
+      default: "other",
     },
     breed: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     age: {
-      type: String,
+      type: Number,
       required: true,
-      min: 0
+      min: 0,
     },
     price: {
       type: Number,
       required: true,
-      min: 0
+      min: 0,
     },
     description: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     image: {
       type: String,
-      required: true
+      required: true,
     },
-    available: { 
-      type: Boolean, 
-      default: true 
+    available: {
+      type: Boolean,
+      default: true,
+    },
+    vaccinations: [
+      {
+        vaccineName: String,
+        dueDate: Date,
+        completed: { type: Boolean, default: false },
+      },
+    ],
+    buyerEmail: {
+      type: String,
+      trim: true, // Store buyer email for reminders
     },
   },
   {
@@ -46,4 +57,4 @@ const Pets = new mongoose.Schema(
   }
 );
 
-export const Pet = mongoose.model('pet', Pets)
+export const Pet = mongoose.model("Pet", Pets);

@@ -1,0 +1,8 @@
+PUT http://localhost:5501/api/pets/67cd65737dddfafcd3a510cb/vaccination
+Content-Type: application/json
+
+{
+  "vaccineName": "Rabies"
+}
+
+
