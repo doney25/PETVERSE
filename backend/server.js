@@ -11,7 +11,12 @@ import multer from 'multer'
 
 const app = express()
 const server = http.createServer(app);
-const io = new Server(server)
+const io = new Server(server, {
+  cors: {
+      origin: "http://localhost:5173",  // Ensure frontend is allowed
+      methods: ["GET", "POST"]
+  }
+});
 
 //Middleware
 app.use(express.json())
@@ -49,7 +54,7 @@ app.post('/uploadImage', upload.array('images', 10), (req, res) => {
   }
 });
 
-const PORT = process.env.PORT ;
+const PORT = process.env.PORT || 5500 ;
 
 io.on('connection', (socket) => {
   console.log('New client connected:', socket.id);

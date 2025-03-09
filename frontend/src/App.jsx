@@ -5,6 +5,7 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import Home from "./pages/home/Home";
 import ChatPage from "./components/ChatPage";
 import PetDetails from "./pages/PetDetails";
+import PurchasePage from "./pages/PurchasePage";
 import Dashboard from "./pages/home/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { Route, Routes } from "react-router-dom";
@@ -17,7 +18,8 @@ function App() {
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/pet-details/:id" element={<PetDetails />} />
       <Route path="/chat" element={<ChatPage />} />
-      <Route
+      <Route path="/purchase/:id" element={<PurchasePage />} />   
+        <Route
         path="/dashboard"
         element={
           <ProtectedRoute>

@@ -11,7 +11,7 @@ import { Shield, Bell } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "@/context/Authcontext";
 
-export default function Seller() {
+export default function admin() {
   const [activeTab, setActiveTab] = useState("home");
   const navigate = useNavigate();
   const { logout } = useContext(AuthContext);
