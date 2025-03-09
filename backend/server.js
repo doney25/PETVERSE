@@ -9,7 +9,12 @@ import { Server } from 'socket.io';
 
 const app = express()
 const server = http.createServer(app);
-const io = new Server(server)
+const io = new Server(server, {
+  cors: {
+      origin: "http://localhost:5173",  // Ensure frontend is allowed
+      methods: ["GET", "POST"]
+  }
+});
 
 //Middleware
 app.use(express.json())
@@ -22,7 +27,7 @@ app.use('/pets', petRouter)
 app.use('/api/users', userRouter);
 dotenv.config();
 
-const PORT = process.env.PORT ;
+const PORT = process.env.PORT || 5500 ;
 
 io.on('connection', (socket) => {
   console.log('New client connected:', socket.id);
