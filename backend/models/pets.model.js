@@ -6,24 +6,18 @@ const petSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      trim: true,
-      trim: true,
     },
     category: {
       type: String,
       enum: ["dog", "cat", "bird", "other"],
-      default: "other",
-      default: "other",
       default: "other",
     },
     breed: {
       type: String,
       required: true,
       trim: true,
-      trim: true,
     },
     age: {
-      type: Number,
       type: Number,
       required: true,
       min: 0,
@@ -81,9 +75,10 @@ const petSchema = new mongoose.Schema(
     buyerEmail: {
       type: String,
       trim: true, // Store buyer email for reminders
-    available: {
-      type: Boolean,
-      default: true,
+      available: {
+        type: Boolean,
+        default: true,
+      },
     },
   },
   { timestamps: true }
