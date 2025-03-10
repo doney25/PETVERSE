@@ -35,7 +35,6 @@ export default function Seller() {
         },
         body: JSON.stringify(petData),
       });
-      
 
       if (response.ok) {
         alert("Pet added successfully!");
@@ -59,7 +58,7 @@ export default function Seller() {
             <Store className="w-6 h-6 mb-3" />
             <span className="text-lg font-semibold mb-3">Seller Dashboard</span>
           </div>
-          
+
           {/* Sidebar Menu */}
           <div className="space-y-4">
             <Button
@@ -114,7 +113,7 @@ export default function Seller() {
             </Button>
           </div>
         </div>
-        
+
         {/* Logout Button at the Bottom */}
         <div className="mt-auto">
           <Button
@@ -130,7 +129,7 @@ export default function Seller() {
           </Button>
         </div>
       </div>
-       
+
       {/* Main Content */}
       <div className="flex-1 p-8 bg-gray-100">
         {activeTab === "home" && <Home />}
