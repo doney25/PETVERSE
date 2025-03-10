@@ -10,8 +10,6 @@ const petSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-    category: {
-      type: String,
       enum: ["dog", "cat", "bird", "other"],
       default: "other",
       default: "other",
