@@ -1,4 +1,4 @@
-import { Pet } from "../models/pets.model.js";
+import Pet  from "../models/pets.model.js";
 
 //Show all pets
 const showPets = async (req, res) => {

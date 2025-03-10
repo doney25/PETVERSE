@@ -1,12 +1,42 @@
-import Header from "@/components/layout/Header";
-import PetCard from "@/components/layout/PetCard";
-import pets from "@/petsdata";
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Header from "@/components/layout/Header";
+
 
 const Buyer = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [pets, setPets] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Fetch pets from backend API
+    const fetchPets = async () => {
+      try {
+        const response = await fetch("http://localhost:5501/pets/all");
+        if (!response.ok) {
+          throw new Error("Failed to fetch pets");
+        }
+        const data = await response.json();
+        setPets(data);
+      } catch (error) {
+        console.error("Error fetching pets:", error);
+      }
+    };
+
+    fetchPets();
+
+    // WebSocket connection for real-time updates
+    const socket = new WebSocket("ws://localhost:5500"); // Adjust WebSocket URL based on backend setup
+
+    socket.onmessage = (event) => {
+      const updatedPet = JSON.parse(event.data);
+      setPets((prevPets) => [updatedPet, ...prevPets]); // Add new pet at the top
+    };
+
+    return () => {
+      socket.close();
+    };
+  }, []);
 
   // Filter pets based on the search query
   const filteredPets = pets.filter((pet) =>
@@ -43,14 +73,14 @@ const Buyer = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {filteredPets.length > 0 ? (
               filteredPets.map((pet) => (
-                <div key={pet.id} className="bg-white p-4 shadow-lg rounded-lg text-center">
+                <div key={pet._id} className="bg-white p-4 shadow-lg rounded-lg text-center">
                   <img src={pet.image} alt={pet.name} className="w-full h-48 object-cover rounded-lg mb-4" />
                   <h2 className="text-xl font-semibold">{pet.name}</h2>
                   <p className="text-gray-600">{pet.breed}</p>
                   <p className="text-gray-500 mt-2">{pet.description}</p>
                   <button 
                     className="mt-4 bg-orange-500 text-white py-2 px-6 rounded-full shadow-md hover:bg-orange-600"
-                    onClick={() => navigate(`/checkout/${pet.id}`)}
+                    onClick={() => navigate(`/checkout/${pet._id}`)}
                   >
                     Buy Now
                   </button>

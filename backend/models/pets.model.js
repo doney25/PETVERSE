@@ -1,57 +1,73 @@
 import mongoose from "mongoose";
 
-const Pets = new mongoose.Schema(
+const petSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
+      trim: true,
       trim: true,
     },
     category: {
       type: String,
       enum: ["dog", "cat", "bird", "other"],
       default: "other",
+      default: "other",
     },
     breed: {
       type: String,
       required: true,
       trim: true,
+      trim: true,
     },
     age: {
-      type: String,
-      required: true,
-      min: 0,
-    },
-    price: {
       type: Number,
       required: true,
       min: 0,
+    },
+    color: {
+      type: String,
+      required: true,
+      trim: true,
     },
     description: {
       type: String,
       required: true,
       trim: true,
     },
-    image: {
-      type: [String],
+    price: {
+      type: Number,
       required: true,
+      min: 0,
+    },
+    image: {
+      type: String,
+      required: true,
+    },
+    sellerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User", // Assuming you have a User model
+    },
+    location: {
+      type: String,
+      required: true,
+    },
+    dateListed: {
+      type: Date,
+      default: Date.now,
+    },
+    status: {
+      type: String,
+      default: "Available",
     },
     available: {
       type: Boolean,
       default: true,
     },
-    seller: {
-      type: String,
-      required: true,
-    },
-    sellerId: {
-      type: String,
-      required: true,
-    },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-export const Pet = mongoose.model("pet", Pets);
+const Pet = mongoose.model("Pet", petSchema);
+export default Pet;
