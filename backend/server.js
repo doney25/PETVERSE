@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import cors from "cors";
+import cors from "cors";;
 import dotenv from "dotenv";
 import http from "http";
 import { Server } from "socket.io";
@@ -10,6 +10,8 @@ import userRouter from "./routes/user.route.js";
 import "./services/vaccination.service.js"; // ✅ Import vaccination reminder service
 
 dotenv.config(); // ✅ Ensure .env variables are loaded before usage
+import path from "path";
+import multer from 'multer'
 
 const app = express();
 const server = http.createServer(app);

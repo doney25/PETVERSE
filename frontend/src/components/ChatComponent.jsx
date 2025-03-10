@@ -1,15 +1,20 @@
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
-// const socket = io("http://localhost:5501"); // Adjust for production
+// Connect to backend socket server
+const socket = io("http://localhost:5501");  
 
-const ChatComponent = ({ buyerId, sellerId }) => {
+const ChatComponent = ({ transactionId, buyerId, sellerId }) => {
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState([]);
 
     useEffect(() => {
-        socket.emit("joinRoom", { buyerId, sellerId });
+        if (!transactionId) return;
 
+        // Join chat room
+        socket.emit("joinRoom", { transactionId });
+
+        // Listen for incoming messages
         socket.on("receiveMessage", (data) => {
             setMessages((prevMessages) => [...prevMessages, data]);
         });
@@ -17,12 +22,14 @@ const ChatComponent = ({ buyerId, sellerId }) => {
         return () => {
             socket.off("receiveMessage");
         };
-    }, [buyerId, sellerId]);
+    }, [transactionId]);
 
     const sendMessage = () => {
         if (message.trim() !== "") {
-            socket.emit("sendMessage", { buyerId, sellerId, message });
-            setMessages([...messages, { sender: buyerId, message }]);
+            const newMessage = { sender: buyerId, message };
+
+            socket.emit("sendMessage", { transactionId, ...newMessage });
+            setMessages((prevMessages) => [...prevMessages, newMessage]);
             setMessage("");
         }
     };

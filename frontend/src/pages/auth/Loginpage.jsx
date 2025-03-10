@@ -24,6 +24,7 @@ const LoginPage = () => {
         "http://localhost:5501/api/users/login",
         { email, password }
       );
+      localStorage.setItem("userId", data.user.id);
       localStorage.setItem("token", data.token);
       localStorage.setItem("userRole", data.user.role);
       localStorage.setItem("userName", data.user.name);

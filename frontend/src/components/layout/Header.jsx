@@ -69,7 +69,7 @@ export default function Header() {
           {/* Cart Button */}
           <Button
             variant="outline"
-            className="hidden md:flex sm:hidden flex items-center space-x-2 text-gray-600 hover:text-blue-500"
+            className="md:flex sm:hidden flex items-center space-x-2 text-gray-600 hover:text-blue-500"
           >
             <ShoppingCartIcon className="w-5 h-5" />
             <span>Cart</span>

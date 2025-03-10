@@ -13,6 +13,9 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "@/context/Authcontext";
 import ManagePets from "@/components/seller/ManagePets";
 import Home from "@/components/seller/Home";
+import io from "socket.io-client";
+
+const socket = io("http://localhost:5501");
 
 export default function Seller() {
   const [activeTab, setActiveTab] = useState("home");
@@ -21,6 +24,28 @@ export default function Seller() {
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
+  };
+
+  const handleAddPet = async (petData) => {
+    try {
+      const response = await fetch("http://localhost:5501/pets", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(petData),
+      });
+
+      if (response.ok) {
+        alert("Pet added successfully!");
+        const newPet = await response.json();
+        socket.emit("newPetAdded", newPet); // Notify buyers about the new pet
+      } else {
+        alert("Failed to add pet.");
+      }
+    } catch (error) {
+      console.error("Error adding pet:", error);
+    }
   };
 
   return (
@@ -95,9 +120,8 @@ export default function Seller() {
             className="w-full flex items-center justify-start"
             variant="destructive"
             onClick={async () => {
-              // Assuming the logout function is properly defined
               await logout();
-              navigate("/"); // Redirect to the home page or login
+              navigate("/");
             }}
           >
             <LogoutIcon className="w-5 h-5 mr-2" />
@@ -108,8 +132,8 @@ export default function Seller() {
 
       {/* Main Content */}
       <div className="flex-1 p-8 bg-gray-100">
-        {activeTab === "home" && <Home /> }
-        {activeTab === "petListings" && <ManagePets/> }
+        {activeTab === "home" && <Home />}
+        {activeTab === "petListings" && <ManagePets onAddPet={handleAddPet} />}
         {activeTab === "orders" && <div>Orders Content</div>}
         {activeTab === "communication" && <div>Communication Content</div>}
         {activeTab === "petHealth" && <div>Pet Health Records Content</div>}

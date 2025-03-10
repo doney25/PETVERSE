@@ -1,4 +1,4 @@
-import { Pet } from "../models/pets.model.js"; 
+import Pet  from "../models/pets.model.js";
 
 // Show all pets
 const showPets = async (req, res) => {
@@ -26,7 +26,7 @@ const createPet = async (req, res) => {
       !req.body.image ||
       req.body.available === undefined
     ) {
-      return res.status(400).json({ error: "All fields are required" });
+      return res.status(400).send({ error: "All fields are required" })
     }
     const newPet = await Pet.create(req.body);
     return res.status(201).json(newPet);
@@ -48,16 +48,16 @@ const updatePet = async (req, res) => {
       !req.body.image ||
       req.body.available === undefined
     ) {
-      return res.status(400).json({ error: "All fields are required" });
+      return res.status(400).send({ error: "All fields are required" })
     }
-    const { id } = req.params;
-    const updated_pet = await Pet.findByIdAndUpdate(id, req.body, { new: true });
+    const {id} = req.params
+    const updated_pet = await Pet.findByIdAndUpdate(id, req.body, { new: true })
     if (!updated_pet) {
       return res.status(404).json({ message: "Pet not found." });
     }
-    return res.status(200).json({ message: "Pet updated successfully!", pet: updated_pet });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(200).send({message: "Pet updated Successfully!"})
+  }catch (error) {
+    res.status(500).json({ message: "Error updating vaccination status", error: error.message });
   }
 };
 
