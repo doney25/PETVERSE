@@ -6,15 +6,20 @@ const petSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
+      trim: true,
     },
     category: {
       type: String,
+    category: {
+      type: String,
       enum: ["dog", "cat", "bird", "other"],
+      default: "other",
       default: "other",
     },
     breed: {
       type: String,
       required: true,
+      trim: true,
       trim: true,
     },
     age: {

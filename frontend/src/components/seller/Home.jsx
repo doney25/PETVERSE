@@ -22,19 +22,48 @@ export default function Home() {
   const [image, setImages] = useState([]);
   const [description, setDescription] = useState("");
 
-  const handleSubmit = () => {
+  const handleImageUpload = async () => {
+    try {
+      const formData = new FormData();
+      for (let i = 0; i < image.length; i++) {
+        formData.append("images", image[i]);
+      }
+      const response = await axios.post(
+        "http://localhost:5501/uploadImage",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      return response.data.imageUrls; // Get image URLs (paths)
+    } catch (error) {
+      console.error("Image upload failed:", error);
+      return [];
+    }
+  };
+
+  const handleSubmit = async () => {
+    const uploadedImageUrls = await handleImageUpload();
+    const sellerId = localStorage.getItem('userId')
+    const sellerName = localStorage.getItem('userName')
     const petData = {
       name,
       category,
       breed,
       age,
       price,
-      image,
+      image: uploadedImageUrls,
       description,
+      available: true,
+      sellerId: sellerId,
+      seller: sellerName
     };
     axios
-      .post("http://localhost:5501/createPet", petData)
-      .then(console.log("Pet Listed Sucessfully"))
+      .post("http://localhost:5501/pets", petData)
+      .then(() => alert("Pet Listed Sucessfully"))
       .catch((error) => {
         console.log(error);
       });
@@ -74,7 +103,7 @@ export default function Home() {
             />
             <Input
               placeholder="Age"
-              type="number"
+              type="string"
               onChange={(e) => setAge(e.target.value)}
             />
             <Input
@@ -86,7 +115,7 @@ export default function Home() {
               type="file"
               multiple
               accept="image/*"
-              onChange={(e) => setImages([...e.target.files])}
+              onChange={(e) => setImages(Array.from(e.target.files))}
             />
             <Textarea
               placeholder="Short Description"
