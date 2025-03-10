@@ -6,18 +6,15 @@ const petSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      trim: true,
     },
     category: {
       type: String,
       enum: ["dog", "cat", "bird", "other"],
       default: "other",
-      default: "other",
     },
     breed: {
       type: String,
       required: true,
-      trim: true,
       trim: true,
     },
     age: {
@@ -33,10 +30,11 @@ const petSchema = new mongoose.Schema(
     description: {
       type: String,
       required: true,
+      min: 0,
       trim: true,
     },
-    price: {
-      type: Number,
+    color: {
+      type: String,
       required: true,
       min: 0,
     },
@@ -52,6 +50,7 @@ const petSchema = new mongoose.Schema(
     location: {
       type: String,
       required: true,
+      trim: true,
     },
     dateListed: {
       type: Date,
@@ -59,11 +58,27 @@ const petSchema = new mongoose.Schema(
     },
     status: {
       type: String,
+      required: true,
       default: "Available",
     },
     available: {
       type: Boolean,
       default: true,
+    },
+    vaccinations: [
+      {
+        vaccineName: String,
+        dueDate: Date,
+        completed: { type: Boolean, default: false },
+      },
+    ],
+    buyerEmail: {
+      type: String,
+      trim: true, // Store buyer email for reminders
+      available: {
+        type: Boolean,
+        default: true,
+      },
     },
   },
   { timestamps: true }

@@ -1,69 +1,44 @@
 import express from "express";
 import mongoose from "mongoose";
-import cors from "cors";
-import petRouter from "./routes/pets.route.js";
-import userRouter from "./routes/user.route.js"
-import dotenv from 'dotenv';
-import http from 'http';
-import { Server } from 'socket.io';
+import cors from "cors";;
+import dotenv from "dotenv";
+import http from "http";
+import { Server } from "socket.io";
+
+import petRouter from "./routes/pets.route.js"; // ✅ Ensure correct import
+import userRouter from "./routes/user.route.js";
+import "./services/vaccination.service.js"; // ✅ Import vaccination reminder service
+
+dotenv.config(); // ✅ Ensure .env variables are loaded before usage
 import path from "path";
 import multer from 'multer'
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
+const io = new Server(server);
+
+// Middleware
+app.use(express.json());
+app.use(
+  cors({
     origin: "http://localhost:5173",
-    methods: ["GET", "POST"],
-  },
-});
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
-//Middleware
-app.use(express.json())
-app.use(cors())
-// app.use(cors({
-//     origin: 'http://localhost:5173',  
-//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//     credentials: true  
-// }))
-app.use('/pets', petRouter)
-app.use('/api/users', userRouter);
-app.use('/uploads', express.static('uploads'));
-dotenv.config();
+//  Use API Routes
+app.use("/api/pets", petRouter); // Corrected route path
+app.use("/api/users", userRouter);
 
-//multer storage engine for images
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Store images in the 'uploads' folder
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Use a unique filename
-  },
-});
+const PORT = process.env.PORT || 5501; //  Fallback port if .env is missing
 
-const upload = multer({ storage: storage });
-
-
-// Image upload route
-app.post('/uploadImage', upload.array('images', 10), (req, res) => {
-  if (req.files && req.files.length > 0) {
-    const imageUrls = req.files.map(file => `/uploads/${file.filename}`); // Store relative path
-    res.json({ imageUrls });
-  } else {
-    res.status(400).json({ message: 'No image files uploaded' });
-  }
-});
-
-const PORT = process.env.PORT || 5500 ;
-
-// Socket.IO for live chat and pet updates
+// WebSocket for Chat Functionality
 io.on("connection", (socket) => {
   console.log("New client connected:", socket.id);
 
-  // Room-based chat connection
   socket.on("joinRoom", ({ buyerId, sellerId }) => {
     const room = [buyerId, sellerId].sort().join("_");
-    socket.join(room);
     console.log(`User joined room: ${room}`);
   });
 
@@ -73,18 +48,12 @@ io.on("connection", (socket) => {
     console.log(`Message sent to ${room}:`, message);
   });
 
-  // Listen for pet listings and update buyers in real-time
-  socket.on("newPetListed", (pet) => {
-    io.emit("updatePetList", pet);
-    console.log("New pet listed:", pet);
-  });
-
   socket.on("disconnect", () => {
     console.log("Client disconnected:", socket.id);
   });
 });
 
-// Default Route
+// Base Route
 app.get("/", (req, res) => {
   return res.status(201).send("Welcome to Petverse");
 });
