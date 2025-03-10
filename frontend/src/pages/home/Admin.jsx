@@ -10,6 +10,7 @@ import {
 import { Shield, Bell } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "@/context/Authcontext";
+import PetListings from '@/components/admin/PetListings'
 
 export default function admin() {
   const [activeTab, setActiveTab] = useState("home");
@@ -106,7 +107,7 @@ export default function admin() {
       {/* Main Content */}
       <div className="flex-1 p-8 bg-gray-100">
         {activeTab === "home" && <div>Home Content</div>}
-        {activeTab === "petListings" && <div>Pet Listings Content</div>}
+        {activeTab === "petListings" && <PetListings />}
         {activeTab === "orders" && <div>Orders Content</div>}
         {activeTab === "notification" && <div>Notification Content</div>}
         {activeTab === "petHealth" && <div>Pet Health Records Content</div>}

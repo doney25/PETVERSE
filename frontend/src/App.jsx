@@ -18,8 +18,8 @@ function App() {
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/pet-details/:id" element={<PetDetails />} />
       <Route path="/chat" element={<ChatPage />} />
-      <Route path="/purchase/:id" element={<PurchasePage />} />   
-        <Route
+      <Route path="/purchase/:id" element={<PurchasePage />} />
+      <Route
         path="/dashboard"
         element={
           <ProtectedRoute>
