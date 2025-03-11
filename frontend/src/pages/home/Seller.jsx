@@ -11,9 +11,10 @@ import {
 import { Store } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "@/context/Authcontext";
-import ManagePets from "@/components/seller/ManagePets";
-import Home from "@/components/seller/Home";
+import ManagePets from "@/pages/seller/ManagePets";
+import Home from "@/pages/seller/Home";
 import io from "socket.io-client";
+import ChatComponent from "@/components/ChatComponent";
 
 const socket = io("http://localhost:5501");
 
@@ -26,32 +27,10 @@ export default function Seller() {
     setActiveTab(tab);
   };
 
-  const handleAddPet = async (petData) => {
-    try {
-      const response = await fetch("http://localhost:5501/pets", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(petData),
-      });
-
-      if (response.ok) {
-        alert("Pet added successfully!");
-        const newPet = await response.json();
-        socket.emit("newPetAdded", newPet); // Notify buyers about the new pet
-      } else {
-        alert("Failed to add pet.");
-      }
-    } catch (error) {
-      console.error("Error adding pet:", error);
-    }
-  };
-
   return (
     <div className="flex">
       {/* Sidebar */}
-      <div className="w-64 h-screen bg-gray-800 text-white p-6 flex flex-col">
+      <div className="w-64 h-screen bg-gray-800 text-white p-6 flex flex-col fixed top-0 left-0 z-10">
         <div className="flex-grow">
           {/* Sidebar Header */}
           <div className="flex items-center space-x-2 mb-3">
@@ -94,9 +73,9 @@ export default function Seller() {
             <Button
               variant="outline"
               className={`w-full flex items-center justify-start text-black hover:bg-blue-500 hover:text-white transition-all duration-300 ${
-                activeTab === "communication" ? "bg-blue-400" : ""
+                activeTab === "chats" ? "bg-blue-400" : ""
               }`}
-              onClick={() => handleTabChange("communication")}
+              onClick={() => handleTabChange("chats")}
             >
               <ChatIcon className="w-5 h-5 mr-2" />
               Chats
@@ -131,11 +110,11 @@ export default function Seller() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-8 bg-gray-100">
+      <div className="flex-1 p-8 ml-64 bg-gray-100 overflow-y-auto">
         {activeTab === "home" && <Home />}
-        {activeTab === "petListings" && <ManagePets onAddPet={handleAddPet} />}
+        {activeTab === "petListings" && <ManagePets />}
         {activeTab === "orders" && <div>Orders Content</div>}
-        {activeTab === "communication" && <div>Communication Content</div>}
+        {activeTab === "chats" && <ChatComponent />}
         {activeTab === "petHealth" && <div>Pet Health Records Content</div>}
       </div>
     </div>

@@ -18,6 +18,11 @@ const petSchema = new mongoose.Schema(
       trim: true,
     },
     age: {
+      type: String,
+      required: true,
+      min: 0,
+    },
+    price: {
       type: Number,
       required: true,
       min: 0,
@@ -33,19 +38,17 @@ const petSchema = new mongoose.Schema(
       min: 0,
       trim: true,
     },
-    color: {
-      type: String,
-      required: true,
-      min: 0,
-    },
     image: {
-      type: String,
+      type: [String],
       required: true,
     },
     sellerId: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "User", // Assuming you have a User model
+      type: String,
+      required: true
+    },
+    seller: {
+      type: String,
+      required: true
     },
     location: {
       type: String,
@@ -60,10 +63,6 @@ const petSchema = new mongoose.Schema(
       type: String,
       required: true,
       default: "Available",
-    },
-    available: {
-      type: Boolean,
-      default: true,
     },
     vaccinations: [
       {
