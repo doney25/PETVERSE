@@ -15,6 +15,7 @@ const showPets = async (req, res) => {
 
 // Create a pet
 const createPet = async (req, res) => {
+  console.log(req)
   try {
     if (
       !req.body.name ||

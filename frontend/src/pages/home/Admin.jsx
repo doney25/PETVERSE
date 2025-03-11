@@ -10,7 +10,7 @@ import {
 import { Shield, Bell } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "@/context/Authcontext";
-import PetListings from '@/components/admin/PetListings'
+import PetListings from '@/pages/admin/PetListings'
 
 export default function admin() {
   const [activeTab, setActiveTab] = useState("home");
@@ -24,7 +24,7 @@ export default function admin() {
   return (
     <div className="flex">
       {/* Sidebar */}
-      <div className="w-64 h-screen bg-gray-800 text-white p-6 flex flex-col">
+      <div className="w-64 h-screen bg-gray-800 text-white p-6 flex flex-col fixed top-0 left-0 z-10">
         <div className="flex-grow">
           {/* Sidebar Header */}
           <div className="flex items-center space-x-2 mb-3">
@@ -105,7 +105,7 @@ export default function admin() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-8 bg-gray-100">
+      <div className="flex-1 p-8 ml-64 bg-gray-100 overflow-y-auto">
         {activeTab === "home" && <div>Home Content</div>}
         {activeTab === "petListings" && <PetListings />}
         {activeTab === "orders" && <div>Orders Content</div>}

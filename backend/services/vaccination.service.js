@@ -1,6 +1,6 @@
 import cron from "node-cron"; // Use import instead of require
 import nodemailer from "nodemailer"; // Use import instead of require
-import {Pet} from "../models/pets.model.js"; // Now correctly importing the default export
+import Pet from "../models/pets.model.js"; // Now correctly importing the default export
 
 
 // Configure email sender
