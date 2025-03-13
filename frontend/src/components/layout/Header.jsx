@@ -1,25 +1,34 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import { Button } from "../ui/button";
+import { LogOut, UserCog, MessageCircle } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 import {
   ShoppingCartIcon,
   LoginIcon,
-  LogoutIcon,
   XIcon,
   MenuIcon,
 } from "@heroicons/react/outline";
 import { Link, useNavigate } from "react-router-dom";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { AuthContext } from "@/context/Authcontext";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { logout } = useContext(AuthContext);
-  const userName = ""
+  const userName = localStorage.getItem("userName");
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-  
+
   return (
     <header className="bg-white shadow-md">
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
@@ -77,20 +86,40 @@ export default function Header() {
 
           {/* Login / User Info */}
 
-          {localStorage.getItem("userName") ? (
+          {userName ? (
             <div className="flex items-center space-x-4">
-              <span className="text-orange-500 font-semibold">{localStorage.getItem("userName")}</span>
-
-              <Button
-                onClick={async () => {
-                  await logout();
-                  navigate("/");
-                }}
-                className="bg-red-500 text-white px-4 py-2 rounded-full"
-              >
-                <LogoutIcon />
-                Logout
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Avatar className="bg-black">
+                    <AvatarImage src="/cat.png" />
+                    <AvatarFallback className="bg-black text-white font-extrabold">
+                      {userName.toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent side="right" className="w-56">
+                  <DropdownMenuLabel>Logged in as {userName}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate("/shop/account")}>
+                    <UserCog className="mr-2 h-4 w-4" />
+                    Account
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/shop/chat")}>
+                    <MessageCircle className="mr-2 h-4 w-4" />
+                    Messages
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={async () => {
+                      await logout()
+                      navigate("/");
+                    }}
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           ) : (
             <Link to="/login">
@@ -127,17 +156,7 @@ export default function Header() {
           >
             About Us
           </a>
-          {userName ? (
-            <Button
-              onClick={async () => {
-                await logout();
-                navigate("/");
-              }}
-              className="block w-full text-left py-2 text-gray-200 hover:text-red-500"
-            >
-              Logout
-            </Button>
-          ) : (
+          {userName ? null : (
             <Link to="/login">
               <a className="block py-2 text-gray-200 hover:text-blue-500">
                 Login
