@@ -23,6 +23,7 @@ const Dashboard = () => {
     <>
       {userRole === "seller" && <Seller />}
       {userRole === "admin" && <Admin />}
+      {userRole === "buyer" && "Unauthorised User"}
     </>
   );
 };

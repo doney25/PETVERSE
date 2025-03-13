@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "@/components/layout/Header";
 import axios from "axios";
+import CarouselList from "@/components/buyer/CarouselList";
+import Section from "@/components/buyer/Section";
+import { Dog, CatIcon, Bird, LucideMinus, Bone, Scissors, FishIcon, Shapes } from "lucide-react";
 
 const Buyer = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -41,9 +44,57 @@ const Buyer = () => {
     pet.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const petCategoriesWithIcon = [
+    { id: "dog", label: "Dog", icon: Dog },
+    { id: "cat", label: "Cat", icon: CatIcon },
+    { id: "birds", label: "Birds", icon: Bird },
+    { id: "other", label: "Other", icon: LucideMinus }
+  ];
+
+  const productsCategoriesWithIcon = [
+    { id: "dogfood", label: "Dog Food", icon: Bone },
+    { id: "catfood", label: "Cat Food", icon: FishIcon },
+    { id: "grooming", label: "Grooming", icon: Scissors },
+    { id: "toys", label: "Toys", icon: Shapes }
+  ];
+
+  function handleNavigateToListingPage(getCurrentItem, section) {
+    sessionStorage.removeItem("filters");
+    const currentFilter = {
+      [section]: [getCurrentItem.id],
+    };
+
+    sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+    navigate(`/shop/listing`);
+  }
+
   return (
     <>
       <Header />
+      <CarouselList />
+      <section className="py-12 bg-orange-400 text-white">
+        <div className="container mx-auto px-14">
+          <h2 className="text-3xl font-bold text-center mb-8">
+            Shop Pets by Category
+          </h2>
+          <Section
+            categoriesWithIcon={petCategoriesWithIcon}
+            handleNavigateToListingPage={handleNavigateToListingPage}
+          />
+        </div>
+      </section>
+      <section className="py-12 bg-gray-50">
+        <div className="container mx-auto px-14">
+          <h2 className="text-3xl font-bold text-center mb-8">
+            Shop Products by Category
+          </h2>
+          <Section
+            categoriesWithIcon={productsCategoriesWithIcon}
+            handleNavigateToListingPage={handleNavigateToListingPage}
+          />
+        </div>
+      </section>
+
       <div className="bg-gray-100 min-h-screen">
         {/* Hero Section */}
         <div className="bg-orange-500 text-white py-14 text-center">
