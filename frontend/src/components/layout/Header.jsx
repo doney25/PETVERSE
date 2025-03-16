@@ -29,6 +29,14 @@ export default function Header() {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const handleClick = () => {
+    if (userName) {
+      navigate('/shop/home');
+    } else {
+      navigate('/');
+    }
+  };
+
   return (
     <header className="bg-white shadow-md">
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
@@ -59,7 +67,7 @@ export default function Header() {
 
         {/* Navigation Links */}
         <nav className="hidden md:flex space-x-6">
-          <a href="#home" className="text-gray-600 hover:text-blue-500">
+          <a onClick={handleClick} className="text-gray-600 hover:text-blue-500">
             Home
           </a>
           <a href="#shop" className="text-gray-600 hover:text-blue-500">
@@ -104,7 +112,7 @@ export default function Header() {
                     <UserCog className="mr-2 h-4 w-4" />
                     Account
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/shop/chat")}>
+                  <DropdownMenuItem onClick={() => navigate(`/shop/chat/${localStorage.getItem("userId")}`)}>
                     <MessageCircle className="mr-2 h-4 w-4" />
                     Messages
                   </DropdownMenuItem>

@@ -13,10 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "@/context/Authcontext";
 import ManagePets from "@/pages/seller/ManagePets";
 import Home from "@/pages/seller/Home";
-import io from "socket.io-client";
-import ChatComponent from "@/components/ChatComponent";
-
-const socket = io("http://localhost:5501");
+import ChatPage from "../seller/ChatPage"
 
 export default function Seller() {
   const [activeTab, setActiveTab] = useState("home");
@@ -114,7 +111,7 @@ export default function Seller() {
         {activeTab === "home" && <Home />}
         {activeTab === "petListings" && <ManagePets />}
         {activeTab === "orders" && <div>Orders Content</div>}
-        {activeTab === "chats" && <ChatComponent />}
+        {activeTab === "chats" && <ChatPage />}
         {activeTab === "petHealth" && <div>Pet Health Records Content</div>}
       </div>
     </div>

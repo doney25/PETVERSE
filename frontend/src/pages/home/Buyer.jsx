@@ -4,7 +4,7 @@ import Header from "@/components/layout/Header";
 import axios from "axios";
 import CarouselList from "@/components/buyer/CarouselList";
 import Section from "@/components/buyer/Section";
-import { Dog, CatIcon, Bird, LucideMinus, Bone, Scissors, FishIcon, Shapes } from "lucide-react";
+import { Dog, CatIcon, Bird, Bone, Scissors, Shapes, Search } from "lucide-react";
 
 const Buyer = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -25,18 +25,6 @@ const Buyer = () => {
         console.log(error);
         setLoading(false);
       });
-
-    // WebSocket connection for real-time updates
-    const socket = new WebSocket("ws://localhost:5501"); // Adjust WebSocket URL based on backend setup
-
-    socket.onmessage = (event) => {
-      const updatedPet = JSON.parse(event.data);
-      setPets((prevPets) => [updatedPet, ...prevPets]); // Add new pet at the top
-    };
-
-    return () => {
-      socket.close();
-    };
   }, []);
 
   // Filter pets based on the search query
@@ -48,24 +36,32 @@ const Buyer = () => {
     { id: "dog", label: "Dog", icon: Dog },
     { id: "cat", label: "Cat", icon: CatIcon },
     { id: "birds", label: "Birds", icon: Bird },
-    { id: "other", label: "Other", icon: LucideMinus }
+    { id: "", label: "Browse All", icon: Search }
   ];
 
   const productsCategoriesWithIcon = [
-    { id: "dogfood", label: "Dog Food", icon: Bone },
-    { id: "catfood", label: "Cat Food", icon: FishIcon },
+    { id: "food", label: "Pet Food", icon: Bone },
     { id: "grooming", label: "Grooming", icon: Scissors },
-    { id: "toys", label: "Toys", icon: Shapes }
+    { id: "toys", label: "Toys", icon: Shapes },
+    { id: "", label: "Browse All", icon: Search }
   ];
 
-  function handleNavigateToListingPage(getCurrentItem, section) {
+  function handlePetNavigateToListingPage(getCurrentItem, section) {
     sessionStorage.removeItem("filters");
     const currentFilter = {
       [section]: [getCurrentItem.id],
     };
-
     sessionStorage.setItem("filters", JSON.stringify(currentFilter));
-    navigate(`/shop/listing`);
+    navigate(`/shop/pets/${currentFilter.category}`);
+  }
+
+  function handleProductNavigateToListingPage(getCurrentItem, section) {
+    sessionStorage.removeItem("filters");
+    const currentFilter = {
+      [section]: [getCurrentItem.id],
+    };
+    sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+    navigate(`/shop/products/${currentFilter.category}`);
   }
 
   return (
@@ -79,7 +75,7 @@ const Buyer = () => {
           </h2>
           <Section
             categoriesWithIcon={petCategoriesWithIcon}
-            handleNavigateToListingPage={handleNavigateToListingPage}
+            handleNavigateToListingPage={handlePetNavigateToListingPage}
           />
         </div>
       </section>
@@ -90,7 +86,7 @@ const Buyer = () => {
           </h2>
           <Section
             categoriesWithIcon={productsCategoriesWithIcon}
-            handleNavigateToListingPage={handleNavigateToListingPage}
+            handleNavigateToListingPage={handleProductNavigateToListingPage}
           />
         </div>
       </section>
