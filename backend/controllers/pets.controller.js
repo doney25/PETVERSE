@@ -13,6 +13,20 @@ const showPets = async (req, res) => {
   }
 };
 
+// Show one pets
+const showPet = async (req, res) => {
+  try {
+    const {id} = req.params
+    const pet = await Pet.findById(id);
+    return res.status(200).json({
+      data: pet,
+    });
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Create a pet
 const createPet = async (req, res) => {
   console.log(req)
@@ -103,4 +117,4 @@ const updateVaccinationStatus = async (req, res) => {
   }
 };
 
-export { createPet, updatePet, showPets, deletePet, updateVaccinationStatus };
+export { createPet, updatePet, showPets, showPet, deletePet, updateVaccinationStatus };

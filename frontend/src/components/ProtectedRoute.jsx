@@ -1,9 +1,22 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
-const ProtectedRoute = ({ children }) => {
-  const token = localStorage.getItem("token"); // Check if token exists
+const ProtectedRoute = ({ roleRequired }) => {
+  const token = localStorage.getItem("token");
+  const userRole = localStorage.getItem("userRole");
 
-  return token ? children : <Navigate to="/login" />;
+  if (!token) {
+    return <Navigate to="/login" />;
+  }
+
+  if (roleRequired && roleRequired !== userRole) {
+    if (userRole === "buyer") {
+      return <Navigate to="/shop/home" />;
+    } else if (userRole === "admin" || userRole === "seller") {
+      return <Navigate to="/dashboard" />;
+    }
+  }
+
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

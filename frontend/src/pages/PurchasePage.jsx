@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import ChatComponent from "../components/ChatComponent";
+// import ChatComponent from "../components/ChatComponent";
 import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "@/context/Authcontext"; // Import authentication context
 

@@ -1,29 +1,44 @@
 import React from "react";
+import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 
 const PetCard = ({ pets }) => {
-  const navigate = useNavigate();
-
   if (!Array.isArray(pets)) return null;
+  const navigate = useNavigate()
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-      { pets.map((pet) => {
+      {pets.map((pet) => {
         return (
-          <div key={pet._id} className="bg-white shadow-lg rounded-lg p-4">
+          <div key={pet._id} className="bg-white rounded-lg shadow-sm overflow-hidden">
             <img
               src={`http://localhost:5501${pet.image[0]}`}
               alt={pet.name}
-              className="w-full h-40 object-cover rounded-md"
+              className="w-full h-48 object-cover cursor-pointer"
+              onClick={() => navigate(`/shop/pets/${pet.category}/${pet._id}`)}
             />
-            <h3 className="text-xl font-bold mt-3">{pet.name}</h3>
-            <p className="text-gray-600">Breed: {pet.breed}</p>
-            <button
-              className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-md"
-              onClick={() => navigate(`/pet-details/${pet.id}`)}
+            <div
+              className="p-4 cursor-pointer bg-gray-100"
+              onClick={() => navigate(`/shop/pets/${pet.category}/${pet._id}`)}
             >
-              View Details
-            </button>
+              <h3 className="text-lg font-semibold">{pet.name}</h3>
+              <p className="text-sm text-muted-foreground">{pet.breed}</p>
+              <div className="flex justify-between items-center mt-4">
+                <span className="text-xl font-bold">₹{pet.price}</span>
+                <Button
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    console.log("Buy now");
+                  }}
+                >
+                  Add to Cart
+                </Button>
+                {/* <Button onClick={() => onAddToCart(product.id, product.stock)} size="sm">
+            Add to Cart
+          </Button> */}
+              </div>
+            </div>
           </div>
         );
       })}

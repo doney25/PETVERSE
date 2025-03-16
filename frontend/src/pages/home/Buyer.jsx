@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "@/components/layout/Header";
 import axios from "axios";
+import CarouselList from "@/components/buyer/CarouselList";
+import Section from "@/components/buyer/Section";
+import { Dog, CatIcon, Bird, Bone, Scissors, Shapes, Search } from "lucide-react";
 
 const Buyer = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -22,18 +25,6 @@ const Buyer = () => {
         console.log(error);
         setLoading(false);
       });
-
-    // WebSocket connection for real-time updates
-    const socket = new WebSocket("ws://localhost:5501"); // Adjust WebSocket URL based on backend setup
-
-    socket.onmessage = (event) => {
-      const updatedPet = JSON.parse(event.data);
-      setPets((prevPets) => [updatedPet, ...prevPets]); // Add new pet at the top
-    };
-
-    return () => {
-      socket.close();
-    };
   }, []);
 
   // Filter pets based on the search query
@@ -41,9 +32,65 @@ const Buyer = () => {
     pet.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const petCategoriesWithIcon = [
+    { id: "dog", label: "Dog", icon: Dog },
+    { id: "cat", label: "Cat", icon: CatIcon },
+    { id: "birds", label: "Birds", icon: Bird },
+    { id: "", label: "Browse All", icon: Search }
+  ];
+
+  const productsCategoriesWithIcon = [
+    { id: "food", label: "Pet Food", icon: Bone },
+    { id: "grooming", label: "Grooming", icon: Scissors },
+    { id: "toys", label: "Toys", icon: Shapes },
+    { id: "", label: "Browse All", icon: Search }
+  ];
+
+  function handlePetNavigateToListingPage(getCurrentItem, section) {
+    sessionStorage.removeItem("filters");
+    const currentFilter = {
+      [section]: [getCurrentItem.id],
+    };
+    sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+    navigate(`/shop/pets/${currentFilter.category}`);
+  }
+
+  function handleProductNavigateToListingPage(getCurrentItem, section) {
+    sessionStorage.removeItem("filters");
+    const currentFilter = {
+      [section]: [getCurrentItem.id],
+    };
+    sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+    navigate(`/shop/products/${currentFilter.category}`);
+  }
+
   return (
     <>
       <Header />
+      <CarouselList />
+      <section className="py-12 bg-orange-400 text-white">
+        <div className="container mx-auto px-14">
+          <h2 className="text-3xl font-bold text-center mb-8">
+            Shop Pets by Category
+          </h2>
+          <Section
+            categoriesWithIcon={petCategoriesWithIcon}
+            handleNavigateToListingPage={handlePetNavigateToListingPage}
+          />
+        </div>
+      </section>
+      <section className="py-12 bg-gray-50">
+        <div className="container mx-auto px-14">
+          <h2 className="text-3xl font-bold text-center mb-8">
+            Shop Products by Category
+          </h2>
+          <Section
+            categoriesWithIcon={productsCategoriesWithIcon}
+            handleNavigateToListingPage={handleProductNavigateToListingPage}
+          />
+        </div>
+      </section>
+
       <div className="bg-gray-100 min-h-screen">
         {/* Hero Section */}
         <div className="bg-orange-500 text-white py-14 text-center">
