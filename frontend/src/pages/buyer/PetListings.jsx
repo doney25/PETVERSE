@@ -35,7 +35,7 @@ const PetListing = () => {
   useEffect(() => {
     if (searchQuery) {
       const results = pets.filter((pet) =>
-        pet.name.toLowerCase().includes(searchQuery.toLowerCase())
+        pet.breed.toLowerCase().includes(searchQuery.toLowerCase())
       );
       setFilteredPets(results);
     } else {
