@@ -15,7 +15,7 @@ const Home = () => {
   const featuredPets = pets.filter((pet, index) => index < 3 || (index >= 5 && index < 8));
   
   useEffect(() => {
-    localStorage.getItem("token") ? navigate('/dashboard') : null
+    localStorage.getItem("token") ? navigate('/shop/home') : null
   },[navigate])
 
   return (
