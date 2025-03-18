@@ -69,7 +69,7 @@ const PetDetails = () => {
           </div>
           <div className="mt-2">
             <h3 className="text-xl font-semibold">Age:</h3>
-            <p>{pet.age} years old</p>
+            <p>{pet.age}</p>
           </div>
           <div className="mt-2">
             <h3 className="text-xl font-semibold">Color:</h3>

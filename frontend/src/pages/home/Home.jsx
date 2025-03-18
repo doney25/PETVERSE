@@ -1,5 +1,5 @@
 import Header from "@/components/layout/Header";
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -13,6 +13,10 @@ const Home = () => {
 
   // Select 3 dogs and 3 cats for the slider
   const featuredPets = pets.filter((pet, index) => index < 3 || (index >= 5 && index < 8));
+  
+  useEffect(() => {
+    localStorage.getItem("token") ? navigate('/shop/home') : null
+  },[navigate])
 
   return (
     <>
