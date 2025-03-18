@@ -1,21 +1,20 @@
 import express from "express";
 import mongoose from "mongoose";
-import cors from "cors";;
+import cors from "cors";
 import dotenv from "dotenv";
 import http from "http";
 import { Server } from "socket.io";
-
-import petRouter from "./routes/pets.route.js"; // ✅ Ensure correct import
+import path from "path";
+import multer from "multer";
+import petRouter from "./routes/pets.route.js";
 import userRouter from "./routes/user.route.js";
-import "./services/vaccination.service.js"; // ✅ Import vaccination reminder service
+import "./services/vaccination.service.js";
+import Chat from "./models/chats.model.js";
 
 dotenv.config(); // ✅ Ensure .env variables are loaded before usage
-import path from "path";
-import multer from 'multer'
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
 
 // Middleware
 app.use(express.json());
@@ -26,37 +25,96 @@ app.use(
     credentials: true,
   })
 );
-
-//  Use API Routes
-app.use("/api/pets", petRouter); // Corrected route path
+app.use("/api/pets", petRouter);
 app.use("/api/users", userRouter);
+app.use(
+  "/uploads",
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET"],
+    credentials: true,
+  })
+);
+app.use("/uploads", express.static("uploads"));
 
-const PORT = process.env.PORT || 5501; //  Fallback port if .env is missing
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"],
+    credentials: true,
+  },
+});
 
 // WebSocket for Chat Functionality
 io.on("connection", (socket) => {
-  console.log("New client connected:", socket.id);
+  console.log("A user connected:", socket.id);
 
-  socket.on("joinRoom", ({ buyerId, sellerId }) => {
-    const room = [buyerId, sellerId].sort().join("_");
-    console.log(`User joined room: ${room}`);
+  socket.on("start_chat", async ({ buyerName, sellerName, buyerId, sellerId }) => {
+    let chat = await Chat.findOne({ buyerId, sellerId });
+
+    if (!chat) {
+      chat = new Chat({ buyerName, sellerName, buyerId, sellerId, messages: [] });
+      await chat.save();
+    }
+
+    socket.join(chat._id.toString());
+    socket.emit("chat_history", chat.messages);
   });
 
-  socket.on("sendMessage", ({ buyerId, sellerId, message }) => {
-    const room = [buyerId, sellerId].sort().join("_");
-    io.to(room).emit("receiveMessage", { sender: buyerId, message });
-    console.log(`Message sent to ${room}:`, message);
+  socket.on("send_message", async ({ buyerId, sellerId, sender, message }) => {
+    
+    const chat = await Chat.findOneAndUpdate(
+      { buyerId, sellerId },
+      { $push: { messages: { sender, message } } },
+      { new: true, upsert: true }
+    );
+
+    io.to(chat._id.toString()).emit("receive_message", chat.messages);
   });
 
   socket.on("disconnect", () => {
-    console.log("Client disconnected:", socket.id);
+    console.log("User disconnected:", socket.id);
   });
+});
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // Store images in the 'uploads' folder
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Use a unique filename
+  },
+});
+
+const upload = multer({ storage: storage });
+
+// Image upload route
+app.post("/uploadImage", upload.array("images", 10), (req, res) => {
+  if (req.files && req.files.length > 0) {
+    const imageUrls = req.files.map((file) => `/uploads/${file.filename}`); // Store relative path
+    res.json({ imageUrls });
+  } else {
+    res.status(400).json({ message: "No image files uploaded" });
+  }
 });
 
 // Base Route
 app.get("/", (req, res) => {
   return res.status(201).send("Welcome to Petverse");
 });
+
+app.get("/api/chats/:userId", async (req, res) => {
+  const userId = req.params.userId;
+
+  const chats = await Chat.find({
+    $or: [{ buyerId: userId }, { sellerId: userId }],
+  }).select("buyerName sellerName buyerId sellerId messages");
+
+  res.json(chats);
+});
+
+const PORT = process.env.PORT || 5501;
 
 // Connect to MongoDB
 mongoose

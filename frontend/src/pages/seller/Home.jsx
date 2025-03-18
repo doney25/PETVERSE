@@ -18,6 +18,8 @@ export default function Home() {
   const [category, setCategory] = useState("");
   const [breed, setBreed] = useState("");
   const [age, setAge] = useState("");
+  const [color, setColor] = useState("");
+  const [location, setLocation] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImages] = useState([]);
   const [description, setDescription] = useState("");
@@ -55,14 +57,17 @@ export default function Home() {
       breed,
       age,
       price,
+      color,
+      location,
       image: uploadedImageUrls,
       description,
       available: true,
       sellerId: sellerId,
       seller: sellerName
     };
+    console.log(petData)
     axios
-      .post("http://localhost:5501/pets", petData)
+      .post("http://localhost:5501/api/pets", petData)
       .then(() => alert("Pet Listed Sucessfully"))
       .catch((error) => {
         console.log(error);
@@ -77,7 +82,7 @@ export default function Home() {
       {/* Quick Add Pet Form */}
       <Card>
         <CardHeader>
-          <CardTitle>Add a New Pet</CardTitle>
+          <CardTitle>Sell a Pet</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -105,6 +110,16 @@ export default function Home() {
               placeholder="Age"
               type="string"
               onChange={(e) => setAge(e.target.value)}
+            />
+            <Input
+              placeholder="Color"
+              type="string"
+              onChange={(e) => setColor(e.target.value)}
+            />
+            <Input
+              placeholder="Location"
+              type="string"
+              onChange={(e) => setLocation(e.target.value)}
             />
             <Input
               placeholder="Price"

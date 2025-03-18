@@ -33,7 +33,11 @@ const LoginPage = () => {
       setUserRole(data.user.role);
       setSuccessMessage("Login successful!");
       setError("");
-      navigate("/dashboard");
+      if (data.user.role === "admin" || data.user.role === "seller") {
+        navigate("/dashboard"); // Redirect to dashboard for admin or seller
+      } else if (data.user.role === "buyer") {
+        navigate("/shop/home"); // Redirect to shop home for buyer
+      }
     } catch (err) {
       console.log(err)
       setError(err.response?.data?.error || "Login failed");
