@@ -63,9 +63,15 @@ const confirmEmail = async (req, res) => {
     user.isVerified = true;
     await user.save();
 
-    res
-      .status(200)
-      .send({ message: "Email confirmed successfully! You can now log in." });
+    res.status(200).send(`
+      <html>
+        <head><title>Email Confirmed</title></head>
+        <body style="font-family: Arial, sans-serif; text-align: center; margin-top: 50px;">
+          <h1>Email Verified Successfully! 🎉</h1>
+          <p>You can now <a href="http://localhost:5173/login">log in</a>.</p>
+        </body>
+      </html>
+    `);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
