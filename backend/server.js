@@ -10,7 +10,7 @@ import uploadRouter from "./routes/uploads.route.js";
 import "./services/vaccination.service.js";
 import Chat from "./models/chats.model.js";
 
-dotenv.config(); // ✅ Ensure .env variables are loaded before usage
+dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
@@ -25,9 +25,11 @@ app.use(
     credentials: true,
   })
 );
+
+// Routes
 app.use("/api/pets", petRouter);
 app.use("/api/users", userRouter);
-app.use("/api/upload",uploadRouter)
+app.use("/api/upload", uploadRouter)
 // app.use(
 //   "/uploads",
 //   cors({
@@ -38,6 +40,7 @@ app.use("/api/upload",uploadRouter)
 // );
 // app.use("/uploads", express.static("uploads"));
 
+// WebSocket for Chat Functionality
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:5173",
@@ -47,7 +50,6 @@ const io = new Server(server, {
   },
 });
 
-// WebSocket for Chat Functionality
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
 
@@ -64,7 +66,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send_message", async ({ buyerId, sellerId, sender, message }) => {
-    
     const chat = await Chat.findOneAndUpdate(
       { buyerId, sellerId },
       { $push: { messages: { sender, message } } },
@@ -100,11 +101,7 @@ io.on("connection", (socket) => {
 //   }
 // });
 
-// Base Route
-app.get("/", (req, res) => {
-  return res.status(201).send("Welcome to Petverse");
-});
-
+// Fetch Chat History
 app.get("/api/chats/:userId", async (req, res) => {
   const userId = req.params.userId;
 
@@ -115,15 +112,20 @@ app.get("/api/chats/:userId", async (req, res) => {
   res.json(chats);
 });
 
+// Base Route
+app.get("/", (req, res) => {
+  return res.status(201).send("Welcome to Petverse");
+});
+
 const PORT = process.env.PORT || 5501;
 
-// Connect to MongoDB
+// Connect to MongoDB and start server
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("Connection Successful.");
     server.listen(PORT, () => {
-      console.log(`App is listening at: http://localhost:${PORT}`);
+      console.log(`Server running on: http://localhost:${PORT}`);
     });
   })
   .catch((error) => {

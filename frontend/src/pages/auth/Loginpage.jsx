@@ -16,6 +16,7 @@ const LoginPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
+    console.log("Submitting login request for:", email, password);
     setError("");
     setSuccessMessage("");
 
@@ -24,6 +25,7 @@ const LoginPage = () => {
         "http://localhost:5501/api/users/login",
         { email, password }
       );
+      console.log("Login response:", response.data);
       localStorage.setItem("userId", data.user.id);
       localStorage.setItem("token", data.token);
       localStorage.setItem("userRole", data.user.role);
