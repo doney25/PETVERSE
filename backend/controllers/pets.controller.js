@@ -29,8 +29,8 @@ const showPet = async (req, res) => {
 
 // Create a pet
 const createPet = async (req, res) => {
-  console.log(req)
   try {
+    console.log("Received body:", req.body);
     if (
       !req.body.name ||
       !req.body.category ||
@@ -38,8 +38,8 @@ const createPet = async (req, res) => {
       !req.body.age ||
       !req.body.price ||
       !req.body.description ||
-      !req.body.image ||
-      req.body.available === undefined
+      !req.body.images ||
+      req.body.status === undefined
     ) {
       return res.status(400).send({ error: "All fields are required" })
     }
@@ -60,8 +60,8 @@ const updatePet = async (req, res) => {
       !req.body.age ||
       !req.body.price ||
       !req.body.description ||
-      !req.body.image ||
-      req.body.available === undefined
+      !req.body.images ||
+      req.body.status === undefined
     ) {
       return res.status(400).send({ error: "All fields are required" })
     }

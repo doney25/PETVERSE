@@ -4,7 +4,14 @@ const UserSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        validate: {
+            validator: function(v) {
+                // This regular expression ensures that only alphabets are allowed (no numbers)
+                return /^[A-Za-z\s]+$/.test(v);  // Allows letters and spaces
+            },
+            message: props => `${props.value} is not a valid name! It should only contain letters and spaces.`
+        }
     },
     email: {
         type: String, 

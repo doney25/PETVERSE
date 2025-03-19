@@ -70,6 +70,12 @@ const PetListing = () => {
             <ul className="space-y-2">
               <li
                 className="cursor-pointer hover:bg-gray-200 p-2 rounded"
+                onClick={() => handleCategoryClick("")}
+              >
+                All
+              </li>
+              <li
+                className="cursor-pointer hover:bg-gray-200 p-2 rounded"
                 onClick={() => handleCategoryClick("dog")}
               >
                 Dogs
@@ -85,6 +91,12 @@ const PetListing = () => {
                 onClick={() => handleCategoryClick("bird")}
               >
                 Birds
+              </li>
+              <li
+                className="cursor-pointer hover:bg-gray-200 p-2 rounded"
+                onClick={() => handleCategoryClick("other")}
+              >
+                Other
               </li>
             </ul>
           </div>

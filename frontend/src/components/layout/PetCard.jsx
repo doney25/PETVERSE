@@ -11,8 +11,14 @@ const PetCard = ({ pets }) => {
       {pets.map((pet) => {
         return (
           <div key={pet._id} className="bg-white rounded-lg shadow-sm overflow-hidden">
-            <img
+            {/* <img
               src={`http://localhost:5501${pet.image[0]}`}
+              alt={pet.name}
+              className="w-full h-48 object-cover cursor-pointer"
+              onClick={() => navigate(`/shop/pets/${pet.category}/${pet._id}`)}
+            /> */}
+            <img
+              src={pet.images[0]}
               alt={pet.name}
               className="w-full h-48 object-cover cursor-pointer"
               onClick={() => navigate(`/shop/pets/${pet.category}/${pet._id}`)}
