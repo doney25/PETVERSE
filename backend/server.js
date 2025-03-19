@@ -4,10 +4,9 @@ import cors from "cors";
 import dotenv from "dotenv";
 import http from "http";
 import { Server } from "socket.io";
-import path from "path";
-import multer from "multer";
 import petRouter from "./routes/pets.route.js";
 import userRouter from "./routes/user.route.js";
+import uploadRouter from "./routes/uploads.route.js";
 import "./services/vaccination.service.js";
 import Chat from "./models/chats.model.js";
 
@@ -18,6 +17,7 @@ const server = http.createServer(app);
 
 // Middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -29,9 +29,7 @@ app.use(
 // Routes
 app.use("/api/pets", petRouter);
 app.use("/api/users", userRouter);
-
-// Static file serving for images
-app.use("/uploads", express.static("uploads"));
+app.use("/api/upload", uploadRouter)
 
 // WebSocket for Chat Functionality
 const io = new Server(server, {
@@ -71,28 +69,6 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);
   });
-});
-
-// Multer setup for image uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/"); // Store images in 'uploads' folder
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Use a unique filename
-  },
-});
-
-const upload = multer({ storage });
-
-// Image Upload Route
-app.post("/uploadImage", upload.array("images", 10), (req, res) => {
-  if (req.files && req.files.length > 0) {
-    const imageUrls = req.files.map((file) => `/uploads/${file.filename}`); // Store relative path
-    res.json({ imageUrls });
-  } else {
-    res.status(400).json({ message: "No image files uploaded" });
-  }
 });
 
 // Fetch Chat History

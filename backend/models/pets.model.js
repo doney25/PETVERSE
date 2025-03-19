@@ -38,7 +38,7 @@ const petSchema = new mongoose.Schema(
       min: 0,
       trim: true,
     },
-    image: {
+    images: {
       type: [String],
       required: true,
     },
