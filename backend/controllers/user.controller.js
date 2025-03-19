@@ -10,9 +10,8 @@ const signUp = async (req, res) => {
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
+      console.log('User already exists');
       return res.status(400).json({ error: "User already exists" });
-      console.log('jiii11')
-
     }
 
     // Hash password
@@ -29,7 +28,7 @@ const signUp = async (req, res) => {
     });
 
     await newUser.save();
-
+    console.log("User saved successfully:", newUser);
     // Send email confirmation via Supabase
     const { error } = await supabase.auth.signUp({
       email,
@@ -37,7 +36,7 @@ const signUp = async (req, res) => {
     }, {
       emailRedirectTo: "http://localhost:5501/api/users/confirmEmail",
     });
-
+    console.log("send to supabse.")
     if (error) throw error;
 
     res.status(201).json({ message: "Signup successful! Check your email to verify your account." });
@@ -50,25 +49,26 @@ const signUp = async (req, res) => {
 
 // Email Confirmation Handler
 const confirmEmail = async (req, res) => {
-  const { token } = req.query;
   try {
-    if (!token) {
+    const { email } = req.query; // Get email from query parameters
+
+    if (!email) {
       return res.status(400).json({ error: "Invalid confirmation request" });
     }
-    
-    // Verify user using Supabase
-    const { data, error } = await supabase.auth.getUser(token);
-    if (error || !data) {
-      return res.status(400).json({ error: "Invalid or expired confirmation token" });
+
+    // Find and update the user in MongoDB
+    const user = await User.findOneAndUpdate(
+      { email: email },
+      { isVerified: true },
+    );
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found or already verified" });
     }
 
-    // Update MongoDB user as verified
-    await User.findOneAndUpdate({ email: data.email }, { isVerified: true });
-
-    res.status(200).send("Email confirmed successfully! You can now log in.");
-    console.log('jiii13')
-
+    res.status(200).json({ message: "Email confirmed successfully! You can now log in." });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: "Server error" });
   }
 };

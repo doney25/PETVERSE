@@ -34,13 +34,13 @@ const SignupPage = () => {
     }
 
     try {
-      const { error } = await supabase.auth.signUp(
-        { email, password },
-        { emailRedirectTo: "http://localhost:5501/api/users/confirmEmail" } // Change URL as needed
-      );
+      const { data } = await axios.post(
+               "http://localhost:5501/api/users/signup" , // Change URL as needed
+               { name, email, password, role },
+              );
 
       if (error) throw error;
-      setSuccessMessage("Signup successful! Check your email to verify your account." );
+      setSuccessMessage("Signup successful! Check your email to verify your account."  );
     } catch (err) {
       setError(err.response?.data?.error || "Signup failed");
     } finally {
