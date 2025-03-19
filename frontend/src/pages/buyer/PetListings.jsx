@@ -35,7 +35,7 @@ const PetListing = () => {
   useEffect(() => {
     if (searchQuery) {
       const results = pets.filter((pet) =>
-        pet.name.toLowerCase().includes(searchQuery.toLowerCase())
+        pet.breed.toLowerCase().includes(searchQuery.toLowerCase())
       );
       setFilteredPets(results);
     } else {
@@ -82,7 +82,7 @@ const PetListing = () => {
               </li>
               <li
                 className="cursor-pointer hover:bg-gray-200 p-2 rounded"
-                onClick={() => handleCategoryClick("birds")}
+                onClick={() => handleCategoryClick("bird")}
               >
                 Birds
               </li>

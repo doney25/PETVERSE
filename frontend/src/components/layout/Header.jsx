@@ -56,13 +56,12 @@ export default function Header() {
 
         {/* Logo Section */}
         <div className="flex items-center w-32 space-x-4">
-          <Link to="/">
             <img
               src="/petverse logo 5.jpeg" // Add your logo image here
               alt="Petverse Logo"
               className="h-12 w-32 object-contain"
+              onClick={handleClick}
             />
-          </Link>
         </div>
 
         {/* Navigation Links */}
