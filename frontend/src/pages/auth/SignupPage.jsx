@@ -3,6 +3,7 @@ import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { RadioGroup } from "@/components/ui/radio-group";
+import { supabase } from "@/utils/supabaseClient";
 
 const SignupPage = () => {
   const [name, setName] = useState("");
@@ -33,13 +34,13 @@ const SignupPage = () => {
     }
 
     try {
-      await axios.post("http://localhost:5501/api/users/signup", {
-        name,
-        email,
-        password,
-        role
-      });
-      setSuccessMessage("Signup successful! You can now log in.");
+      const { error } = await supabase.auth.signUp(
+        { email, password },
+        { emailRedirectTo: "http://localhost:5501/api/users/confirmEmail" } // Change URL as needed
+      );
+
+      if (error) throw error;
+      setSuccessMessage("Signup successful! Check your email to verify your account." );
     } catch (err) {
       setError(err.response?.data?.error || "Signup failed");
     } finally {
