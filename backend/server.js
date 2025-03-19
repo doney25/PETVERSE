@@ -30,15 +30,6 @@ app.use(
 app.use("/api/pets", petRouter);
 app.use("/api/users", userRouter);
 app.use("/api/upload", uploadRouter)
-// app.use(
-//   "/uploads",
-//   cors({
-//     origin: "http://localhost:5173",
-//     methods: ["GET"],
-//     credentials: true,
-//   })
-// );
-// app.use("/uploads", express.static("uploads"));
 
 // WebSocket for Chat Functionality
 const io = new Server(server, {
@@ -79,27 +70,6 @@ io.on("connection", (socket) => {
     console.log("User disconnected:", socket.id);
   });
 });
-
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, "uploads/"); // Store images in the 'uploads' folder
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, Date.now() + path.extname(file.originalname)); // Use a unique filename
-//   },
-// });
-
-// const upload = multer({ storage: storage });
-
-// // Image upload route
-// app.post("/uploadImage", upload.array("images", 10), (req, res) => {
-//   if (req.files && req.files.length > 0) {
-//     const imageUrls = req.files.map((file) => `/uploads/${file.filename}`); // Store relative path
-//     res.json({ imageUrls });
-//   } else {
-//     res.status(400).json({ message: "No image files uploaded" });
-//   }
-// });
 
 // Fetch Chat History
 app.get("/api/chats/:userId", async (req, res) => {

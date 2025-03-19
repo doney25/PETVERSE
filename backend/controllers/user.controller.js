@@ -10,7 +10,7 @@ const signUp = async (req, res) => {
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      console.log('User already exists');
+      console.log("User already exists");
       return res.status(400).json({ error: "User already exists" });
     }
 
@@ -28,20 +28,21 @@ const signUp = async (req, res) => {
     });
 
     await newUser.save();
-    console.log("User saved successfully:", newUser);
     // Send email confirmation via Supabase
     const { error } = await supabase.auth.signUp({
       email,
       password,
-    }, {
-      emailRedirectTo: "http://localhost:5501/api/users/confirmEmail",
+      options: {
+        emailRedirectTo: `http://localhost:5501/api/users/confirmEmail?email=${email}`,
+      },
     });
-    console.log("send to supabse.")
+    console.log("send to supabse.");
     if (error) throw error;
 
-    res.status(201).json({ message: "Signup successful! Check your email to verify your account." });
-    console.log('jiii12')
-
+    res.status(200).json({
+      success: true,
+      message: "Email confirmed successfully! You can now log in.",
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -56,17 +57,15 @@ const confirmEmail = async (req, res) => {
       return res.status(400).json({ error: "Invalid confirmation request" });
     }
 
-    // Find and update the user in MongoDB
-    const user = await User.findOneAndUpdate(
-      { email: email },
-      { isVerified: true },
-    );
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ error: "User not found" });
 
-    if (!user) {
-      return res.status(404).json({ error: "User not found or already verified" });
-    }
+    user.isVerified = true;
+    await user.save();
 
-    res.status(200).json({ message: "Email confirmed successfully! You can now log in." });
+    res
+      .status(200)
+      .send({ message: "Email confirmed successfully! You can now log in." });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
@@ -82,9 +81,9 @@ const login = async (req, res) => {
 
     // Check if email is verified
     if (!user.isVerified) {
-      return res.status(400).json({ error: "Please verify your email before logging in." });
-      console.log('jiii14')
-
+      return res
+        .status(400)
+        .json({ error: "Please verify your email before logging in." });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
