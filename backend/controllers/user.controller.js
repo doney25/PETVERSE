@@ -34,7 +34,6 @@ const signUp = async (req, res) => {
       email,
       password: hashedPassword,
       role,
-      isVerified: false, // New field to track verification
     });
 
     await newUser.save();
@@ -52,7 +51,7 @@ const signUp = async (req, res) => {
 const confirmEmail = async (req, res) => {
   try {
     const { email } = req.query; // Get email from query parameters
-
+    console.log("Email confirmation request for:", email);
     if (!email) {
       return res.status(400).json({ error: "Invalid confirmation request" });
     }
@@ -73,7 +72,7 @@ const confirmEmail = async (req, res) => {
       </html>
     `);
   } catch (err) {
-    console.error(err);
+    console.error("Email confirmation error:", err);
     res.status(500).json({ error: "Server error" });
   }
 };
@@ -93,7 +92,10 @@ const login = async (req, res) => {
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
+    if (!isMatch) {
+      console.log("Invalid credentials");
+      return res.status(400).json({ error: "Invalid credentials" });
+    }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
@@ -109,6 +111,7 @@ const login = async (req, res) => {
       },
     });
   } catch (error) {
+    console.error("Login error:", error);
     res.status(500).json({ message: error.message });
   }
 };
