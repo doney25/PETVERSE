@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import PetCard from "@/components/layout/PetCard";
+import PetCard from "@/components/layout/BuyerPetCard";
 import Header from "@/components/layout/Header";
 import axios from "axios";
 
@@ -70,6 +70,12 @@ const PetListing = () => {
             <ul className="space-y-2">
               <li
                 className="cursor-pointer hover:bg-gray-200 p-2 rounded"
+                onClick={() => handleCategoryClick("")}
+              >
+                All
+              </li>
+              <li
+                className="cursor-pointer hover:bg-gray-200 p-2 rounded"
                 onClick={() => handleCategoryClick("dog")}
               >
                 Dogs
@@ -86,11 +92,17 @@ const PetListing = () => {
               >
                 Birds
               </li>
+              <li
+                className="cursor-pointer hover:bg-gray-200 p-2 rounded"
+                onClick={() => handleCategoryClick("other")}
+              >
+                Other
+              </li>
             </ul>
           </div>
 
           {/* Pet Listings */}
-          <div className="flex-grow">
+          <div className="flex-grow grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {loading ? (
               <p>Loading pets...</p>
             ) : (

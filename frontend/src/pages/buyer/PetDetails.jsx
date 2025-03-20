@@ -2,118 +2,147 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
+import { Alert } from "@/components/ui/alert";
+import { Carousel, CarouselItem } from "@/components/ui/carousel";
+import { Heart, ShoppingCart } from "lucide-react";
 
 const PetDetails = () => {
-  const { petId } = useParams(); // Get petId from the URL
+  const { petId } = useParams();
   const [pet, setPet] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const buyerId = localStorage.getItem("userId")
+  const buyerId = localStorage.getItem("userId");
 
   useEffect(() => {
-    // Fetch pet details from the backend
     axios
-      .get(`http://localhost:5501/api/pets/${petId}`) // Adjust API endpoint accordingly
+      .get(`http://localhost:5501/api/pets/${petId}`)
       .then((response) => {
         setPet(response.data.data);
         setLoading(false);
       })
-      .catch((error) => {
-        console.error("Error fetching pet details:", error);
+      .catch(() => {
+        setError("An error occurred while fetching pet details.");
         setLoading(false);
       });
   }, [petId]);
 
-  // If the data is still loading, show a loading indicator
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  // If there's no pet data or error, show a message
-  if (!pet) {
-    return <div>Pet not found.</div>;
-  }
-
   return (
-    <div className="container mx-auto p-4 w-3/4">
+    <div className="container mx-auto max-w-5xl p-6">
       {/* Back Button */}
-      <button
-        onClick={() => navigate(-1)} // Go back to the previous page
-        className="text-blue-500 hover:text-blue-700 mb-4"
-      >
+      <Button variant="outline" onClick={() => navigate(-1)} className="mb-6">
         ← Back
-      </button>
+      </Button>
+
+      {/* Loading State */}
+      {loading && (
+        <Card className="p-6">
+          <Skeleton className="h-64 w-full mb-4" />
+          <Skeleton className="h-8 w-1/2 mb-2" />
+          <Skeleton className="h-6 w-1/3 mb-2" />
+        </Card>
+      )}
+
+      {/* Error State */}
+      {error && (
+        <Alert variant="destructive" className="mb-6">
+          <Alert.Description>{error}</Alert.Description>
+        </Alert>
+      )}
 
       {/* Pet Details */}
-      <div className="flex flex-col md:flex-row gap-6">
-        {/* Image Gallery */}
-        <div className="w-full md:w-1/3">
-          <img
-            src={`http://localhost:5501${pet.image[0]}`} // Display the first image
-            alt={pet.name}
-            className="w-full h-72 object-cover rounded-lg shadow-md"
-          />
-        </div>
-
-        {/* Pet Information */}
-        <div className="w-full md:w-2/3">
-          <h2 className="text-3xl font-semibold">{pet.name}</h2>
-          <p className="text-lg text-gray-600">{pet.category}</p>
-          <p className="text-xl font-bold text-green-500 mt-2">₹{pet.price}</p>
-
-          <p className="mt-4">{pet.description}</p>
-
-          <div className="mt-6">
-            <h3 className="text-xl font-semibold">Breed:</h3>
-            <p>{pet.breed}</p>
-          </div>
-          <div className="mt-2">
-            <h3 className="text-xl font-semibold">Age:</h3>
-            <p>{pet.age}</p>
-          </div>
-          <div className="mt-2">
-            <h3 className="text-xl font-semibold">Color:</h3>
-            <p>{pet.color}</p>
-          </div>
-          <div className="mt-2">
-            <h3 className="text-xl font-semibold">Location:</h3>
-            <p>{pet.location}</p>
-          </div>
-          <div className="mt-2">
-            <h3 className="text-xl font-semibold">Status:</h3>
-            <p>{pet.status}</p>
-          </div>
-
-          {/* Seller Information */}
-          <div className="mt-6">
-            <h3 className="text-xl font-semibold">Seller:</h3>
-            <p>{pet.seller}</p>
-            <p>{pet.sellerId}</p>
-            <Button
-              size="sm"
-              onClick={() => {
-                navigate(`/shop/chat/${buyerId}/${pet.sellerId}`, { state: { seller: pet.seller } })
-              }}
-            >
-              Contact seller
-            </Button>
-          </div>
-
-          {/* Vaccinations */}
-          <div className="mt-6">
-            <h3 className="text-xl font-semibold">Vaccinations:</h3>
-            <ul>
-              {pet.vaccinations.map((vaccine, index) => (
-                <li key={index}>
-                  <span className="font-semibold">{vaccine.vaccineName}</span>:{" "}
-                  {vaccine.completed ? "Completed" : "Pending"} (Due:{" "}
-                  {new Date(vaccine.dueDate).toLocaleDateString()})
-                </li>
+      {pet && (
+        <Card className="flex flex-col md:flex-row gap-6 p-6 shadow-lg">
+          {/* Image Carousel */}
+          <div className="w-full md:w-1/2">
+            <Carousel>
+              {pet.images.map((image, index) => (
+                <CarouselItem key={index}>
+                  <img
+                    src={image}
+                    alt={pet.name}
+                    className="w-full h-80 object-cover rounded-lg shadow-md"
+                  />
+                </CarouselItem>
               ))}
-            </ul>
+            </Carousel>
           </div>
-        </div>
-      </div>
+
+          {/* Pet Info Section */}
+          <div className="w-full md:w-1/2">
+            <CardHeader>
+              <CardTitle className="text-3xl font-semibold">{pet.name}</CardTitle>
+            </CardHeader>
+
+            <CardContent className="space-y-4">
+              <p className="text-xl font-bold text-green-500">₹{pet.price}</p>
+              <p>{pet.description}</p>
+
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <p className="font-semibold">Breed:</p>
+                  <p>{pet.breed}</p>
+                </div>
+                <div>
+                  <p className="font-semibold">Age:</p>
+                  <p>{pet.age}</p>
+                </div>
+                <div>
+                  <p className="font-semibold">Color:</p>
+                  <p>{pet.color}</p>
+                </div>
+                <div>
+                  <p className="font-semibold">Location:</p>
+                  <p>{pet.location}</p>
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <p className="font-semibold">Status:</p>
+                <Badge variant="outline">{pet.status}</Badge>
+              </div>
+
+              {/* Seller Info */}
+              <div className="mt-6 border-t pt-4">
+                <p className="font-semibold text-lg">Seller: {pet.seller} (⭐ 4.5)</p>
+                {buyerId && (
+                  <Button
+                    size="sm"
+                    className="mt-2"
+                    onClick={() => navigate(`/shop/chat/${buyerId}/${pet.sellerId}`, { state: { seller: pet.seller }})}
+                  >
+                    Contact Seller
+                  </Button>
+                )}
+              </div>
+
+              {/* Vaccination Info */}
+              {pet.vaccinations?.length > 0 && (
+                <div className="mt-6">
+                  <p className="font-semibold text-lg">Vaccinations:</p>
+                  <ul className="list-disc ml-4">
+                    {pet.vaccinations.map((vaccine, index) => (
+                      <li key={index}>
+                        <span className="font-semibold">{vaccine.vaccineName}</span>: {vaccine.completed ? "Completed" : "Pending"} (Due: {new Date(vaccine.dueDate).toLocaleDateString()})
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <div className="mt-6 flex gap-4">
+                <Button className="flex-1">Add to Cart <ShoppingCart className="ml-2" size={16} /></Button>
+                <Button className="flex-1" variant="destructive">Buy Now</Button>
+                <Button variant="ghost" className="text-red-500"><Heart size={20} /></Button>
+              </div>
+            </CardContent>
+          </div>
+        </Card>
+      )}
     </div>
   );
 };

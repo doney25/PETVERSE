@@ -12,6 +12,7 @@ import {
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import axios from "axios";
+import ImageUploader from "@/components/ImageUploader";
 
 export default function Home() {
   const [name, setName] = useState("");
@@ -21,36 +22,14 @@ export default function Home() {
   const [color, setColor] = useState("");
   const [location, setLocation] = useState("");
   const [price, setPrice] = useState("");
-  const [image, setImages] = useState([]);
+  const [images, setImages] = useState([]);
   const [description, setDescription] = useState("");
 
-  const handleImageUpload = async () => {
-    try {
-      const formData = new FormData();
-      for (let i = 0; i < image.length; i++) {
-        formData.append("images", image[i]);
-      }
-      const response = await axios.post(
-        "http://localhost:5501/uploadImage",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      return response.data.imageUrls; // Get image URLs (paths)
-    } catch (error) {
-      console.error("Image upload failed:", error);
-      return [];
-    }
-  };
-
   const handleSubmit = async () => {
-    const uploadedImageUrls = await handleImageUpload();
-    const sellerId = localStorage.getItem('userId')
-    const sellerName = localStorage.getItem('userName')
+    if (images.length === 0) return alert("Please upload at least one image.");
+
+    const sellerId = localStorage.getItem("userId");
+    const sellerName = localStorage.getItem("userName");
     const petData = {
       name,
       category,
@@ -59,13 +38,12 @@ export default function Home() {
       price,
       color,
       location,
-      image: uploadedImageUrls,
+      images,
       description,
-      available: true,
+      status: "Available",
       sellerId: sellerId,
-      seller: sellerName
+      seller: sellerName,
     };
-    console.log(petData)
     axios
       .post("http://localhost:5501/api/pets", petData)
       .then(() => alert("Pet Listed Sucessfully"))
@@ -98,8 +76,7 @@ export default function Home() {
                 <SelectItem value="dog">Dog</SelectItem>
                 <SelectItem value="cat">Cat</SelectItem>
                 <SelectItem value="bird">Bird</SelectItem>
-                <SelectItem value="fish">Fish</SelectItem>
-                <SelectItem value="reptile">Reptile</SelectItem>
+                <SelectItem value="other">Other</SelectItem>
               </SelectContent>
             </Select>
             <Input
@@ -126,11 +103,10 @@ export default function Home() {
               type="number"
               onChange={(e) => setPrice(e.target.value)}
             />
-            <Input
-              type="file"
-              multiple
-              accept="image/*"
-              onChange={(e) => setImages(Array.from(e.target.files))}
+            <ImageUploader
+              onUpload={(newImages) =>
+                setImages((prev) => [...prev, ...newImages])
+              }
             />
             <Textarea
               placeholder="Short Description"

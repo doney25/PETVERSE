@@ -127,7 +127,7 @@ const Buyer = () => {
                   className="bg-white p-4 shadow-lg rounded-lg text-center"
                 >
                   <img
-                    src={`http://localhost:5501${pet.image[0]}`}
+                    src={pet.images[0]}
                     alt={pet.name}
                     className="w-full h-48 object-cover rounded-lg mb-4"
                   />

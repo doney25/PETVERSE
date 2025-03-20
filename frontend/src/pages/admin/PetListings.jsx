@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import PetCard from "@/components/layout/PetCard";
+import PetCard from "@/components/layout/BuyerPetCard";
 
 const ManagePets = () => {
   const [pets, setPets] = useState([]);

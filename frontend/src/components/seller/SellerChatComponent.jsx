@@ -1,17 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Send } from "lucide-react"
 
 const socket = io("http://localhost:5501");
 
-const SellerChatComponent = ({ buyerId, sellerId, onBack }) => {
+const SellerChatComponent = ({ buyerId, sellerId, onBack, buyerName }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const chatEndRef = useRef(null);
   useEffect(() => {
     socket.emit("start_chat", { buyerId, sellerId });
 
     socket.on("chat_history", (history) => {
       setMessages(history);
+      setLoading(false)
     });
 
     socket.on("receive_message", (newMessages) => {
@@ -24,36 +33,60 @@ const SellerChatComponent = ({ buyerId, sellerId, onBack }) => {
   const sendMessage = () => {
     if (input.trim() === "") return;
 
-    socket.emit("send_message", { buyerId, sellerId, sender: sellerId, message: input });
+    socket.emit("send_message", {
+      buyerId,
+      sellerId,
+      sender: sellerId,
+      message: input,
+    });
     setInput("");
   };
 
   return (
-    <div className="p-4 border rounded w-3/4 container mx-auto">
-      <button
-        onClick={onBack} // Go back to the previous page
-        className="text-blue-500 hover:text-blue-700 mb-4"
-      >
+    <div className="max-w-2xl mx-auto p-4">
+      <Button variant="outline" onClick={onBack} className="mb-6">
         ← Back
-      </button>
-      <h2>Chat with Buyer</h2>
-      <div className="h-64 overflow-y-auto border p-2">
-        {messages.map((msg, index) => (
-          <p key={index} className={msg.sender === sellerId ? "text-blue-500" : "text-green-500"}>
-            <strong>{msg.sender === sellerId ? "You" : "Buyer"}:</strong> {msg.message}
-          </p>
-        ))}
-      </div>
-      <input
-        type="text"
-        className="border p-2 w-full mt-2"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder="Type a message..."
-      />
-      <button className="mt-2 bg-blue-500 text-white p-2 rounded w-full" onClick={sendMessage}>
-        Send
-      </button>
+      </Button>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Chat with {buyerName}</CardTitle>
+        </CardHeader>
+        <CardContent className="h-96 overflow-y-auto border p-4 flex flex-col">
+          {loading ? (
+            <Skeleton className="h-6 w-full mb-2" />
+          ) : messages.length > 0 ? (
+            messages.map((msg, index) => (
+              <div
+                key={index}
+                className={`p-2 rounded-lg max-w-xs ${
+                  msg.sender === sellerId
+                    ? "bg-blue-500 text-white self-end"
+                    : "bg-gray-300 text-black self-start"
+                }`}
+              >
+                {msg.message}
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-500">
+              No messages yet. Start the conversation!
+            </p>
+          )}
+          <div ref={chatEndRef} />
+        </CardContent>
+
+        <div className="p-4 border-t flex items-center gap-2">
+          <Input
+            type="text"
+            className="flex-1"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Type a message..."
+          />
+          <Button onClick={sendMessage}><Send /></Button>
+        </div>
+      </Card>
     </div>
   );
 };

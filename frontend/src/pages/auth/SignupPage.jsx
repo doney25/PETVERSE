@@ -34,13 +34,15 @@ const SignupPage = () => {
     }
 
     try {
-      const { data } = await axios.post(
-               "http://localhost:5501/api/users/signup" , // Change URL as needed
-               { name, email, password, role },
-              );
+      const { error } = await axios.post(
+        "http://localhost:5501/api/users/signup", // Change URL as needed
+        { name, email, password, role }
+      );
 
       if (error) throw error;
-      setSuccessMessage("Signup successful! Check your email to verify your account."  );
+      setSuccessMessage(
+        "Signup successful! Check your email to verify your account."
+      );
     } catch (err) {
       setError(err.response?.data?.error || "Signup failed");
     } finally {
@@ -72,12 +74,15 @@ const SignupPage = () => {
           <RadioGroup
             value={role}
             onChange={(e) => {
-              setRole(e.target.value)}}
+              setRole(e.target.value);
+            }}
             className="flex gap-4 w-full my-2"
           >
             <label
               htmlFor="buyer"
-              className={`px-6 py-2 rounded-lg border cursor-pointer flex-1 text-center ${role === 'buyer' ? 'bg-blue-700 text-white' : 'bg-gray-200'}`}
+              className={`px-6 py-2 rounded-lg border cursor-pointer flex-1 text-center ${
+                role === "buyer" ? "bg-blue-700 text-white" : "bg-gray-200"
+              }`}
             >
               Buyer
               <input
@@ -91,7 +96,9 @@ const SignupPage = () => {
 
             <label
               htmlFor="seller"
-              className={`px-6 py-2 rounded-lg border cursor-pointer flex-1 text-center ${role === 'seller' ? 'bg-blue-700 text-white' : 'bg-gray-200'}`}
+              className={`px-6 py-2 rounded-lg border cursor-pointer flex-1 text-center ${
+                role === "seller" ? "bg-blue-700 text-white" : "bg-gray-200"
+              }`}
             >
               Seller
               <input
@@ -103,7 +110,6 @@ const SignupPage = () => {
               />
             </label>
           </RadioGroup>
-
           <div className="mb-4">
             <label className="block text-gray-700 font-medium">Name</label>
             <input
@@ -115,7 +121,6 @@ const SignupPage = () => {
               className="w-full px-4 py-2 mt-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
-
           <div className="mb-4">
             <label className="block text-gray-700 font-medium">Email</label>
             <input
@@ -127,7 +132,6 @@ const SignupPage = () => {
               className="w-full px-4 py-2 mt-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
-
           <div className="mb-4">
             <label className="block text-gray-700 font-medium">Password</label>
             <input
@@ -139,7 +143,6 @@ const SignupPage = () => {
               className="w-full px-4 py-2 mt-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
-
           <div className="mb-4">
             <label className="block text-gray-700 font-medium">
               Confirm Password
@@ -153,7 +156,6 @@ const SignupPage = () => {
               className="w-full px-4 py-2 mt-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
-
           <Button
             className="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition"
             type="submit"

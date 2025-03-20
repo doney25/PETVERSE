@@ -24,6 +24,7 @@ const ChatPage = () => {
         <SellerChatComponent
           buyerId={selectedChat?.buyerId}
           sellerId={selectedChat?.sellerId}
+          buyerName={selectedChat?.buyerName}
           onBack={backToA}
         />
       )}
