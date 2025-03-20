@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import PetCard from "@/components/layout/PetCard";
+import PetCard from "@/components/layout/BuyerPetCard";
 import Header from "@/components/layout/Header";
 import axios from "axios";
 
@@ -102,7 +102,7 @@ const PetListing = () => {
           </div>
 
           {/* Pet Listings */}
-          <div className="flex-grow">
+          <div className="flex-grow grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {loading ? (
               <p>Loading pets...</p>
             ) : (

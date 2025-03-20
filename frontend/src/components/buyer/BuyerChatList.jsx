@@ -40,7 +40,7 @@ const BuyerChatList = () => {
 
             {/* Button to navigate to the chat */}
             <button
-              onClick={() => navigate(`/shop/chat/${chat.buyerId}/${chat.sellerId}`)}
+              onClick={() => navigate(`/shop/chat/${chat.buyerId}/${chat.sellerId}`, { state: { seller: chat.sellerName }})}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all"
             >
               Open Chat

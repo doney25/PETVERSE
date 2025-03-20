@@ -14,6 +14,16 @@ const signUp = async (req, res) => {
       return res.status(400).json({ error: "User already exists" });
     }
 
+    // Send email confirmation via Supabase
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `http://localhost:5501/api/users/confirmEmail?email=${email}`,
+      },
+    });
+    if (error) throw error;
+
     // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -28,16 +38,6 @@ const signUp = async (req, res) => {
     });
 
     await newUser.save();
-    // Send email confirmation via Supabase
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `http://localhost:5501/api/users/confirmEmail?email=${email}`,
-      },
-    });
-    console.log("send to supabse.");
-    if (error) throw error;
 
     res.status(200).json({
       success: true,

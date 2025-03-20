@@ -1,0 +1,64 @@
+import React from "react";
+import { Button } from "../ui/button";
+import { useNavigate } from "react-router-dom";
+import { Trash2, Pencil } from "lucide-react";
+
+const SellerPetCard = ({ pets }) => {
+  if (!Array.isArray(pets)) return null;
+  const navigate = useNavigate();
+
+  return (
+    <>
+      {pets.map((pet) => {
+        return (
+          <div
+            key={pet._id}
+            className="bg-white rounded-lg shadow-sm overflow-hidden"
+          >
+            <img
+              src={pet.images[0]}
+              alt={pet.name}
+              className="w-full h-48 object-cover cursor-pointer"
+              onClick={() => navigate(`/shop/pets/${pet.category}/${pet._id}`)}
+            />
+            <div
+              className="p-4 cursor-pointer bg-gray-100"
+              onClick={() => navigate(`/shop/pets/${pet.category}/${pet._id}`)}
+            >
+              <h3 className="text-lg font-semibold">{pet.name}</h3>
+              <p className="text-sm text-muted-foreground">{pet.breed}</p>
+              <div className="flex items-center mt-4 justify-between w-full">
+                <span className="text-xl font-bold">₹{pet.price}</span>
+                <div className="flex space-x-2">
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    className="flex items-center space-x-1 hover:bg-red-400"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      console.log("Delete");
+                    }}
+                  >
+                    <Trash2 />
+                  </Button>
+                  <Button
+                    className="bg-amber-400 flex items-center space-x- hover:bg-yellow-300"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      console.log("Edit");
+                    }}
+                  >
+                    <Pencil />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </>
+  );
+};
+
+export default SellerPetCard;
