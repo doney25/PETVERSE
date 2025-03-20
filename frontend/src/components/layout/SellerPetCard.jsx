@@ -1,11 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import { Trash2, Pencil } from "lucide-react";
+import axios from "axios";
 
-const SellerPetCard = ({ pets }) => {
+const SellerPetCard = ({ pets, onNavigate }) => {
   if (!Array.isArray(pets)) return null;
   const navigate = useNavigate();
+
+  const onDelete = (id) => {
+    axios
+      .delete(`http://localhost:5501/api/pets/${id}`)
+      .then(() => {
+        navigate(0)
+        alert("Pet deleted successfully");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <>
@@ -19,11 +32,9 @@ const SellerPetCard = ({ pets }) => {
               src={pet.images[0]}
               alt={pet.name}
               className="w-full h-48 object-cover cursor-pointer"
-              onClick={() => navigate(`/shop/pets/${pet.category}/${pet._id}`)}
             />
             <div
               className="p-4 cursor-pointer bg-gray-100"
-              onClick={() => navigate(`/shop/pets/${pet.category}/${pet._id}`)}
             >
               <h3 className="text-lg font-semibold">{pet.name}</h3>
               <p className="text-sm text-muted-foreground">{pet.breed}</p>
@@ -36,7 +47,7 @@ const SellerPetCard = ({ pets }) => {
                     className="flex items-center space-x-1 hover:bg-red-400"
                     onClick={(e) => {
                       e.stopPropagation();
-                      console.log("Delete");
+                      onDelete(pet._id);
                     }}
                   >
                     <Trash2 />
@@ -46,7 +57,7 @@ const SellerPetCard = ({ pets }) => {
                     size="sm"
                     onClick={(e) => {
                       e.stopPropagation();
-                      console.log("Edit");
+                      onNavigate(pet._id)
                     }}
                   >
                     <Pencil />
