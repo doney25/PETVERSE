@@ -12,7 +12,8 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const { setUserName, setUserRole } = useContext(AuthContext)
+  const { setUserName, setUserRole } = useContext(AuthContext);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -39,7 +40,7 @@ const LoginPage = () => {
         navigate("/shop/home"); // Redirect to shop home for buyer
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
       setError(err.response?.data?.error || "Login failed");
       setSuccessMessage("");
     } finally {
@@ -48,9 +49,9 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600">
       <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg">
-        <h2 className="text-3xl font-bold text-center text-gray-800">Login</h2>
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Login</h2>
 
         {error && (
           <p className="text-red-500 text-sm mt-2 text-center">{error}</p>
