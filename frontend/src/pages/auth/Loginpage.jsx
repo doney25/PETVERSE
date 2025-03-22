@@ -7,6 +7,7 @@ import { AuthContext } from "@/context/Authcontext";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,9 +22,22 @@ const LoginPage = () => {
     setSuccessMessage("");
 
     try {
+      // Validate the role
+      const roleValidationResponse = await axios.post(
+        "http://localhost:5501/api/users/validate_role",
+        { email, role }
+      );
+
+      if (!roleValidationResponse.data.valid) {
+        setError(`No ${role} found with this email.`);
+        setLoading(false);
+        return;
+      }
+
+      // Proceed with login
       const { data } = await axios.post(
         "http://localhost:5501/api/users/login",
-        { email, password }
+        { email, password, role }
       );
       localStorage.setItem("userId", data.user.id);
       localStorage.setItem("token", data.token);
@@ -62,6 +76,25 @@ const LoginPage = () => {
             {successMessage}
           </p>
         )}
+
+        <div className="flex justify-center mb-6">
+          <Button
+            onClick={() => setRole("buyer")}
+            className={`px-6 py-2 rounded-lg border cursor-pointer mx-2 ${
+              role === "buyer" ? "bg-blue-700 text-white" : "bg-gray-200"
+            }`}
+          >
+            Buyer
+          </Button>
+          <Button
+            onClick={() => setRole("seller")}
+            className={`px-6 py-2 rounded-lg border cursor-pointer mx-2 ${
+              role === "seller" ? "bg-blue-700 text-white" : "bg-gray-200"
+            }`}
+          >
+            Seller
+          </Button>
+        </div>
 
         <form onSubmit={handleLogin} className="mt-6">
           <div className="mb-4">

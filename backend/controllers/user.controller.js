@@ -115,7 +115,20 @@ const login = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
+const validate_role = async (req, res) => {
+  const { email, role } = req.body;
+  try {
+    const user = await User.findOne({ email, role });
+    if (user) {
+      return res.json({ valid: true });
+    } else {
+      return res.json({ valid: false });
+    }
+  } catch (error) {
+    console.error('Role validation error:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
 // Logout
 const logout = (req, res) => {
   res.clearCookie("token").json({
@@ -124,4 +137,4 @@ const logout = (req, res) => {
   });
 };
 
-export { signUp, confirmEmail, login, logout };
+export { signUp, confirmEmail,validate_role, login, logout };
