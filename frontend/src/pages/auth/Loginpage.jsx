@@ -7,12 +7,14 @@ import { AuthContext } from "@/context/Authcontext";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const { setUserName, setUserRole } = useContext(AuthContext)
+  const { setUserName, setUserRole } = useContext(AuthContext);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -20,9 +22,22 @@ const LoginPage = () => {
     setSuccessMessage("");
 
     try {
+      // Validate the role
+      const roleValidationResponse = await axios.post(
+        "http://localhost:5501/api/users/validate_role",
+        { email, role }
+      );
+
+      if (!roleValidationResponse.data.valid) {
+        setError(`No ${role} found with this email.`);
+        setLoading(false);
+        return;
+      }
+
+      // Proceed with login
       const { data } = await axios.post(
         "http://localhost:5501/api/users/login",
-        { email, password }
+        { email, password, role }
       );
       localStorage.setItem("userId", data.user.id);
       localStorage.setItem("token", data.token);
@@ -39,7 +54,7 @@ const LoginPage = () => {
         navigate("/shop/home"); // Redirect to shop home for buyer
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
       setError(err.response?.data?.error || "Login failed");
       setSuccessMessage("");
     } finally {
@@ -48,9 +63,9 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600">
       <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg">
-        <h2 className="text-3xl font-bold text-center text-gray-800">Login</h2>
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Login</h2>
 
         {error && (
           <p className="text-red-500 text-sm mt-2 text-center">{error}</p>
@@ -61,6 +76,25 @@ const LoginPage = () => {
             {successMessage}
           </p>
         )}
+
+        <div className="flex justify-center mb-6">
+          <Button
+            onClick={() => setRole("buyer")}
+            className={`px-6 py-2 rounded-lg border cursor-pointer mx-2 ${
+              role === "buyer" ? "bg-blue-700 text-white" : "bg-gray-200"
+            }`}
+          >
+            Buyer
+          </Button>
+          <Button
+            onClick={() => setRole("seller")}
+            className={`px-6 py-2 rounded-lg border cursor-pointer mx-2 ${
+              role === "seller" ? "bg-blue-700 text-white" : "bg-gray-200"
+            }`}
+          >
+            Seller
+          </Button>
+        </div>
 
         <form onSubmit={handleLogin} className="mt-6">
           <div className="mb-4">
