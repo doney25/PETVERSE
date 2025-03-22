@@ -41,7 +41,7 @@ const ImageUploader = ({ onUpload }) => {
   };
 
   return (
-    <div>
+    <div className="flex">
       <Input
         type="file"
         accept="image/*"
@@ -49,7 +49,7 @@ const ImageUploader = ({ onUpload }) => {
         onChange={handleFileChange}
       />
       <Button
-        className="absolute my-4"
+        className="mx-2"
         variant="outline"
         onClick={handleUpload}
         disabled={loading}

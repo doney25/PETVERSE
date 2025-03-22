@@ -30,7 +30,6 @@ const showPet = async (req, res) => {
 // Create a pet
 const createPet = async (req, res) => {
   try {
-    console.log("Received body:", req.body);
     if (
       !req.body.name ||
       !req.body.category ||
