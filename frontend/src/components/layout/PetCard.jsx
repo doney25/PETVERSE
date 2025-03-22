@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const PetCard = ({ pets }) => {
   if (!Array.isArray(pets)) return null;
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -15,11 +15,23 @@ const PetCard = ({ pets }) => {
               src={`http://localhost:5501${pet.image[0]}`}
               alt={pet.name}
               className="w-full h-48 object-cover cursor-pointer"
-              onClick={() => navigate(`/shop/pets/${pet.category}/${pet._id}`)}
+              onClick={() => {
+                if (pet.category === "food" || pet.category === "grooming" || pet.category === "toys") {
+                  navigate(`/shop/products/${pet.category}/${pet._id}`);
+                } else {
+                  navigate(`/shop/pets/${pet.category}/${pet._id}`);
+                }
+              }}
             />
             <div
               className="p-4 cursor-pointer bg-gray-100"
-              onClick={() => navigate(`/shop/pets/${pet.category}/${pet._id}`)}
+              onClick={() => {
+                if (pet.category === "food" || pet.category === "grooming" || pet.category === "toys") {
+                  navigate(`/shop/products/${pet.category}/${pet._id}`);
+                } else {
+                  navigate(`/shop/pets/${pet.category}/${pet._id}`);
+                }
+              }}
             >
               <h3 className="text-lg font-semibold">{pet.name}</h3>
               <p className="text-sm text-muted-foreground">{pet.breed}</p>
@@ -34,9 +46,6 @@ const PetCard = ({ pets }) => {
                 >
                   Add to Cart
                 </Button>
-                {/* <Button onClick={() => onAddToCart(product.id, product.stock)} size="sm">
-            Add to Cart
-          </Button> */}
               </div>
             </div>
           </div>

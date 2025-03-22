@@ -8,6 +8,7 @@ import path from "path";
 import multer from "multer";
 import petRouter from "./routes/pets.route.js";
 import userRouter from "./routes/user.route.js";
+import productRouter from "./routes/product.route.js"; // ✅ Import Product Router
 import "./services/vaccination.service.js";
 import Chat from "./models/chats.model.js";
 
@@ -25,8 +26,11 @@ app.use(
     credentials: true,
   })
 );
+
 app.use("/api/pets", petRouter);
 app.use("/api/users", userRouter);
+app.use("/api/products", productRouter); // ✅ Register Product Route
+
 app.use(
   "/uploads",
   cors({
@@ -63,7 +67,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send_message", async ({ buyerId, sellerId, sender, message }) => {
-    
     const chat = await Chat.findOneAndUpdate(
       { buyerId, sellerId },
       { $push: { messages: { sender, message } } },

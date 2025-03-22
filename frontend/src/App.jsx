@@ -9,8 +9,10 @@ import Buyer from "./pages/home/Buyer";
 import BuyerChatComponent from "./components/buyer/BuyerChatComponent";
 import PetListings from "./pages/buyer/PetListings";
 import ProductListings from "./pages/buyer/ProductListings";
+import ProductDetails from "./pages/buyer/ProductDetails"; // Imported ProductDetails
 import PetDetails from "./pages/buyer/PetDetails";
 import ChatList from "./components/buyer/BuyerChatList";
+
 function App() {
   return (
     <Routes>
@@ -22,22 +24,23 @@ function App() {
       {/* <Route path="/pet-details/:id" element={<PetDetails />} /> */}
       {/* <Route path="/chat" element={<ChatPage />} /> */}
       {/* <Route path="/purchase/:id" element={<PurchasePage />} /> */}
+
       {/* Buyer Routes */}
       <Route path="/shop/*" element={<ProtectedRoute roleRequired="buyer" />}>
         <Route path="home" element={<Buyer />} />
-        <Route
-          path="chat/:buyerId/:sellerId"
-          element={<BuyerChatComponent />}
-        />
+        <Route path="chat/:buyerId/:sellerId" element={<BuyerChatComponent />} />
         <Route path="chat/:userId" element={<ChatList />} />
 
         <Route path="pets/:category" element={<PetListings />} />
         <Route path="pets" element={<PetListings />} />
         <Route path="pets/:category/:petId" element={<PetDetails />} />
 
+        {/* Product Routes */}
         <Route path="products" element={<ProductListings />} />
         <Route path="products/:category" element={<ProductListings />} />
+        <Route path="products/:category/:productId" element={<ProductDetails />} /> {/* ✅ Added this route */}
       </Route>
+
       {/* Seller and Admin routes */}
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<Dashboard />} />
