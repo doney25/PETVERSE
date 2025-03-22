@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import { Trash2, Pencil } from "lucide-react";

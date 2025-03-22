@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import PetCard from "@/components/layout/BuyerPetCard";
+import PetCard from "@/components/layout/SellerPetCard";
 
 const ManagePets = () => {
   const [pets, setPets] = useState([]);
@@ -22,7 +22,7 @@ const ManagePets = () => {
   return (
     <div className="p-6 space-y-6">
       <h2 className="text-2xl mb-3">Active Listings</h2>
-      <div className="flex">
+      <div className="flex-grow grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
         {pets.length === 0 ? (
           <h2>There are no Listings currently</h2>
         ) : (

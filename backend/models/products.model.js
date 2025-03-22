@@ -6,7 +6,7 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    image: {
+    images: {
       type: [String],
       required: true,
     },
@@ -31,5 +31,5 @@ const productSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Products = mongoose.model("Products", productSchema);
-export default Products;
+const Product = mongoose.model("Product", productSchema);
+export default Product;

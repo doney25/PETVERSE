@@ -6,6 +6,7 @@ import http from "http";
 import { Server } from "socket.io";
 import petRouter from "./routes/pets.route.js";
 import userRouter from "./routes/user.route.js";
+import productRouter from "./routes/products.route.js";
 import uploadRouter from "./routes/uploads.route.js";
 import "./services/vaccination.service.js";
 import Chat from "./models/chats.model.js";
@@ -20,7 +21,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "http://localhost:5174",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -30,11 +31,12 @@ app.use(
 app.use("/api/pets", petRouter);
 app.use("/api/users", userRouter);
 app.use("/api/upload", uploadRouter)
+app.use("/api/products", productRouter)
 
 // WebSocket for Chat Functionality
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: "http://localhost:5174",
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type"],
     credentials: true,
