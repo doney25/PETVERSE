@@ -3,7 +3,6 @@ import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { RadioGroup } from "@/components/ui/radio-group";
-import { supabase } from "@/utils/supabaseClient";
 
 const SignupPage = () => {
   const [name, setName] = useState("");
@@ -51,7 +50,7 @@ const SignupPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600">
       <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg">
         <h2 className="text-3xl font-bold text-center text-gray-800">
           Sign Up
@@ -70,46 +69,6 @@ const SignupPage = () => {
         )}
 
         <form onSubmit={handleSignup} className="mt-6">
-          Who are you?
-          <RadioGroup
-            value={role}
-            onChange={(e) => {
-              setRole(e.target.value);
-            }}
-            className="flex gap-4 w-full my-2"
-          >
-            <label
-              htmlFor="buyer"
-              className={`px-6 py-2 rounded-lg border cursor-pointer flex-1 text-center ${
-                role === "buyer" ? "bg-blue-700 text-white" : "bg-gray-200"
-              }`}
-            >
-              Buyer
-              <input
-                type="radio"
-                id="buyer"
-                name="role"
-                value="buyer"
-                className="hidden"
-              />
-            </label>
-
-            <label
-              htmlFor="seller"
-              className={`px-6 py-2 rounded-lg border cursor-pointer flex-1 text-center ${
-                role === "seller" ? "bg-blue-700 text-white" : "bg-gray-200"
-              }`}
-            >
-              Seller
-              <input
-                type="radio"
-                id="seller"
-                name="role"
-                value="seller"
-                className="hidden"
-              />
-            </label>
-          </RadioGroup>
           <div className="mb-4">
             <label className="block text-gray-700 font-medium">Name</label>
             <input
@@ -155,6 +114,48 @@ const SignupPage = () => {
               required
               className="w-full px-4 py-2 mt-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-medium">Role</label>
+            <RadioGroup
+              value={role}
+              onChange={(e) => {
+                setRole(e.target.value);
+              }}
+              className="flex gap-4 w-full my-2"
+            >
+              <label
+                htmlFor="buyer"
+                className={`px-6 py-2 rounded-lg border cursor-pointer flex-1 text-center ${
+                  role === "buyer" ? "bg-blue-700 text-white" : "bg-gray-200"
+                }`}
+              >
+                Buyer
+                <input
+                  type="radio"
+                  id="buyer"
+                  name="role"
+                  value="buyer"
+                  className="hidden"
+                />
+              </label>
+
+              <label
+                htmlFor="seller"
+                className={`px-6 py-2 rounded-lg border cursor-pointer flex-1 text-center ${
+                  role === "seller" ? "bg-blue-700 text-white" : "bg-gray-200"
+                }`}
+              >
+                Seller
+                <input
+                  type="radio"
+                  id="seller"
+                  name="role"
+                  value="seller"
+                  className="hidden"
+                />
+              </label>
+            </RadioGroup>
           </div>
           <Button
             className="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition"

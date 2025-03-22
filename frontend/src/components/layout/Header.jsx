@@ -66,37 +66,10 @@ export default function Header() {
 
         {/* Navigation Links */}
         <nav className="hidden md:flex space-x-6">
-          <a onClick={handleClick} className="text-gray-600 hover:text-blue-500 cursor-pointer">
+          <a href="/login" onClick={handleClick} className="text-gray-600 hover:text-blue-500">
             Home
           </a>
-
-          {/* Shop Dropdown */}
-          <div className="relative group">
-            <button className="text-gray-600 hover:text-blue-500 focus:outline-none">
-              Shop
-            </button>
-            <div className="absolute left-0 mt-2 w-48 bg-white border rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
-              <ul className="py-2">
-                <li>
-                  <button 
-                    onClick={() => navigate("/shop/pets")} 
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-200 w-full text-left"
-                  >
-                    Pets
-                  </button>
-                </li>
-                <li>
-                  <button 
-                    onClick={() => navigate("/shop/products")} 
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-200 w-full text-left"
-                  >
-                    Pet Products
-                  </button>
-                </li>
-              </ul>
-            </div>
-          </div>
-
+          
           <a href="#about" className="text-gray-600 hover:text-blue-500">
             About Us
           </a>
@@ -108,13 +81,7 @@ export default function Header() {
         {/* Right Section: Cart + Login/Logout */}
         <div className="flex items-center space-x-4">
           {/* Cart Button */}
-          <Button
-            variant="outline"
-            className="md:flex sm:hidden flex items-center space-x-2 text-gray-600 hover:text-blue-500"
-          >
-            <ShoppingCartIcon className="w-5 h-5" />
-            <span>Cart</span>
-          </Button>
+
 
           {/* Login / User Info */}
           {userName ? (
@@ -153,15 +120,26 @@ export default function Header() {
               </DropdownMenu>
             </div>
           ) : (
-            <Link to="/login">
-              <Button
-                variant="primary"
-                className="bg-red-500 text-white px-4 py-2 rounded-full"
-              >
-                <LoginIcon className="w-5 h-5" />
-                <span>Log In</span>
-              </Button>
-            </Link>
+            <div className="flex space-x-4">
+              <Link to="/login">
+                <Button
+                  variant="primary"
+                  className="bg-red-500 text-white px-4 py-2 rounded-full"
+                >
+                  <LoginIcon className="w-5 h-5" />
+                  <span>Log In</span>
+                </Button>
+              </Link>
+              <Link to="/signup">
+                <Button
+                  variant="primary"
+                  className="bg-red-500 text-white px-4 py-2 rounded-full"
+                >
+                   <LoginIcon className="w-5 h-5" />
+                  <span>Sign Up</span>
+                </Button>
+              </Link>
+            </div>
           )}
         </div>
       </div>
@@ -178,11 +156,18 @@ export default function Header() {
             About Us
           </a>
           {userName ? null : (
-            <Link to="/login">
-              <a className="block py-2 text-gray-200 hover:text-blue-500">
-                Login
-              </a>
-            </Link>
+            <div>
+              <Link to="/login">
+                <a className="block py-2 text-gray-200 hover:text-blue-500">
+                  Login
+                </a>
+              </Link>
+              <Link to="/signup">
+                <a className="block py-2 text-gray-200 hover:text-blue-500">
+                  Sign Up
+                </a>
+              </Link>
+            </div>
           )}
         </div>
       )}
