@@ -10,9 +10,12 @@ import {
 import { Shield, Bell, BoxIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "@/context/Authcontext";
-import PetListings from '@/pages/admin/PetListings'
+import PetListings from '@/pages/admin/Home'
 import ListProducts from "../admin/ListProducts";
 import ManageProducts from "../admin/ManageProducts";
+import ListingPage from "../seller/ListingPage";
+import PetListing from "../buyer/PetListings";
+import Home from "@/pages/admin/Home";
 
 export default function admin() {
   const [activeTab, setActiveTab] = useState("home");
@@ -117,7 +120,8 @@ export default function admin() {
 
       {/* Main Content */}
       <div className="flex-1 p-8 ml-64 bg-gray-100 overflow-y-auto">
-        {activeTab === "home" && <PetListings />}
+        {activeTab === "home" && <Home />}
+        {/* {activeTab === "home" && <PetListings />} */}
         {activeTab === "listProducts" && <ListProducts />}
         {activeTab === "manageProducts" && <ManageProducts />}
         {activeTab === "orders" && <div>Orders Content</div>}

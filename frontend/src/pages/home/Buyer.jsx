@@ -33,9 +33,9 @@ const Buyer = () => {
   );
 
   const petCategoriesWithIcon = [
-    { id: "dog", label: "Dog", icon: Dog },
-    { id: "cat", label: "Cat", icon: CatIcon },
-    { id: "birds", label: "Birds", icon: Bird },
+    { id: "dog", label: "Dogs", icon: Dog },
+    { id: "cat", label: "Cats", icon: CatIcon },
+    { id: "bird", label: "Birds", icon: Bird },
     { id: "", label: "Browse All", icon: Search }
   ];
 

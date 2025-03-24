@@ -1,6 +1,6 @@
-import Cart from "../models/cart.model";
+import Cart from "../models/cart.model.js";
 
-export const addToCart = async (req, res) => {
+const addToCart = async (req, res) => {
   try {
     const { userId, itemId, itemType, name, price, image } = req.body;
 
@@ -52,7 +52,7 @@ export const addToCart = async (req, res) => {
   }
 };
 
-export const removeFromCart = async (req, res) => {
+const removeFromCart = async (req, res) => {
   try {
     const { userId, itemId } = req.body;
 
@@ -68,7 +68,7 @@ export const removeFromCart = async (req, res) => {
   }
 };
 
-export const getCart = async (req, res) => {
+const getCart = async (req, res) => {
   try {
     const { userId } = req.params;
     const cart = await Cart.findOne({ userId });
@@ -80,3 +80,5 @@ export const getCart = async (req, res) => {
     res.status(500).json({ message: "Error fetching cart", error });
   }
 };
+
+ export {addToCart, removeFromCart, getCart}
