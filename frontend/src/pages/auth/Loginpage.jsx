@@ -48,8 +48,10 @@ const LoginPage = () => {
       setUserRole(data.user.role);
       setSuccessMessage("Login successful!");
       setError("");
-      if (data.user.role === "admin" || data.user.role === "seller") {
-        navigate("/dashboard"); // Redirect to dashboard for admin or seller
+      if (data.user.role === "admin") {
+        navigate("/dashboard"); // Redirect to admin dashboard
+      } else if (data.user.role === "seller") {
+        navigate("/dashboard"); // Redirect to dashboard for seller
       } else if (data.user.role === "buyer") {
         navigate("/shop/home"); // Redirect to shop home for buyer
       }
@@ -93,6 +95,14 @@ const LoginPage = () => {
             }`}
           >
             Seller
+          </Button>
+          <Button
+            onClick={() => setRole("admin")}
+            className={`px-6 py-2 rounded-lg border cursor-pointer mx-2 ${
+              role === "admin" ? "bg-blue-700 text-white" : "bg-gray-200"
+            }`}
+          >
+            Admin
           </Button>
         </div>
 
