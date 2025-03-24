@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import SellerPetCard from "../../components/layout/SellerPetCard";
 
-const ManagePets = () => {
+const PetList = ({onNavigateToEdit}) => {
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(false);
   const sellerId = localStorage.getItem("userId")
@@ -31,11 +31,11 @@ const ManagePets = () => {
         {pets.length === 0 ? (
           <h2>There are no Listings currently</h2>
           ) : (
-          <SellerPetCard pets={pets} />
+          <SellerPetCard pets={pets} onNavigate={onNavigateToEdit}/>
         )}
       </div>
     </div>
   );
 };
 
-export default ManagePets;
+export default PetList;

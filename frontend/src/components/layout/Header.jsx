@@ -38,7 +38,7 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-white shadow-md">
+    <header className="bg-white shadow-md relative z-50"> {/* Ensure header has a higher z-index */}
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
         <div className="md:hidden flex items-center justify-start">
           <Button
@@ -56,12 +56,12 @@ export default function Header() {
 
         {/* Logo Section */}
         <div className="flex items-center w-32 space-x-4">
-            <img
-              src="/petverse logo 5.jpeg" // Add your logo image here
-              alt="Petverse Logo"
-              className="h-12 w-32 object-contain"
-              onClick={handleClick}
-            />
+          <img
+            src="/petverse logo 5.jpeg" 
+            alt="Petverse Logo"
+            className="h-12 w-32 object-contain cursor-pointer"
+            onClick={handleClick}
+          />
         </div>
 
         {/* Navigation Links */}
@@ -84,7 +84,6 @@ export default function Header() {
 
 
           {/* Login / User Info */}
-
           {userName ? (
             <div className="flex items-center space-x-4">
               <DropdownMenu>
@@ -110,7 +109,7 @@ export default function Header() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onClick={async () => {
-                      await logout()
+                      await logout();
                       navigate("/");
                     }}
                   >
@@ -147,22 +146,13 @@ export default function Header() {
 
       {isMenuOpen && (
         <div className="md:hidden bg-gray-800 dark:bg-gray-900 text-white py-4 px-6">
-          <a
-            href="#home"
-            className="block py-2 text-gray-200 hover:text-blue-500"
-          >
+          <a onClick={handleClick} className="block py-2 text-gray-200 hover:text-blue-500 cursor-pointer">
             Home
           </a>
-          <a
-            href="#shop"
-            className="block py-2 text-gray-200 hover:text-blue-500"
-          >
+          <a href="#shop" className="block py-2 text-gray-200 hover:text-blue-500">
             Shop
           </a>
-          <a
-            href="#about"
-            className="block py-2 text-gray-200 hover:text-blue-500"
-          >
+          <a href="#about" className="block py-2 text-gray-200 hover:text-blue-500">
             About Us
           </a>
           {userName ? null : (

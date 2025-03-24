@@ -11,9 +11,9 @@ import {
 import { Store } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "@/context/Authcontext";
-import ManagePets from "@/pages/seller/ManagePets";
 import Home from "@/pages/seller/Home";
 import ChatPage from "../seller/ChatPage"
+import ListingPage from "../seller/ListingPage";
 
 export default function Seller() {
   const [activeTab, setActiveTab] = useState("home");
@@ -109,7 +109,7 @@ export default function Seller() {
       {/* Main Content */}
       <div className="flex-1 p-8 ml-64 bg-gray-100 overflow-y-auto">
         {activeTab === "home" && <Home />}
-        {activeTab === "petListings" && <ManagePets />}
+        {activeTab === "petListings" && <ListingPage />}
         {activeTab === "orders" && <div>Orders Content</div>}
         {activeTab === "chats" && <ChatPage />}
         {activeTab === "petHealth" && <div>Pet Health Records Content</div>}

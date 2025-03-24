@@ -11,6 +11,8 @@ import PetListings from "./pages/buyer/PetListings";
 import ProductListings from "./pages/buyer/ProductListings";
 import PetDetails from "./pages/buyer/PetDetails";
 import ChatList from "./components/buyer/BuyerChatList";
+import CartPage from "./pages/buyer/CartPage";
+import ProductDetails from "./pages/buyer/ProductDetails";
 function App() {
   return (
     <Routes>
@@ -35,21 +37,15 @@ function App() {
         <Route path="pets" element={<PetListings />} />
         <Route path="pets/:category/:petId" element={<PetDetails />} />
 
+        {/* Product Routes */}
         <Route path="products" element={<ProductListings />} />
         <Route path="products/:category" element={<ProductListings />} />
+        <Route path="products/:category/:productId" element={<ProductDetails />} /> 
+        <Route path="cart" element={<CartPage />} />
       </Route>
       {/* Seller and Admin routes */}
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<Dashboard />} />
-        {/* <Route
-          path="/chat/:buyerId/:sellerId"
-          element={
-            <SellerChatComponent
-              buyerId={"67c7d476148281d249f2c67a"}
-              sellerId={"67c4180657692f021854cbac"}
-            />
-          }
-        /> */}
       </Route>
     </Routes>
   );
