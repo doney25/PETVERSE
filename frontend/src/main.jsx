@@ -3,11 +3,14 @@ import App from "./App";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/Authcontext";
+import { CartProvider } from "./context/CartContext";
 
 createRoot(document.getElementById("root")).render(
   <AuthProvider>
     <BrowserRouter>
-      <App />
+      <CartProvider>
+        <App />
+      </CartProvider>
     </BrowserRouter>
   </AuthProvider>
 );

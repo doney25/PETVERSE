@@ -31,14 +31,16 @@ export default function Header() {
 
   const handleClick = () => {
     if (userName) {
-      navigate('/shop/home');
+      navigate("/shop/home");
     } else {
-      navigate('/');
+      navigate("/");
     }
   };
 
   return (
-    <header className="bg-white shadow-md relative z-50"> {/* Ensure header has a higher z-index */}
+    <header className="bg-white shadow-md relative z-50">
+      {" "}
+      {/* Ensure header has a higher z-index */}
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
         <div className="md:hidden flex items-center justify-start">
           <Button
@@ -57,7 +59,7 @@ export default function Header() {
         {/* Logo Section */}
         <div className="flex items-center w-32 space-x-4">
           <img
-            src="/petverse logo 5.jpeg" 
+            src="/petverse logo 5.jpeg"
             alt="Petverse Logo"
             className="h-12 w-32 object-contain cursor-pointer"
             onClick={handleClick}
@@ -66,10 +68,13 @@ export default function Header() {
 
         {/* Navigation Links */}
         <nav className="hidden md:flex space-x-6">
-          <a href="/login" onClick={handleClick} className="text-gray-600 hover:text-blue-500">
+          <a
+            onClick={handleClick}
+            className="text-gray-600 hover:text-blue-500"
+          >
             Home
           </a>
-          
+
           <a href="#about" className="text-gray-600 hover:text-blue-500">
             About Us
           </a>
@@ -82,10 +87,17 @@ export default function Header() {
         <div className="flex items-center space-x-4">
           {/* Cart Button */}
 
-
           {/* Login / User Info */}
           {userName ? (
             <div className="flex items-center space-x-4">
+              <Button
+                variant="outline"
+                className="md:flex sm:hidden flex items-center space-x-2 text-gray-600 hover:text-blue-500"
+                onClick={() => {navigate('/shop/cart')}}
+              >
+                <ShoppingCartIcon className="w-5 h-5" />
+                <span>Cart</span>
+              </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Avatar className="bg-black">
@@ -102,7 +114,11 @@ export default function Header() {
                     <UserCog className="mr-2 h-4 w-4" />
                     Account
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate(`/shop/chat/${localStorage.getItem("userId")}`)}>
+                  <DropdownMenuItem
+                    onClick={() =>
+                      navigate(`/shop/chat/${localStorage.getItem("userId")}`)
+                    }
+                  >
                     <MessageCircle className="mr-2 h-4 w-4" />
                     Messages
                   </DropdownMenuItem>
@@ -135,7 +151,7 @@ export default function Header() {
                   variant="primary"
                   className="bg-red-500 text-white px-4 py-2 rounded-full"
                 >
-                   <LoginIcon className="w-5 h-5" />
+                  <LoginIcon className="w-5 h-5" />
                   <span>Sign Up</span>
                 </Button>
               </Link>
@@ -143,16 +159,24 @@ export default function Header() {
           )}
         </div>
       </div>
-
       {isMenuOpen && (
         <div className="md:hidden bg-gray-800 dark:bg-gray-900 text-white py-4 px-6">
-          <a onClick={handleClick} className="block py-2 text-gray-200 hover:text-blue-500 cursor-pointer">
+          <a
+            onClick={handleClick}
+            className="block py-2 text-gray-200 hover:text-blue-500 cursor-pointer"
+          >
             Home
           </a>
-          <a href="#shop" className="block py-2 text-gray-200 hover:text-blue-500">
+          <a
+            href="#shop"
+            className="block py-2 text-gray-200 hover:text-blue-500"
+          >
             Shop
           </a>
-          <a href="#about" className="block py-2 text-gray-200 hover:text-blue-500">
+          <a
+            href="#about"
+            className="block py-2 text-gray-200 hover:text-blue-500"
+          >
             About Us
           </a>
           {userName ? null : (
