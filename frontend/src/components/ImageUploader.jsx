@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import axios from "axios";
+import { enqueueSnackbar } from "notistack";
 
 const ImageUploader = ({ onUpload }) => {
   const [images, setImages] = useState([]);
@@ -13,7 +14,7 @@ const ImageUploader = ({ onUpload }) => {
   };
 
   const handleUpload = async () => {
-    if (images.length === 0) return alert("Please select images");
+    if (images.length === 0) return enqueueSnackbar("Please select images.", {variant:"warning"})
 
     setLoading(true);
     const uploadedUrls = [];
@@ -33,6 +34,8 @@ const ImageUploader = ({ onUpload }) => {
       if (res.data.imageUrls) {
         onUpload(res.data.imageUrls); // ✅ Make sure it's an array
       }
+
+      enqueueSnackbar("Image Upload Successful!", {variant:"success"})
     } catch (error) {
       console.error("Error uploading image:", error);
     }

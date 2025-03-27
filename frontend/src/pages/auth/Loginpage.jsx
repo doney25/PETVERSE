@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { AuthContext } from "@/context/Authcontext";
+import { enqueueSnackbar } from "notistack";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -49,11 +50,14 @@ const LoginPage = () => {
       setSuccessMessage("Login successful!");
       setError("");
       if (data.user.role === "admin") {
-        navigate("/dashboard"); // Redirect to admin dashboard
+        navigate("/dashboard");
+        enqueueSnackbar("Login Successful!", {variant:"success"}) 
       } else if (data.user.role === "seller") {
-        navigate("/dashboard"); // Redirect to dashboard for seller
+        navigate("/dashboard");
+        enqueueSnackbar("Login Successful!", {variant:"success"})
       } else if (data.user.role === "buyer") {
-        navigate("/shop/home"); // Redirect to shop home for buyer
+        navigate("/shop/home");
+        enqueueSnackbar("Login Successful!", {variant:"success"})
       }
     } catch (err) {
       console.log(err);
