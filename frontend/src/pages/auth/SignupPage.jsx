@@ -3,6 +3,7 @@ import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { RadioGroup } from "@/components/ui/radio-group";
+import { enqueueSnackbar } from "notistack";
 
 const SignupPage = () => {
   const [name, setName] = useState("");
@@ -22,12 +23,14 @@ const SignupPage = () => {
 
     if (password !== confirmPassword) {
       setError("Passwords do not match!");
+      enqueueSnackbar("Passwords do not match!", {variant:"error"})
       setLoading(false);
       return;
     }
 
     if (!role) {
       setError("Please select a role.");
+      enqueueSnackbar("Please select a role", {variant:"warning"})
       setLoading(false);
       return;
     }
@@ -39,11 +42,10 @@ const SignupPage = () => {
       );
 
       if (error) throw error;
-      setSuccessMessage(
-        "Signup successful! Check your email to verify your account."
-      );
+      enqueueSnackbar("Signup successful! Check your email to verify your account.", {variant:"success"})
     } catch (err) {
       setError(err.response?.data?.error || "Signup failed");
+      enqueueSnackbar(err.response?.data?.error || "Signup failed", {variant:"error"})
     } finally {
       setLoading(false);
     }

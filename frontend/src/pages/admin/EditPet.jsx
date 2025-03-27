@@ -13,6 +13,7 @@ import { Edit3 } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ImageUploader from "@/components/ImageUploader";
+import { enqueueSnackbar } from "notistack";
 
 export default function EditPet({ onBack, pet }) { //Iwant this pet inside useEffect
   const [id, setId] = useState("");
@@ -62,7 +63,7 @@ export default function EditPet({ onBack, pet }) { //Iwant this pet inside useEf
     };
     axios
       .put(`http://localhost:5501/api/pets/${id}`, petData)
-      .then(() => alert("Pet Edited Sucessfully"))
+      .then(() => enqueueSnackbar("Pet updated successfully!", {variant:"success"}))
       .catch((error) => {
         console.log(error);
       });

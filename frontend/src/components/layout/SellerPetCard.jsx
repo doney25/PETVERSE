@@ -3,6 +3,7 @@ import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import { Trash2, Pencil } from "lucide-react";
 import axios from "axios";
+import { enqueueSnackbar } from "notistack";
 
 const SellerPetCard = ({ pets, onNavigate }) => {
   if (!Array.isArray(pets)) return null;
@@ -13,7 +14,7 @@ const SellerPetCard = ({ pets, onNavigate }) => {
       .delete(`http://localhost:5501/api/pets/${id}`)
       .then(() => {
         navigate(0)
-        alert("Pet deleted successfully");
+        enqueueSnackbar("Pet removed successfully!", {variant:"success"})
       })
       .catch((error) => {
         console.log(error);

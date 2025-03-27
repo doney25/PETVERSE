@@ -13,6 +13,7 @@ import { Plus } from "lucide-react";
 import { useState } from "react";
 import axios from "axios";
 import ImageUploader from "@/components/ImageUploader";
+import { enqueueSnackbar } from "notistack";
 
 const ListProducts = () => {
 
@@ -36,9 +37,9 @@ const ListProducts = () => {
         console.log(productData)
         axios
           .post("http://localhost:5501/api/products", productData)
-          .then(() => alert("Product Listed Successful"))
+          .then(() => enqueueSnackbar("Product listed successfully!", {variant:"success"}))
           .catch((error) => {
-            console.log(error);
+            enqueueSnackbar(error.message, {variant:"error"});
           });
       };
 

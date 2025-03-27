@@ -13,6 +13,8 @@ import { Edit3 } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ImageUploader from "@/components/ImageUploader";
+import { enqueueSnackbar } from "notistack";
+import { useNavigate } from "react-router-dom";
 
 export default function EditPet({ onBack, pet }) { //Iwant this pet inside useEffect
   const [id, setId] = useState("");
@@ -25,6 +27,7 @@ export default function EditPet({ onBack, pet }) { //Iwant this pet inside useEf
   const [price, setPrice] = useState("");
   const [images, setImages] = useState([]);
   const [description, setDescription] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get(`http://localhost:5501/api/pets/${pet}`)
@@ -42,7 +45,7 @@ export default function EditPet({ onBack, pet }) { //Iwant this pet inside useEf
   }, [pet])
 
   const handleSave = async () => {
-    if (images.length === 0) return alert("Please upload at least one image.");
+    if (images.length === 0) return enqueueSnackbar("Please upload at least one image.", {variant:"warning"})
 
     const sellerId = localStorage.getItem("userId");
     const sellerName = localStorage.getItem("userName");
@@ -62,9 +65,12 @@ export default function EditPet({ onBack, pet }) { //Iwant this pet inside useEf
     };
     axios
       .put(`http://localhost:5501/api/pets/${id}`, petData)
-      .then(() => alert("Pet Edited Sucessfully"))
+      .then(() => {
+        enqueueSnackbar("Edit Successfully saved!", {variant:"success"})
+        navigate(0)
+      })
       .catch((error) => {
-        console.log(error);
+        enqueueSnackbar(error.message, {variant:"error"})
       });
   };
 
