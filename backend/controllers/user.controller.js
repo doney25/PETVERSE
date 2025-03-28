@@ -129,6 +129,14 @@ const validate_role = async (req, res) => {
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
+const verify_breed= (req, res) => {
+  const { breed } = req.body;
+  if (breed === 'labrador') {
+    return res.json({ valid: true });
+  } else {
+    return res.json({ valid: false });
+  }
+};
 // Logout
 const logout = (req, res) => {
   res.clearCookie("token").json({
@@ -137,4 +145,4 @@ const logout = (req, res) => {
   });
 };
 
-export { signUp, confirmEmail,validate_role, login, logout };
+export { signUp, confirmEmail,validate_role, verify_breed, login, logout };

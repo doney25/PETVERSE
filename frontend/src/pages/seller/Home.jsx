@@ -13,6 +13,7 @@ import { Plus } from "lucide-react";
 import { useState } from "react";
 import axios from "axios";
 import ImageUploader from "@/components/ImageUploader";
+import PetClassifier from "@/components/PetClassifier"; // Import the PetClassifier component
 
 export default function Home() {
   const [name, setName] = useState("");
@@ -46,7 +47,7 @@ export default function Home() {
     };
     axios
       .post("http://localhost:5501/api/pets", petData)
-      .then(() => alert("Pet Listed Sucessfully"))
+      .then(() => alert("Pet Listed Successfully"))
       .catch((error) => {
         console.log(error);
       });
@@ -113,6 +114,12 @@ export default function Home() {
               onChange={(e) => setDescription(e.target.value)}
             />
           </div>
+
+          {/* Pet Classifier Integration */}
+          <div className="mt-4">
+            <PetClassifier />
+          </div>
+
           <Button
             className="mt-4 w-full"
             variant="default"
