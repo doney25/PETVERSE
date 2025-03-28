@@ -32,7 +32,7 @@ const Home = () => {
         </div>
 
         {/* Image Slider Section */}
-        <h1 className="text-3xl font-bold text-center mb-6">Meet Our Featured Pets</h1>
+        <h1 className="text-3xl font-bold text-center my-6">Meet Our Featured Pets</h1>
         <div className="max-w-5xl mx-auto mt-10 px-4">
           
           <div className="flex justify-center">
@@ -48,8 +48,8 @@ const Home = () => {
             >
               {featuredPets.map((pet) => (
                 <SwiperSlide key={pet.id} className="flex justify-center">
-                  <div className="bg-white shadow-lg rounded-lg p-4 text-center w-80 transform transition-transform hover:scale-105">
-                    <img src={pet.image} alt={pet.name} className="w-full h-48 object-cover rounded-lg" />
+                  <div className="bg-white shadow-lg rounded-lg p-4 text-center h-96 transform transition-transform hover:scale-105">
+                    <img src={pet.image} alt={pet.name} className="w-full h-60 object-cover rounded-lg" />
                     <h3 className="text-xl font-semibold mt-3">{pet.name}</h3>
                     <p className="text-gray-600">{pet.description}</p>
                   </div>
@@ -72,14 +72,14 @@ const Home = () => {
               <p className="mt-2 text-gray-600">Safe and transparent process for all pet purchases and adoptions.</p>
             </div>
             <div className="p-6 bg-white rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold">Expert Advice</h3>
-              <p className="mt-2 text-gray-600">Get tips and support to care for your new pet.</p>
+              <h3 className="text-xl font-semibold">Vaccination Reminder</h3>
+              <p className="mt-2 text-gray-600">Get Vaccination Reminder for your new pet for upto an year.</p>
             </div>
           </div>
         </div>
 
         {/* About Us Section */}
-        <div id="about" className="max-w-6xl mx-auto py-16 px-6 text-center">
+        <div id="about" className="max-w-6xl mx-auto py-6 px-6 text-center">
           <h2 className="text-3xl font-bold">About PETVERSE</h2>
           <p className="mt-4 text-lg text-gray-600">
             PETVERSE is a one-stop platform connecting pet lovers with trusted sellers. Whether you're looking for a furry friend or want to find a loving home for your pet, PETVERSE ensures a seamless and secure experience. With real-time pet listings, verified breeds, live chat with sellers, and AI-powered breed recognition, we make pet adoption easier and more reliable than ever.
@@ -97,7 +97,7 @@ const Home = () => {
             Email: support@petverse.com
           </p>
           <p className="mt-2 text-lg text-gray-600">
-            Phone: +1 (123) 456-7890
+            Phone: +91 9292929292
           </p>
         </div>
 
