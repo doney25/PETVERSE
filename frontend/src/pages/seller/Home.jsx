@@ -13,7 +13,7 @@ import { Plus } from "lucide-react";
 import { useState } from "react";
 import axios from "axios";
 import ImageUploader from "@/components/ImageUploader";
-import PetClassifier from "@/components/PetClassifier"; // Import the PetClassifier component
+import { enqueueSnackbar } from "notistack";
 
 export default function Home() {
   const [name, setName] = useState("");
@@ -49,7 +49,7 @@ export default function Home() {
       .post("http://localhost:5501/api/pets", petData)
       .then(() => alert("Pet Listed Successfully"))
       .catch((error) => {
-        console.log(error);
+        enqueueSnackbar(error.message, {variant:"error"})
       });
   };
 

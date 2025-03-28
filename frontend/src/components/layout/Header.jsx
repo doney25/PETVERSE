@@ -18,6 +18,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { AuthContext } from "@/context/Authcontext";
+import { enqueueSnackbar } from "notistack";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -126,6 +127,7 @@ export default function Header() {
                   <DropdownMenuItem
                     onClick={async () => {
                       await logout();
+                      enqueueSnackbar("Logout Successful!", {variant:"success"})
                       navigate("/");
                     }}
                   >

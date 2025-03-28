@@ -17,14 +17,15 @@ const cartItemSchema = new mongoose.Schema({
   },
   name: String, // Name of the pet or product
   price: Number, // Price of the pet or product
+  stock: Number, // stocks of the pet or product
   quantity: {
     type: Number,
     default: 1,
     validate: function () {
-      return this.itemType === "pet" ? this.quantity === 1 : this.quantity > 0;
+      return this.itemType === "Pet" ? this.quantity === 1 : this.quantity > 0;
     },
   },
-  image: [String], // URL of the pet or product image
+  image: String, // URL of the pet or product image
 });
 
 const CartSchema = new mongoose.Schema({

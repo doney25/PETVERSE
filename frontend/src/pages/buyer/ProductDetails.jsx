@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
+import { enqueueSnackbar } from "notistack";
 
 const ProductDetails = () => {
   const { productId } = useParams(); // Get productId from URL
@@ -28,12 +29,9 @@ const ProductDetails = () => {
 
   return (
     <div className="container mx-auto p-4 w-3/4">
-      <button
-        onClick={() => navigate(-1)}
-        className="text-blue-500 hover:text-blue-700 mb-4"
-      >
+      <Button variant="outline" onClick={() => navigate(-1)} className="mb-6">
         ← Back
-      </button>
+      </Button>
       <div className="flex flex-col md:flex-row gap-6">
         <div className="w-full md:w-1/3">
           <img
@@ -58,7 +56,29 @@ const ProductDetails = () => {
           </div>
 
           <div className="mt-6">
-            <Button size="sm" onClick={() => alert("Added to cart!")}>
+            <Button
+              size="sm"
+              onClick={async (e) => {
+                e.stopPropagation();
+                try {
+                  await handleAddToCart({
+                    itemType: "Product",
+                    itemId: product._id,
+                    itemTypeRef: "Product",
+                    name: product.name,
+                    price: product.price,
+                    stock: product.stock,
+                    quantity: 1,
+                    image: product.images[0],
+                  });
+                  enqueueSnackbar("Product added to cart!", {
+                    variant: "success",
+                  });
+                } catch (error) {
+                  enqueueSnackbar(error.message, { variant: "error" });
+                }
+              }}
+            >
               Add to Cart
             </Button>
           </div>

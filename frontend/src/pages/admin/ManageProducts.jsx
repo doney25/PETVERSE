@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import ImageUploader from "@/components/ImageUploader";
+import { enqueueSnackbar } from "notistack";
 
 const ManageProducts = () => {
   const [products, setProducts] = useState([]);
@@ -53,10 +54,10 @@ const ManageProducts = () => {
 
       setEditingProduct(null);
       fetchProducts();
-      alert("Product updated successfully!");
+      enqueueSnackbar("Product updated successfully!", {variant:"success"})
     } catch (error) {
       console.error("Error updating product:", error);
-      alert("Failed to update product.");
+      enqueueSnackbar("Error updating product.", {variant:"warning"})
     }
   };
 
@@ -116,14 +117,6 @@ const ManageProducts = () => {
                 className="w-full p-2 border rounded"
                 required
               />
-              {/* <input
-                type="text"
-                name="image"
-                value={editingProduct.image}
-                onChange={(e) => setEditingProduct({ ...editingProduct, image: e.target.value })}
-                className="w-full p-2 border rounded"
-                required
-              /> */}
               <ImageUploader />
               <input
                 type="number"

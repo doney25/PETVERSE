@@ -1,16 +1,25 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Alert } from "@/components/ui/alert";
 import { Carousel, CarouselItem } from "@/components/ui/carousel";
 import { Heart, ShoppingCart } from "lucide-react";
+import { CartContext } from "@/context/CartContext";
+import { enqueueSnackbar } from "notistack";
 
 const PetDetails = () => {
   const { petId } = useParams();
+  const { handleAddToCart } = useContext(CartContext);
   const [pet, setPet] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -74,7 +83,9 @@ const PetDetails = () => {
           {/* Pet Info Section */}
           <div className="w-full md:w-1/2">
             <CardHeader>
-              <CardTitle className="text-3xl font-semibold">{pet.name}</CardTitle>
+              <CardTitle className="text-3xl font-semibold">
+                {pet.name}
+              </CardTitle>
             </CardHeader>
 
             <CardContent className="space-y-4">
@@ -107,12 +118,18 @@ const PetDetails = () => {
 
               {/* Seller Info */}
               <div className="mt-6 border-t pt-4">
-                <p className="font-semibold text-lg">Seller: {pet.seller} (⭐ 4.5)</p>
+                <p className="font-semibold text-lg">
+                  Seller: {pet.seller} (⭐ 4.5)
+                </p>
                 {buyerId && (
                   <Button
                     size="sm"
                     className="mt-2"
-                    onClick={() => navigate(`/shop/chat/${buyerId}/${pet.sellerId}`, { state: { seller: pet.seller }})}
+                    onClick={() =>
+                      navigate(`/shop/chat/${buyerId}/${pet.sellerId}`, {
+                        state: { seller: pet.seller },
+                      })
+                    }
                   >
                     Contact Seller
                   </Button>
@@ -126,7 +143,11 @@ const PetDetails = () => {
                   <ul className="list-disc ml-4">
                     {pet.vaccinations.map((vaccine, index) => (
                       <li key={index}>
-                        <span className="font-semibold">{vaccine.vaccineName}</span>: {vaccine.completed ? "Completed" : "Pending"} (Due: {new Date(vaccine.dueDate).toLocaleDateString()})
+                        <span className="font-semibold">
+                          {vaccine.vaccineName}
+                        </span>
+                        : {vaccine.completed ? "Completed" : "Pending"} (Due:{" "}
+                        {new Date(vaccine.dueDate).toLocaleDateString()})
                       </li>
                     ))}
                   </ul>
@@ -135,9 +156,38 @@ const PetDetails = () => {
 
               {/* Action Buttons */}
               <div className="mt-6 flex gap-4">
-                <Button className="flex-1">Add to Cart <ShoppingCart className="ml-2" size={16} /></Button>
-                <Button className="flex-1" variant="destructive">Buy Now</Button>
-                <Button variant="ghost" className="text-red-500"><Heart size={20} /></Button>
+                <Button
+                  onClick={async (e) => {
+                    e.stopPropagation();
+                    try {
+                      await handleAddToCart({
+                        itemType: "Pet",
+                        itemId: pet._id,
+                        itemTypeRef: "Pet",
+                        name: pet.name,
+                        price: pet.price,
+                        quantity: 1, // Ensure pets have quantity 1
+                        image: pet.images[0],
+                      });
+                      enqueueSnackbar("Pet added to cart!", {
+                        variant: "success",
+                      });
+                    } catch (error) {
+                      enqueueSnackbar(error, {
+                        variant: "error",
+                      });
+                    }
+                  }}
+                  className="flex-1"
+                >
+                  Add to Cart <ShoppingCart className="ml-2" size={16} />
+                </Button>
+                <Button className="flex-1" variant="destructive">
+                  Buy Now
+                </Button>
+                <Button variant="ghost" className="text-red-500">
+                  <Heart size={20} />
+                </Button>
               </div>
             </CardContent>
           </div>

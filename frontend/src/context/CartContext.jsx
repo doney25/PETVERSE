@@ -1,8 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
-
 // Create Context
-const CartContext = createContext();
+export const CartContext = createContext();
 
 // Provider Component
 export const CartProvider = ({ children }) => {
@@ -13,7 +12,7 @@ export const CartProvider = ({ children }) => {
     const userId = localStorage.getItem("userId");
     if (userId) {
       axios
-        .get(`http://localhost:5501/api/cart/${userId}`)
+        .get(`http://localhost:5501/api/cart/get/${userId}`)
         .then((res) => setCart(res.data.items))
         .catch((err) => console.error("Error fetching cart:", err));
     }
@@ -30,10 +29,13 @@ export const CartProvider = ({ children }) => {
         ...item,
       });
 
-      setCart(res.data.cart.items); // Update cart state
-      alert("Item added to cart!");
+      if (res.status !== 200) {
+        throw new Error(res.data.message || "Failed to add item");
+      }
+
+      setCart(res.data?.cart?.items || []); // Handle missing data safely
     } catch (error) {
-      console.error("Error adding to cart:", error);
+      throw error.response?.data?.message || error.message || "An unknown error occurred";
     }
   };
 
@@ -43,10 +45,13 @@ export const CartProvider = ({ children }) => {
       const userId = localStorage.getItem("userId");
       if (!userId) return alert("Please log in first!");
 
-      const res = await axios.post(`http://localhost:5501/api/cart/remove`, {
-        userId,
-        itemId,
-      });
+      const res = await axios.delete(
+        `http://localhost:5501/api/cart/${userId}/${itemId}`,
+        {
+          userId,
+          itemId,
+        }
+      );
 
       setCart(res.data.cart.items); // Update cart state
     } catch (error) {
@@ -54,8 +59,32 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  const handleUpdateQuantity = async (itemId, newQuantity) => {
+    try {
+      const userId = localStorage.getItem("userId");
+      if (!userId) return alert("Please log in first!");
+
+      const res = await axios.post(`http://localhost:5501/api/cart/update`, {
+        userId,
+        itemId,
+        quantity: newQuantity,
+      });
+
+      setCart(res.data.cart.items); // Update cart state
+    } catch (error) {
+      console.error("Error updating quantity:", error);
+    }
+  };
+
   return (
-    <CartContext.Provider value={{ cart, handleAddToCart, handleRemoveFromCart }}>
+    <CartContext.Provider
+      value={{
+        cart,
+        handleAddToCart,
+        handleRemoveFromCart,
+        handleUpdateQuantity,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
