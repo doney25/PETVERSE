@@ -56,12 +56,12 @@ export default function Home() {
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
-      <h2 className="text-2xl mb-3">Home</h2>
+      <h2 className="text-2xl mb-3">Sell Pets</h2>
 
       {/* Quick Add Pet Form */}
       <Card>
         <CardHeader>
-          <CardTitle>Sell a Pet</CardTitle>
+          <CardTitle>Add New Pet Listing</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

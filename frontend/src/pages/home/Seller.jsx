@@ -50,12 +50,12 @@ export default function Seller() {
             <Button
               variant="outline"
               className={`w-full flex items-center justify-start text-black hover:bg-blue-500 hover:text-white transition-all duration-300 ${
-                activeTab === "petListings" ? "bg-blue-400" : ""
+                activeTab === "sellPets" ? "bg-blue-400" : ""
               }`}
-              onClick={() => handleTabChange("petListings")}
+              onClick={() => handleTabChange("sellPets")}
             >
               <ViewListIcon className="w-5 h-5 mr-2" />
-              Manage Pet Listings
+              Sell Pets
             </Button>
             <Button
               variant="outline"
@@ -108,8 +108,8 @@ export default function Seller() {
 
       {/* Main Content */}
       <div className="flex-1 p-8 ml-64 bg-gray-100 overflow-y-auto">
-        {activeTab === "home" && <Home />}
-        {activeTab === "petListings" && <ListingPage />}
+        {activeTab === "home" && <ListingPage />}
+        {activeTab === "sellPets" && <Home />}
         {activeTab === "orders" && <div>Orders Content</div>}
         {activeTab === "chats" && <ChatPage />}
         {activeTab === "petHealth" && <div>Pet Health Records Content</div>}
