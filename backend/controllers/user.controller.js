@@ -17,16 +17,17 @@ const signUp = async (req, res) => {
       return res.status(400).json({ error: "User already exists" });
     }
 
-    const BACKEND_URL = process.env.BACKEND_URL
+    const BACKEND_URL = process.env.BACKEND_URL;
 
     // Send email confirmation via Supabase
+    const redirectUrl = `${process.env.BACKEND_URL}/api/users/confirmEmail?email=${email}`;
+    console.log("Redirect URL:", redirectUrl);
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: {
-        emailRedirectTo: `${BACKEND_URL}/api/users/confirmEmail?email=${email}`,
-      },
+      options: { emailRedirectTo: redirectUrl },
     });
+
     if (error) throw error;
 
     // Hash password
@@ -61,7 +62,7 @@ const confirmEmail = async (req, res) => {
       return res.status(400).json({ error: "Invalid confirmation request" });
     }
 
-    const FRONTEND_URL = process.env.FRONTEND_URL
+    const FRONTEND_URL = process.env.FRONTEND_URL;
 
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ error: "User not found" });
@@ -132,13 +133,13 @@ const validate_role = async (req, res) => {
       return res.json({ valid: false });
     }
   } catch (error) {
-    console.error('Role validation error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    console.error("Role validation error:", error);
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
-const verify_breed= (req, res) => {
+const verify_breed = (req, res) => {
   const { breed } = req.body;
-  if (breed === 'labrador') {
+  if (breed === "labrador") {
     return res.json({ valid: true });
   } else {
     return res.json({ valid: false });
@@ -152,4 +153,4 @@ const logout = (req, res) => {
   });
 };
 
-export { signUp, confirmEmail,validate_role, verify_breed, login, logout };
+export { signUp, confirmEmail, validate_role, verify_breed, login, logout };
