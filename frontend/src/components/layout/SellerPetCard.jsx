@@ -13,11 +13,14 @@ const SellerPetCard = ({ pets, onNavigate }) => {
     axios
       .delete(`http://localhost:5501/api/pets/${id}`)
       .then(() => {
-        navigate(0)
-        enqueueSnackbar("Pet removed successfully!", {variant:"success"})
+        enqueueSnackbar("Pet removed successfully!", { variant: "success" });
+        setTimeout(() => {
+          navigate(0);
+        }, 1500); 
       })
       .catch((error) => {
         console.log(error);
+        enqueueSnackbar("Failed to remove pet!", { variant: "error" });
       });
   };
 
@@ -34,9 +37,7 @@ const SellerPetCard = ({ pets, onNavigate }) => {
               alt={pet.name}
               className="w-full h-48 object-cover cursor-pointer"
             />
-            <div
-              className="p-4 cursor-pointer bg-gray-100"
-            >
+            <div className="p-4 cursor-pointer bg-gray-100">
               <h3 className="text-lg font-semibold">{pet.name}</h3>
               <p className="text-sm text-muted-foreground">{pet.breed}</p>
               <div className="flex items-center mt-4 justify-between w-full">
@@ -58,7 +59,7 @@ const SellerPetCard = ({ pets, onNavigate }) => {
                     size="sm"
                     onClick={(e) => {
                       e.stopPropagation();
-                      onNavigate(pet._id)
+                      onNavigate(pet._id);
                     }}
                   >
                     <Pencil />
