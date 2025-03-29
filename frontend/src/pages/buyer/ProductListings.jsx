@@ -16,7 +16,7 @@ const ProductListings = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`${API_BASE_URL}/products`)
+      .get(`${API_BASE_URL}/api/products`)
       .then((res) => {
         const filtered = category
           ? res.data.data.filter((product) => product.category === category)

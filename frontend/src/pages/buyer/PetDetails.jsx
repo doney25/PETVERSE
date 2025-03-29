@@ -29,7 +29,7 @@ const PetDetails = () => {
 
   useEffect(() => {
     axios
-      .get(`${API_BASE_URL}/pets/${petId}`)
+      .get(`${API_BASE_URL}/api/pets/${petId}`)
       .then((response) => {
         setPet(response.data.data);
         setLoading(false);

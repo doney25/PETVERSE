@@ -38,7 +38,7 @@ const SignupPage = () => {
 
     try {
       const { error } = await axios.post(
-        `${API_BASE_URL}/users/signup`, // Change URL as needed
+        `${API_BASE_URL}/api/users/signup`, // Change URL as needed
         { name, email, password, role }
       );
 

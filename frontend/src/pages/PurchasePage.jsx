@@ -15,7 +15,7 @@ const PurchasePage = () => {
         if (!user) return; // Ensure user is authenticated before fetching details
 
         // Fetch pet details from backend
-        fetch(`${API_BASE_URL}/pets/${petId}`)
+        fetch(`${API_BASE_URL}/api/pets/${petId}`)
             .then((res) => res.json())
             .then((data) => {
                 setPetDetails(data);

@@ -7,7 +7,7 @@ const SellerChatList = ({ onNavigate }) => {
   const userId = localStorage.getItem("userId");
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/chats/${userId}`)
+    fetch(`${API_BASE_URL}/api/chats/${userId}`)
       .then((res) => res.json())
       .then((data) => setChats(data))
       .catch((error) => {

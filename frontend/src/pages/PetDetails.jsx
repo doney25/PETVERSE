@@ -8,12 +8,12 @@ const PetDetails = () => {
   const [pet, setPet] = useState(null);
 
   useEffect(() => {
-    axios.get(`${API_BASE_URL}/pets/${id}`).then((res) => setPet(res.data));
+    axios.get(`${API_BASE_URL}/api/pets/${id}`).then((res) => setPet(res.data));
   }, [id]);
 
   const markAsCompleted = async (vaccineName) => {
     try {
-      await axios.put(`${API_BASE_URL}/pets/${pet._id}/vaccination`, { vaccineName });
+      await axios.put(`${API_BASE_URL}/api/pets/${pet._id}/vaccination`, { vaccineName });
       setPet({
         ...pet,
         vaccinations: pet.vaccinations.map((v) =>

@@ -30,7 +30,7 @@ export default function EditPet({ onBack, pet }) { //Iwant this pet inside useEf
   const [description, setDescription] = useState("");
 
   useEffect(() => {
-    axios.get(`${API_BASE_URL}/pets/${pet}`)
+    axios.get(`${API_BASE_URL}/api/pets/${pet}`)
     .then((res) => {
         setId(res.data.data._id)
         setName(res.data.data.name)
@@ -64,7 +64,7 @@ export default function EditPet({ onBack, pet }) { //Iwant this pet inside useEf
       seller: sellerName,
     };
     axios
-      .put(`${API_BASE_URL}/pets/${id}`, petData)
+      .put(`${API_BASE_URL}/api/pets/${id}`, petData)
       .then(() => enqueueSnackbar("Pet updated successfully!", {variant:"success"}))
       .catch((error) => {
         console.log(error);

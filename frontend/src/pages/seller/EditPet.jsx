@@ -33,7 +33,7 @@ export default function EditPet({ onBack, pet }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`${API_BASE_URL}/pets/${pet}`).then((res) => {
+    axios.get(`${API_BASE_URL}/api/pets/${pet}`).then((res) => {
       setId(res.data.data._id);
       setName(res.data.data.name);
       setCategory(res.data.data.category);
@@ -69,7 +69,7 @@ export default function EditPet({ onBack, pet }) {
       seller: sellerName,
     };
     axios
-      .put(`${API_BASE_URL}/pets/${id}`, petData)
+      .put(`${API_BASE_URL}/api/pets/${id}`, petData)
       .then(() => {
         enqueueSnackbar("Edit Successfully saved!", { variant: "success" });
         navigate(0);
