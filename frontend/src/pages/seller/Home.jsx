@@ -14,6 +14,7 @@ import { useState } from "react";
 import axios from "axios";
 import ImageUploader from "@/components/ImageUploader";
 import { enqueueSnackbar } from "notistack";
+import PetClassifier from "@/components/PetClassifier";
 
 export default function Home() {
   const [name, setName] = useState("");
@@ -47,88 +48,118 @@ export default function Home() {
     };
     axios
       .post("http://localhost:5501/api/pets", petData)
-      .then(() => alert("Pet Listed Successfully"))
+      .then(() => enqueueSnackbar("Pet Listed Successfully", {variant: "success"}))
       .catch((error) => {
-        enqueueSnackbar(error.message, {variant:"error"})
+        enqueueSnackbar(error.message, { variant: "error" });
       });
   };
 
   return (
     <div className="p-6 space-y-6">
-      {/* Header */}
-      <h2 className="text-2xl mb-3">Sell Pets</h2>
+  {/* Header */}
+  <h2 className="text-2xl mb-4">Sell Pets</h2>
 
-      {/* Quick Add Pet Form */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Add New Pet Listing</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input
-              placeholder="Pet Name"
-              onChange={(e) => setName(e.target.value)}
-            />
-            <Select onValueChange={(value) => setCategory(value)}>
+  {/* Quick Add Pet Form */}
+  <Card>
+    <CardHeader>
+      <CardTitle className="text-lg font-semibold">Add New Pet Listing</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Pet Name</label>
+          <Input placeholder="Pet Name" onChange={(e) => setName(e.target.value)} />
+        </div>
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Category</label>
+          <Select onValueChange={(value) => setCategory(value)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select Category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="dog">Dog</SelectItem>
+              <SelectItem value="cat">Cat</SelectItem>
+              <SelectItem value="bird">Bird</SelectItem>
+              <SelectItem value="other">Other</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Pet Breed</label>
+          <Input placeholder="Pet Breed" onChange={(e) => setBreed(e.target.value)} />
+        </div>
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Age</label>
+          <div className="flex gap-2">
+            <Select onValueChange={(value) => setAge(`${value} ${age.split(" ")[1] || "months"}`)}>
               <SelectTrigger>
-                <SelectValue placeholder="Select Category" />
+                <SelectValue placeholder="Select Number" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="dog">Dog</SelectItem>
-                <SelectItem value="cat">Cat</SelectItem>
-                <SelectItem value="bird">Bird</SelectItem>
-                <SelectItem value="other">Other</SelectItem>
+                {[...Array(12).keys()].map((num) => (
+                  <SelectItem key={num + 1} value={(num + 1).toString()}>
+                    {num + 1}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
-            <Input
-              placeholder="Pet Breed"
-              onChange={(e) => setBreed(e.target.value)}
-            />
-            <Input
-              placeholder="Age"
-              type="string"
-              onChange={(e) => setAge(e.target.value)}
-            />
-            <Input
-              placeholder="Color"
-              type="string"
-              onChange={(e) => setColor(e.target.value)}
-            />
-            <Input
-              placeholder="Location"
-              type="string"
-              onChange={(e) => setLocation(e.target.value)}
-            />
-            <Input
-              placeholder="Price"
-              type="number"
-              onChange={(e) => setPrice(e.target.value)}
-            />
-            <ImageUploader
-              onUpload={(newImages) =>
-                setImages((prev) => [...prev, ...newImages])
-              }
-            />
-            <Textarea
-              placeholder="Short Description"
-              onChange={(e) => setDescription(e.target.value)}
-            />
+            <Select onValueChange={(value) => setAge(`${age.split(" ")[0] || "1"} ${value}`)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select Unit" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Months">Months</SelectItem>
+                <SelectItem value="Years">Years</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
+        </div>
 
-          {/* Pet Classifier Integration */}
-          <div className="mt-4">
-            <PetClassifier />
-          </div>
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Color</label>
+          <Input placeholder="Color" onChange={(e) => setColor(e.target.value)} />
+        </div>
 
-          <Button
-            className="mt-4 w-full"
-            variant="default"
-            onClick={handleSubmit}
-          >
-            <Plus className="mr-2" size={16} /> Add Pet
-          </Button>
-        </CardContent>
-      </Card>
-    </div>
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Location</label>
+          <Input placeholder="Location" onChange={(e) => setLocation(e.target.value)} />
+        </div>
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Price</label>
+          <Input placeholder="Price" type="number" onChange={(e) => setPrice(e.target.value)} />
+        </div>
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Pet Images</label>
+          <ImageUploader onUpload={(newImages) => setImages((prev) => [...prev, ...newImages])} />
+        </div>
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Description</label>
+          <Textarea placeholder="Short Description" onChange={(e) => setDescription(e.target.value)} />
+        </div>
+
+        <div className="space-y-2 mt-2">
+          <label className="block text-sm font-medium">Health Certificate</label>
+          <ImageUploader onUpload={(newImages) => setImages((prev) => [...prev, ...newImages])} />
+        </div>        
+      </div>
+
+      {/* Pet Classifier Integration */}
+      <div className="mt-6">
+        <PetClassifier />
+      </div>
+
+      <Button className="mt-6 w-full" variant="default" onClick={handleSubmit}>
+        <Plus className="mr-2" size={16} /> Sell
+      </Button>
+    </CardContent>
+  </Card>
+</div>
+
   );
 }

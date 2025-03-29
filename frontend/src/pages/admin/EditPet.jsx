@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import ImageUploader from "@/components/ImageUploader";
 import { enqueueSnackbar } from "notistack";
+import { Label } from "@/components/ui/label";
 
 export default function EditPet({ onBack, pet }) { //Iwant this pet inside useEffect
   const [id, setId] = useState("");
@@ -80,65 +81,103 @@ export default function EditPet({ onBack, pet }) { //Iwant this pet inside useEf
           <CardTitle>Edit Pet</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input
-              placeholder="Pet Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <Select value={category} onValueChange={(value) => setCategory(value)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select Category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="dog">Dog</SelectItem>
-                <SelectItem value="cat">Cat</SelectItem>
-                <SelectItem value="bird">Bird</SelectItem>
-                <SelectItem value="other">Other</SelectItem>
-              </SelectContent>
-            </Select>
-            <Input
-              placeholder="Pet Breed"
-              value={breed}
-              onChange={(e) => setBreed(e.target.value)}
-            />
-            <Input
-              placeholder="Age"
-              value={age}
-              type="string"
-              onChange={(e) => setAge(e.target.value)}
-            />
-            <Input
-              placeholder="Color"
-              value={color}
-              type="string"
-              onChange={(e) => setColor(e.target.value)}
-            />
-            <Input
-              placeholder="Location"
-              value={location}
-              type="string"
-              onChange={(e) => setLocation(e.target.value)}
-            />
-            <Input
-              placeholder="Price"
-              value={price}
-              type="number"
-              onChange={(e) => setPrice(e.target.value)}
-            />
-            <ImageUploader
-              onUpload={(newImages) =>
-                setImages((prev) => [...prev, ...newImages])
-              }
-            />
-            <Textarea
-              placeholder="Short Description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 items-center">
+            <div className="flex flex-col space-y-2">
+              <Label>Name</Label>
+              <Input
+                placeholder="Pet Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+
+            <div className="flex flex-col space-y-2">
+              <Label>Category</Label>
+              <Select
+                value={category}
+                onValueChange={(value) => setCategory(value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select Category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="dog">Dog</SelectItem>
+                  <SelectItem value="cat">Cat</SelectItem>
+                  <SelectItem value="bird">Bird</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex flex-col space-y-2">
+              <Label>Pet Breed</Label>
+              <Input
+                placeholder="Pet Breed"
+                value={breed}
+                onChange={(e) => setBreed(e.target.value)}
+              />
+            </div>
+
+            <div className="flex flex-col space-y-2">
+              <Label>Age</Label>
+              <Input
+                placeholder="Age"
+                value={age}
+                type="string"
+                onChange={(e) => setAge(e.target.value)}
+              />
+            </div>
+
+            <div className="flex flex-col space-y-2">
+              <Label>Color</Label>
+              <Input
+                placeholder="Color"
+                value={color}
+                type="string"
+                onChange={(e) => setColor(e.target.value)}
+              />
+            </div>
+
+            <div className="flex flex-col space-y-2">
+              <Label>Location</Label>
+              <Input
+                placeholder="Location"
+                value={location}
+                type="string"
+                onChange={(e) => setLocation(e.target.value)}
+              />
+            </div>
+
+            <div className="flex flex-col space-y-2">
+              <Label>Price</Label>
+              <Input
+                placeholder="Price"
+                value={price}
+                type="number"
+                onChange={(e) => setPrice(e.target.value)}
+              />
+            </div>
+
+            <div className="flex flex-col space-y-2">
+              <Label>Images</Label>
+              <ImageUploader
+                onUpload={(newImages) =>
+                  setImages((prev) => [...prev, ...newImages])
+                }
+              />
+            </div>
+
+            <div className="flex flex-col col-span-2 space-y-2">
+              <Label>Description</Label>
+              <Textarea
+                placeholder="Short Description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </div>
           </div>
           <Button
-            className="mt-4 w-full"
+            className="mt-6 w-full"
             variant="default"
             onClick={handleSave}
           >

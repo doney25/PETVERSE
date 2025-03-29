@@ -13,6 +13,7 @@ import PetDetails from "./pages/buyer/PetDetails";
 import ChatList from "./components/buyer/BuyerChatList";
 import CartPage from "./pages/buyer/CartPage";
 import ProductDetails from "./pages/buyer/ProductDetails";
+import { CartProvider } from "./context/CartContext";
 function App() {
   return (
     <Routes>
@@ -25,7 +26,14 @@ function App() {
       {/* <Route path="/chat" element={<ChatPage />} /> */}
       {/* <Route path="/purchase/:id" element={<PurchasePage />} /> */}
       {/* Buyer Routes */}
-      <Route path="/shop/*" element={<ProtectedRoute roleRequired="buyer" />}>
+      <Route
+        path="/shop/*"
+        element={
+          <CartProvider>
+            <ProtectedRoute roleRequired="buyer" />
+          </CartProvider>
+        }
+      >
         <Route path="home" element={<Buyer />} />
         <Route
           path="chat/:buyerId/:sellerId"
@@ -40,7 +48,10 @@ function App() {
         {/* Product Routes */}
         <Route path="products" element={<ProductListings />} />
         <Route path="products/:category" element={<ProductListings />} />
-        <Route path="products/:category/:productId" element={<ProductDetails />} /> 
+        <Route
+          path="products/:category/:productId"
+          element={<ProductDetails />}
+        />
         <Route path="cart" element={<CartPage />} />
       </Route>
       {/* Seller and Admin routes */}
