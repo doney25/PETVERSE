@@ -15,6 +15,7 @@ import axios from "axios";
 import ImageUploader from "@/components/ImageUploader";
 import { enqueueSnackbar } from "notistack";
 import PetClassifier from "@/components/PetClassifier";
+import { API_BASE_URL } from "src/config.js"
 
 export default function Home() {
   const [name, setName] = useState("");
@@ -47,7 +48,7 @@ export default function Home() {
       seller: sellerName,
     };
     axios
-      .post("http://localhost:5501/api/pets", petData)
+      .post(`${API_BASE_URL}/pets`, petData)
       .then(() => enqueueSnackbar("Pet Listed Successfully", {variant: "success"}))
       .catch((error) => {
         enqueueSnackbar(error.message, { variant: "error" });
