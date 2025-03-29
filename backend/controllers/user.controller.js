@@ -19,7 +19,7 @@ const signUp = async (req, res) => {
       email,
       password,
       options: {
-        emailRedirectTo: `http://localhost:5501/api/users/confirmEmail?email=${email}`,
+        emailRedirectTo: `${process.env.BACKEND_URL}/api/users/confirmEmail?email=${email}`,
       },
     });
     if (error) throw error;
@@ -67,7 +67,7 @@ const confirmEmail = async (req, res) => {
         <head><title>Email Confirmed</title></head>
         <body style="font-family: Arial, sans-serif; text-align: center; margin-top: 50px;">
           <h1>Email Verified Successfully! 🎉</h1>
-          <p>You can now <a href="http://localhost:5173/login">log in</a>.</p>
+          <p>You can now <a href=${process.env.FRONTEND_URL}/login>log in</a>.</p>
         </body>
       </html>
     `);
