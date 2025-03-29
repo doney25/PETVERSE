@@ -17,7 +17,7 @@ const Buyer = () => {
     // Fetch pets from backend API
     setLoading(true);
     axios
-      .get(`${API_BASE_URL}/pets/`)
+      .get(`${API_BASE_URL}/api/pets/`)
       .then((res) => {
         setPets(res.data.data);
         setLoading(false);

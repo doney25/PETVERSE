@@ -12,7 +12,7 @@ const SellerPetCard = ({ pets, onNavigate }) => {
 
   const onDelete = (id) => {
     axios
-      .delete(`${API_BASE_URL}/pets/${id}`)
+      .delete(`${API_BASE_URL}/api/pets/${id}`)
       .then(() => {
         enqueueSnackbar("Pet removed successfully!", { variant: "success" });
         setTimeout(() => {

@@ -14,7 +14,7 @@ export const CartProvider = ({ children }) => {
     const userId = localStorage.getItem("userId");
     if (userId) {
       axios
-        .get(`${API_BASE_URL}/cart/get/${userId}`)
+        .get(`${API_BASE_URL}/api/cart/get/${userId}`)
         .then((res) => setCart(res.data.items))
         .catch((err) => console.error("Error fetching cart:", err));
     }
@@ -26,7 +26,7 @@ export const CartProvider = ({ children }) => {
       const userId = localStorage.getItem("userId");
       if (!userId) return alert("Please log in first!");
 
-      const res = await axios.post(`${API_BASE_URL}/cart/add`, {
+      const res = await axios.post(`${API_BASE_URL}/api/cart/add`, {
         userId,
         ...item,
       });
@@ -48,7 +48,7 @@ export const CartProvider = ({ children }) => {
       if (!userId) return alert("Please log in first!");
 
       const res = await axios.delete(
-        `${API_BASE_URL}/cart/${userId}/${itemId}`,
+        `${API_BASE_URL}/api/cart/${userId}/${itemId}`,
         {
           userId,
           itemId,
@@ -66,7 +66,7 @@ export const CartProvider = ({ children }) => {
       const userId = localStorage.getItem("userId");
       if (!userId) return alert("Please log in first!");
 
-      const res = await axios.post(`${API_BASE_URL}/cart/update`, {
+      const res = await axios.post(`${API_BASE_URL}/api/cart/update`, {
         userId,
         itemId,
         quantity: newQuantity,

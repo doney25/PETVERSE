@@ -16,7 +16,7 @@ const ManageProducts = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get(`${API_BASE_URL}/products?sellerId=${sellerId}`);
+      const res = await axios.get(`${API_BASE_URL}/api/products?sellerId=${sellerId}`);
       setProducts(res.data.data);
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -28,7 +28,7 @@ const ManageProducts = () => {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
 
     try {
-      await axios.delete(`${API_BASE_URL}/products/${productId}`, {
+      await axios.delete(`${API_BASE_URL}/api/products/${productId}`, {
         data: { sellerId }, // ✅ Send seller ID for verification
       });
 
@@ -49,7 +49,7 @@ const ManageProducts = () => {
     e.preventDefault();
     try {
       console.log(editingProduct)
-      await axios.put(`${API_BASE_URL}/products/${editingProduct._id}`, {
+      await axios.put(`${API_BASE_URL}/api/products/${editingProduct._id}`, {
         ...editingProduct
       });
 

@@ -17,7 +17,7 @@ const PetListing = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`${API_BASE_URL}/pets/`)
+      .get(`${API_BASE_URL}/api/pets/`)
       .then((res) => {
         const filteredPets = category
           ? res.data.data.filter((pet) => String(pet.category) === category)

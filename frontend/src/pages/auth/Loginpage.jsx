@@ -26,7 +26,7 @@ const LoginPage = () => {
     try {
       // Validate the role
       const roleValidationResponse = await axios.post(
-        `${API_BASE_URL}/users/validate_role`,
+        `${API_BASE_URL}/api/users/validate_role`,
         { email, role }
       );
 
@@ -38,7 +38,7 @@ const LoginPage = () => {
 
       // Proceed with login
       const { data } = await axios.post(
-        `${API_BASE_URL}/users/login`,
+        `${API_BASE_URL}/api/users/login`,
         { email, password, role }
       );
       localStorage.setItem("userId", data.user.id);

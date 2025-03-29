@@ -37,7 +37,7 @@ const ListProducts = () => {
         };
         console.log(productData)
         axios
-          .post(`${API_BASE_URL}/products`, productData)
+          .post(`${API_BASE_URL}/api/products`, productData)
           .then(() => enqueueSnackbar("Product listed successfully!", {variant:"success"}))
           .catch((error) => {
             enqueueSnackbar(error.message, {variant:"error"});

@@ -48,7 +48,7 @@ export default function Home() {
       seller: sellerName,
     };
     axios
-      .post(`${API_BASE_URL}/pets`, petData)
+      .post(`${API_BASE_URL}/api/pets`, petData)
       .then(() => enqueueSnackbar("Pet Listed Successfully", {variant: "success"}))
       .catch((error) => {
         enqueueSnackbar(error.message, { variant: "error" });

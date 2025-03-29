@@ -12,7 +12,7 @@ const PetList = ({onNavigateToEdit}) => {
  useEffect(() => {
    setLoading(true);
    axios
-    .get(`${API_BASE_URL}/pets`)
+    .get(`${API_BASE_URL}/api/pets`)
     .then((res) => {
       const filteredPets = res.data.data.filter(
         (pet) => String(pet.sellerId) === sellerId 
