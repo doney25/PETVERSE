@@ -106,6 +106,7 @@ const setVaccinationDetails = async (req, res) => {
 
     // Add new vaccination details
     pet.vaccinations.push({ vaccineName, dueDate, completed: false });
+    await pet.save();
     res.status(200).json({ message: "Vaccination details added successfully", pet });
   } catch (error) {
     res.status(500).json({ message: "Error updating vaccination details", error: error.message });
