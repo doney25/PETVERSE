@@ -71,7 +71,7 @@ const confirmEmail = async (req, res) => {
         <head><title>Email Confirmed</title></head>
         <body style="font-family: Arial, sans-serif; text-align: center; margin-top: 50px;">
           <h1>Email Verified Successfully! 🎉</h1>
-          <p>You can now <a href=${process.env.FRONTEND_URL}/login>log in</a>.</p>
+          <p>You can now <a href=${process.env.FRONTEND_URL}/api/login>log in</a>.</p>
         </body>
       </html>
     `);
