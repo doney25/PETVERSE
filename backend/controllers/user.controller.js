@@ -5,7 +5,6 @@ import { supabase } from "../utils/supabaseClient.js";
 import dotenv from "dotenv";
 
 dotenv.config();
-console.log(process.env.BACKEND_URL)
 
 // SignUp with Email Confirmation
 const signUp = async (req, res) => {
@@ -18,12 +17,14 @@ const signUp = async (req, res) => {
       return res.status(400).json({ error: "User already exists" });
     }
 
+    const BACKEND_URL = process.env.BACKEND_URL
+
     // Send email confirmation via Supabase
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: `${process.env.BACKEND_URL}/api/users/confirmEmail?email=${email}`,
+        emailRedirectTo: `${BACKEND_URL}/api/users/confirmEmail?email=${email}`,
       },
     });
     if (error) throw error;
@@ -60,6 +61,8 @@ const confirmEmail = async (req, res) => {
       return res.status(400).json({ error: "Invalid confirmation request" });
     }
 
+    const FRONTEND_URL = process.env.FRONTEND_URL
+
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ error: "User not found" });
 
@@ -71,7 +74,7 @@ const confirmEmail = async (req, res) => {
         <head><title>Email Confirmed</title></head>
         <body style="font-family: Arial, sans-serif; text-align: center; margin-top: 50px;">
           <h1>Email Verified Successfully! 🎉</h1>
-          <p>You can now <a href=${process.env.FRONTEND_URL}/login>log in</a>.</p>
+          <p>You can now <a href=${FRONTEND_URL}/login>log in</a>.</p>
         </body>
       </html>
     `);
