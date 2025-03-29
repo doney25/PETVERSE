@@ -5,6 +5,7 @@ import { supabase } from "../utils/supabaseClient.js";
 import dotenv from "dotenv";
 
 dotenv.config();
+console.log(process.env.BACKEND_URL)
 
 // SignUp with Email Confirmation
 const signUp = async (req, res) => {
