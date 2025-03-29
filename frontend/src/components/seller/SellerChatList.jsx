@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { User, Inbox } from "lucide-react";
-import { API_BASE_URL } from "src/config.js"
+import API_BASE_URL from "@/config.js"
 
 const SellerChatList = ({ onNavigate }) => {
   const [chats, setChats] = useState([]);

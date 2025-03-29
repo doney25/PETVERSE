@@ -5,7 +5,7 @@ import axios from "axios";
 import CarouselList from "@/components/buyer/CarouselList";
 import Section from "@/components/buyer/Section";
 import { Dog, CatIcon, Bird, Bone, Scissors, Shapes, Search } from "lucide-react";
-import { API_BASE_URL } from "src/config.js"
+import API_BASE_URL from "@/config.js"
 
 const Buyer = () => {
   const [searchQuery, setSearchQuery] = useState("");

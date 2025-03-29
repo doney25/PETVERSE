@@ -15,7 +15,7 @@ import axios from "axios";
 import ImageUploader from "@/components/ImageUploader";
 import { enqueueSnackbar } from "notistack";
 import PetClassifier from "@/components/PetClassifier";
-import { API_BASE_URL } from "src/config.js"
+import API_BASE_URL from "@/config.js"
 
 export default function Home() {
   const [name, setName] = useState("");

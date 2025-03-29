@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Trash2, Pencil } from "lucide-react";
 import axios from "axios";
 import { enqueueSnackbar } from "notistack";
-import { API_BASE_URL } from "src/config.js"
+import API_BASE_URL from "@/config.js"
 
 const SellerPetCard = ({ pets, onNavigate }) => {
   if (!Array.isArray(pets)) return null;

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { RadioGroup } from "@/components/ui/radio-group";
 import { enqueueSnackbar } from "notistack";
-import { API_BASE_URL } from "src/config.js"
+import API_BASE_URL from "@/config.js"
 
 const SignupPage = () => {
   const [name, setName] = useState("");

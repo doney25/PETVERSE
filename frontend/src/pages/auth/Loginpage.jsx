@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { AuthContext } from "@/context/Authcontext";
 import { enqueueSnackbar } from "notistack";
-import { API_BASE_URL } from "src/config.js"
+import API_BASE_URL from "@/config.js"
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");

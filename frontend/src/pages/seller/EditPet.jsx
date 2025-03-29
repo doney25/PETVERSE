@@ -16,7 +16,7 @@ import ImageUploader from "@/components/ImageUploader";
 import { enqueueSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
 import { Label } from "@/components/ui/label";
-import { API_BASE_URL } from "src/config.js"
+import API_BASE_URL from "@/config.js"
 
 export default function EditPet({ onBack, pet }) {
   //Iwant this pet inside useEffect

@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Header from "@/components/layout/Header";
 import ProductCard from "@/components/layout/ProductCard";
-import { API_BASE_URL } from "src/config.js"
+import API_BASE_URL from "@/config.js"
 
 const ProductListings = () => {
   const { category } = useParams();

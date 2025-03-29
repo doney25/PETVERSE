@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { User, Inbox } from "lucide-react";
 import { Button } from "../ui/button";
-import { API_BASE_URL } from "src/config.js"
+import API_BASE_URL from "@/config.js"
 
 const BuyerChatList = () => {
   const [chats, setChats] = useState([]);

@@ -3,7 +3,7 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import axios from "axios";
 import { enqueueSnackbar } from "notistack";
-import { API_BASE_URL } from "src/config.js"
+import API_BASE_URL from "@/config.js"
 
 const ImageUploader = ({ onUpload }) => {
   const [images, setImages] = useState([]);

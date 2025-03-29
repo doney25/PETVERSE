@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import SellerPetCard from "../../components/layout/SellerPetCard";
-import { API_BASE_URL } from "src/config.js"
+import API_BASE_URL from "@/config.js"
 
 const PetList = ({onNavigateToEdit}) => {
   const [pets, setPets] = useState([]);

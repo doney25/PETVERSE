@@ -15,7 +15,7 @@ import axios from "axios";
 import ImageUploader from "@/components/ImageUploader";
 import { enqueueSnackbar } from "notistack";
 import { Label } from "@/components/ui/label";
-import { API_BASE_URL } from "src/config.js"
+import API_BASE_URL from "@/config.js"
 
 export default function EditPet({ onBack, pet }) { //Iwant this pet inside useEffect
   const [id, setId] = useState("");

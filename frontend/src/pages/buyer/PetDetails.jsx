@@ -16,7 +16,7 @@ import { Carousel, CarouselItem } from "@/components/ui/carousel";
 import { Heart, ShoppingCart } from "lucide-react";
 import { CartContext } from "@/context/CartContext";
 import { enqueueSnackbar } from "notistack";
-import { API_BASE_URL } from "src/config.js"
+import API_BASE_URL from "@/config.js"
 
 const PetDetails = () => {
   const { petId } = useParams();
