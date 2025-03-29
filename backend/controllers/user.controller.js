@@ -17,8 +17,6 @@ const signUp = async (req, res) => {
       return res.status(400).json({ error: "User already exists" });
     }
 
-    const BACKEND_URL = process.env.BACKEND_URL;
-
     // Send email confirmation via Supabase
     const redirectUrl = `${process.env.BACKEND_URL}/api/users/confirmEmail?email=${email}`;
     console.log("Redirect URL:", redirectUrl);
@@ -75,7 +73,7 @@ const confirmEmail = async (req, res) => {
         <head><title>Email Confirmed</title></head>
         <body style="font-family: Arial, sans-serif; text-align: center; margin-top: 50px;">
           <h1>Email Verified Successfully! 🎉</h1>
-          <p>You can now <a href=${FRONTEND_URL}/login>log in</a>.</p>
+          <p>You can now <a href=${FRONTEND_URL}/api/login>log in</a>.</p>
         </body>
       </html>
     `);
