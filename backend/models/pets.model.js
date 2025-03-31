@@ -33,6 +33,11 @@ const petSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    gender: {
+      type: String,
+      enum: ["male", "female"],
+      required: true,
+    },
     description: {
       type: String,
       required: true,
@@ -45,11 +50,11 @@ const petSchema = new mongoose.Schema(
     },
     sellerId: {
       type: String,
-      required: true
+      required: true,
     },
     seller: {
       type: String,
-      required: true
+      required: true,
     },
     location: {
       type: String,

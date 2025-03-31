@@ -15,12 +15,14 @@ import CartPage from "./pages/buyer/CartPage";
 import ProductDetails from "./pages/buyer/ProductDetails";
 import CheckoutPage from "./pages/buyer/CheckoutPage"
 import { CartProvider } from "./context/CartContext";
+import PredictBreed from "./pages/PetBreed";
 import OrderSuccessPage from "./pages/buyer/OrderSuccessPage";
 import MyOrdersPage from "./pages/buyer/MyOrdersPage";
 import SingleOrder from "./pages/buyer/SingleOrder";
 import AboutUs from "./pages/Aboutus";
 import ContactUs from "./pages/ContactUs";
 import BuyNow from "./pages/buyer/BuyNow";
+
 
 function App() {
   return (
@@ -29,6 +31,9 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
+      <Route path="/predict-breed" element={<PredictBreed />} /> {/* New Route */}
+
+      {/* Buyer Routes */}
       <Route path="/aboutus" element={<AboutUs />} />
       <Route path="/contactus" element={<ContactUs />} />
       <Route
@@ -64,6 +69,7 @@ function App() {
         <Route path="checkout/:itemId" element={<BuyNow />} />
         <Route path="order-success/:orderId" element={<OrderSuccessPage />} />
       </Route>
+
       {/* Seller and Admin routes */}
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<Dashboard />} />
