@@ -89,31 +89,28 @@ const deletePet = async (req, res) => {
   }
 };
 
-// Update Vaccination Status
-const updateVaccinationStatus = async (req, res) => {
+const setVaccinationDetails = async (req, res) => {
   try {
-    const { vaccineName } = req.body;
+    const { vaccineName, dueDate } = req.body;
     const pet = await Pet.findById(req.params.id);
 
     if (!pet) return res.status(404).json({ message: "Pet not found" });
 
-    let updated = false;
-    pet.vaccinations.forEach((vaccine) => {
-      if (vaccine.vaccineName === vaccineName && !vaccine.completed) {
-        vaccine.completed = true;
-        updated = true;
-      }
-    });
+    const existingVaccine = pet.vaccinations.find(
+      (vaccine) => vaccine.vaccineName === vaccineName
+    );
 
-    if (!updated) {
-      return res.status(400).json({ message: "Vaccination already completed or not found." });
+    if (existingVaccine) {
+      return res.status(400).json({ message: "Vaccination already recorded." });
     }
 
+    // Add new vaccination details
+    pet.vaccinations.push({ vaccineName, dueDate, completed: false });
     await pet.save();
-    res.status(200).json({ message: "Vaccination status updated successfully", pet });
+    res.status(200).json({ message: "Vaccination details added successfully", pet });
   } catch (error) {
-    res.status(500).json({ message: "Error updating vaccination status", error: error.message });
+    res.status(500).json({ message: "Error updating vaccination details", error: error.message });
   }
 };
 
-export { createPet, updatePet, showPets, showPet, deletePet, updateVaccinationStatus };
+export { createPet, updatePet, showPets, showPet, deletePet, setVaccinationDetails };

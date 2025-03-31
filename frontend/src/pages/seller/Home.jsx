@@ -127,7 +127,8 @@ export default function Home() {
 
   return (
     <div className="p-6 space-y-6">
-      <h2 className="text-2xl mb-4">Sell Pets</h2>
+  {/* Header */}
+  <h2 className="text-2xl mb-4">Sell Pets</h2>
 
       <Card>
         <CardHeader>

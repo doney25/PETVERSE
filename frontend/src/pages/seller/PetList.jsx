@@ -6,6 +6,7 @@ const PetList = ({onNavigateToEdit}) => {
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(false);
   const sellerId = localStorage.getItem("userId")
+  const userName = localStorage.getItem("userName")
 
  useEffect(() => {
    setLoading(true);
@@ -26,7 +27,7 @@ const PetList = ({onNavigateToEdit}) => {
 
   return (
     <div className="p-6 space-y-6">
-      <h2 className="text-2xl mb-3">Active Listings</h2>
+      <h2 className="text-2xl mb-3">{userName}'s Active Listings</h2>
       <div className="flex-grow grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
         {pets.length === 0 ? (
           <h2>There are no Listings currently</h2>
