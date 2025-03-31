@@ -38,10 +38,17 @@ const createPet = async (req, res) => {
       !req.body.price ||
       !req.body.description ||
       !req.body.images ||
+      !req.body.gender || // Validate gender
       req.body.status === undefined
     ) {
-      return res.status(400).send({ error: "All fields are required" })
+      return res.status(400).send({ error: "All fields are required, including gender" });
     }
+
+    // Validate gender value
+    if (!["male", "female"].includes(req.body.gender)) {
+      return res.status(400).send({ error: "Invalid gender value. Must be 'male' or 'female'." });
+    }
+
     const newPet = await Pet.create(req.body);
     return res.status(201).json(newPet);
   } catch (error) {
@@ -60,18 +67,25 @@ const updatePet = async (req, res) => {
       !req.body.price ||
       !req.body.description ||
       !req.body.images ||
+      !req.body.gender || // Validate gender
       req.body.status === undefined
     ) {
-      return res.status(400).send({ error: "All fields are required" })
+      return res.status(400).send({ error: "All fields are required, including gender" });
     }
-    const {id} = req.params
-    const updated_pet = await Pet.findByIdAndUpdate(id, req.body, { new: true })
+
+    // Validate gender value
+    if (!["male", "female"].includes(req.body.gender)) {
+      return res.status(400).send({ error: "Invalid gender value. Must be 'male' or 'female'." });
+    }
+
+    const { id } = req.params;
+    const updated_pet = await Pet.findByIdAndUpdate(id, req.body, { new: true });
     if (!updated_pet) {
       return res.status(404).json({ message: "Pet not found." });
     }
-    return res.status(200).send({message: "Pet updated Successfully!"})
-  }catch (error) {
-    res.status(500).json({ message: "Error updating vaccination status", error: error.message });
+    return res.status(200).send({ message: "Pet updated Successfully!" });
+  } catch (error) {
+    res.status(500).json({ message: "Error updating pet details", error: error.message });
   }
 };
 
