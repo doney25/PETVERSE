@@ -2,9 +2,7 @@ import { useContext, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   ViewListIcon,
-  ClipboardIcon,
   ChatIcon,
-  HeartIcon,
   LogoutIcon,
   HomeIcon,
 } from "@heroicons/react/outline";
@@ -42,9 +40,7 @@ export default function Seller() {
             {[
               { tab: "home", icon: HomeIcon, label: "Home" },
               { tab: "sellPets", icon: ViewListIcon, label: "Sell Pets" },
-              { tab: "orders", icon: ClipboardIcon, label: "Orders" },
               { tab: "chats", icon: ChatIcon, label: "Chats" },
-              { tab: "petHealth", icon: HeartIcon, label: "Pet Health" },
             ].map(({ tab, icon: Icon, label }) => (
               <Button
                 key={tab}
@@ -79,9 +75,7 @@ export default function Seller() {
       <div className="flex-1 p-10 ml-64 bg-orange-50 shadow-inner overflow-y-auto min-h-screen">
         {activeTab === "home" && <ListingPage />}
         {activeTab === "sellPets" && <Home />}
-        {activeTab === "orders" && <div>Orders Content</div>}
         {activeTab === "chats" && <ChatPage />}
-        {activeTab === "petHealth" && <div>Pet Health Records Content</div>}
       </div>
     </div>
   );

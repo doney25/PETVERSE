@@ -16,6 +16,7 @@ import ManageProducts from "../admin/ManageProducts";
 import ListingPage from "../seller/ListingPage";
 import PetListing from "../buyer/PetListings";
 import Home from "@/pages/admin/Home";
+import Orders from "../admin/Orders";
 
 export default function Admin() {
   const [activeTab, setActiveTab] = useState("home");
@@ -43,8 +44,6 @@ export default function Admin() {
               { tab: "listProducts", icon: BoxIcon, label: "List Products" },
               { tab: "manageProducts", icon: ViewListIcon, label: "Manage Product Listings" },
               { tab: "orders", icon: ClipboardIcon, label: "Orders" },
-              { tab: "notification", icon: Bell, label: "Notification" },
-              { tab: "petHealth", icon: HeartIcon, label: "Pet Health Records" }
             ].map(({ tab, icon: Icon, label }) => (
               <Button
                 key={tab}
@@ -79,9 +78,7 @@ export default function Admin() {
         {activeTab === "home" && <Home />}
         {activeTab === "listProducts" && <ListProducts />}
         {activeTab === "manageProducts" && <ManageProducts />}
-        {activeTab === "orders" && <div>Orders Content</div>}
-        {activeTab === "notification" && <div>Notification Content</div>}
-        {activeTab === "petHealth" && <div>Pet Health Records Content</div>}
+        {activeTab === "orders" && <Orders />}
       </div>
     </div>
   );
