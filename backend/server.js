@@ -9,6 +9,7 @@ import userRouter from "./routes/user.route.js";
 import productRouter from "./routes/products.route.js";
 import uploadRouter from "./routes/uploads.route.js";
 import cartRouter from "./routes/cart.route.js";
+import orderRouter from "./routes/order.route.js"
 import "./services/vaccination.service.js";
 import Chat from "./models/chats.model.js";
 
@@ -34,6 +35,7 @@ app.use("/api/users", userRouter);
 app.use("/api/upload", uploadRouter)
 app.use("/api/products", productRouter)
 app.use("/api/cart", cartRouter)
+app.use("/api/orders", orderRouter)
 
 // WebSocket for Chat Functionality
 const io = new Server(server, {

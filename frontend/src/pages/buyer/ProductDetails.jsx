@@ -3,13 +3,15 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { enqueueSnackbar } from "notistack";
-import API_BASE_URL from "@/config.js"
+import API_BASE_URL from "@/config.js";
+import { useCart } from "@/context/CartContext";
 
 const ProductDetails = () => {
   const { productId } = useParams(); // Get productId from URL
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { handleAddToCart } = useCart();
 
   useEffect(() => {
     // Fetch product details
@@ -68,6 +70,7 @@ const ProductDetails = () => {
                     itemTypeRef: "Product",
                     name: product.name,
                     price: product.price,
+                    category: product.category,
                     stock: product.stock,
                     quantity: 1,
                     image: product.images[0],
@@ -79,6 +82,12 @@ const ProductDetails = () => {
                   enqueueSnackbar(error.message, { variant: "error" });
                 }
               }}
+              disabled={product.stock <= 0}
+              className={`px-4 py-2 font-semibold text-white rounded-lg ${
+                product.stock <= 0
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-700"
+              }`}
             >
               Add to Cart
             </Button>

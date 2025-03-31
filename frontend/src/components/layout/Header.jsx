@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { Button } from "../ui/button";
-import { LogOut, UserCog, MessageCircle } from "lucide-react";
+import { LogOut, UserCog, MessageCircle, BoxIcon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -116,9 +116,9 @@ export default function Header() {
                 <DropdownMenuContent side="right" className="w-56">
                   <DropdownMenuLabel>Logged in as {userName}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => navigate("/shop/account")}>
-                    <UserCog className="mr-2 h-4 w-4" />
-                    Account
+                  <DropdownMenuItem onClick={() => navigate(`/shop/my-orders/${localStorage.getItem("userId")}`)}>
+                    <BoxIcon className="mr-2 h-4 w-4" />
+                    My Orders
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() =>

@@ -45,6 +45,7 @@ const ProductCard = ({ products }) => {
                         itemId: product._id,
                         itemTypeRef: "Product",
                         name: product.name,
+                        category: product.category,
                         price: product.price,
                         stock: product.stock,
                         quantity: 1, 

@@ -15,6 +15,8 @@ const cartItemSchema = new mongoose.Schema({
     type: String,
     enum: ["Pet", "Product"], // Dynamic reference to Pet or Product model
   },
+  category: String,
+  breed: String,
   name: String, // Name of the pet or product
   price: Number, // Price of the pet or product
   stock: Number, // stocks of the pet or product

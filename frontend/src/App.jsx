@@ -13,8 +13,13 @@ import PetDetails from "./pages/buyer/PetDetails";
 import ChatList from "./components/buyer/BuyerChatList";
 import CartPage from "./pages/buyer/CartPage";
 import ProductDetails from "./pages/buyer/ProductDetails";
+import CheckoutPage from "./pages/buyer/CheckoutPage"
 import { CartProvider } from "./context/CartContext";
 import PredictBreed from "./pages/PetBreed";
+import OrderSuccessPage from "./pages/buyer/OrderSuccessPage";
+import MyOrdersPage from "./pages/buyer/MyOrdersPage";
+import SingleOrder from "./pages/buyer/SingleOrder";
+
 
 function App() {
   return (
@@ -53,6 +58,10 @@ function App() {
           element={<ProductDetails />}
         />
         <Route path="cart" element={<CartPage />} />
+        <Route path="my-orders/:userId" element={<MyOrdersPage />} />
+        <Route path="orders/:orderId" element={<SingleOrder />} />
+        <Route path="checkout" element={<CheckoutPage />} />
+        <Route path="order-success/:orderId" element={<OrderSuccessPage />} />
       </Route>
 
       {/* Seller and Admin routes */}
