@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
-import API_BASE_URL from "@/config.js"
+import API_BASE_URL from "@/config.js";
+import { useSnackbar } from "notistack";
 
 // Create Context
 export const CartContext = createContext();
@@ -15,8 +16,16 @@ export const CartProvider = ({ children }) => {
     if (userId) {
       axios
         .get(`${API_BASE_URL}/api/cart/get/${userId}`)
-        .then((res) => setCart(res.data.items))
-        .catch((err) => console.error("Error fetching cart:", err));
+        .then((res) => {
+          if (res.data && res.data.items.length > 0) {
+            setCart(res.data.items);
+          } else {
+            setCart([]); // Set empty cart state if cart doesn't exist
+          }
+        })
+        .catch((err) => {
+          setCart([]);
+        });
     }
   }, []);
 
@@ -25,21 +34,26 @@ export const CartProvider = ({ children }) => {
     try {
       const userId = localStorage.getItem("userId");
       if (!userId) return alert("Please log in first!");
-
+  
+      if (item.stock <= 0) {
+        return useSnackbar("This item is out of stock!", {variant: 'success'});
+      }
+  
       const res = await axios.post(`${API_BASE_URL}/api/cart/add`, {
         userId,
         ...item,
       });
-
+  
       if (res.status !== 200) {
         throw new Error(res.data.message || "Failed to add item");
       }
-
+  
       setCart(res.data?.cart?.items || []); // Handle missing data safely
     } catch (error) {
-      throw error.response?.data?.message || error.message || "An unknown error occurred";
+      alert(error.response?.data?.message || error.message || "An error occurred");
     }
   };
+  
 
   // Remove Item from Cart
   const handleRemoveFromCart = async (itemId) => {

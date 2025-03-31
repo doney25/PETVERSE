@@ -2,7 +2,7 @@ import Cart from "../models/cart.model.js";
 
 const addToCart = async (req, res) => {
   try {
-    const { userId, itemId, itemType, name, stock, price, image } = req.body;
+    const { userId, itemId, itemType, category, breed, name, stock, price, image } = req.body;
 
     if (!userId || !itemId || !itemType) {
       return res.status(400).json({ message: "Missing required fields" });
@@ -16,28 +16,38 @@ const addToCart = async (req, res) => {
     }
 
     // Check if the item is already in the cart
-    const existingItemIndex = cart.items.findIndex((item) => 
-      item.itemId.toString() === itemId.toString()
+    const existingItemIndex = cart.items.findIndex(
+      (item) => item.itemId.toString() === itemId.toString()
     );
 
     if (existingItemIndex !== -1) {
       if (itemType === "Product") {
-        // Increase quantity for products
+        // Check if adding one more exceeds available stock
+        if (cart.items[existingItemIndex].quantity + 1 > stock) {
+          return res.status(400).json({ message: "Not enough stock available" });
+        }
         cart.items[existingItemIndex].quantity += 1;
       } else {
-        return res.status(400).send({ message: "Pet already in cart" });
+        return res.status(400).json({ message: "Pet already in cart" });
       }
     } else {
+      // Ensure the stock is available before adding
+      if (stock < 1) {
+        return res.status(400).json({ message: "Out of stock" });
+      }
+
       // Add new item to cart
       cart.items.push({
         itemType,
         itemId,
         itemTypeRef: itemType,
         name,
+        category,
+        breed,
         price,
         stock,
         image,
-        quantity: itemType === "Pet" ? 1 : 1, // Pets should have only 1 quantity
+        quantity: 1, // Pets can only be 1, products start at 1
       });
     }
 
@@ -49,6 +59,7 @@ const addToCart = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 
 const removeFromCart = async (req, res) => {
   try {
@@ -107,7 +118,9 @@ const getCart = async (req, res) => {
     const { userId } = req.params;
     const cart = await Cart.findOne({ userId });
 
-    if (!cart) return res.status(404).json({ message: "Cart not found" });
+    if (!cart) {
+      return res.status(200).json({ items: [] }); // Instead of 404, return an empty cart
+    }
 
     res.status(200).json(cart);
   } catch (error) {
@@ -115,4 +128,4 @@ const getCart = async (req, res) => {
   }
 };
 
- export {addToCart, removeFromCart, getCart, updateCartQuantity}
+export { addToCart, removeFromCart, getCart, updateCartQuantity };

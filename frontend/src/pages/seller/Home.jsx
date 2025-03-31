@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus } from "lucide-react";
+import { Trash2, Plus } from "lucide-react";
 import { useState } from "react";
 import axios from "axios";
 import ImageUploader from "@/components/ImageUploader";
@@ -27,6 +27,26 @@ export default function Home() {
   const [price, setPrice] = useState("");
   const [images, setImages] = useState([]);
   const [description, setDescription] = useState("");
+
+// Add this to state
+const [vaccinations, setVaccinations] = useState([]);
+
+// Function to add a new vaccination field
+const addVaccination = () => {
+  setVaccinations([...vaccinations, { name: "", dueDate: "" }]);
+};
+
+// Function to remove a vaccination field
+const removeVaccination = (index) => {
+  setVaccinations(vaccinations.filter((_, i) => i !== index));
+};
+
+// Function to update vaccination details
+const updateVaccination = (index, field, value) => {
+  const updatedVaccinations = [...vaccinations];
+  updatedVaccinations[index][field] = value;
+  setVaccinations(updatedVaccinations);
+};
 
   const handleSubmit = async () => {
     if (images.length === 0) return alert("Please upload at least one image.");
@@ -46,6 +66,7 @@ export default function Home() {
       status: "Available",
       sellerId: sellerId,
       seller: sellerName,
+      vaccinations
     };
     axios
       .post(`${API_BASE_URL}/api/pets`, petData)
@@ -149,6 +170,33 @@ export default function Home() {
           <ImageUploader onUpload={(newImages) => setImages((prev) => [...prev, ...newImages])} />
         </div>        
       </div>
+
+      <div className="space-y-2 mt-4">
+  <label className="block text-sm font-medium">Vaccination Details</label>
+  
+  {vaccinations.map((vaccination, index) => (
+    <div key={index} className="flex items-center gap-2">
+      <Input
+        placeholder="Vaccine Name"
+        value={vaccination.name}
+        onChange={(e) => updateVaccination(index, "name", e.target.value)}
+      />
+      <Input
+        type="date"
+        value={vaccination.dueDate}
+        min={new Date().toISOString().split("T")[0]}
+        onChange={(e) => updateVaccination(index, "dueDate", e.target.value)}
+      />
+      <Button variant="destructive" onClick={() => removeVaccination(index)}>
+        <Trash2 size={16} />
+      </Button>
+    </div>
+  ))}
+
+  <Button className="mt-2" variant="outline" onClick={addVaccination}>
+    <Plus className="mr-2" size={16} /> Add Vaccination
+  </Button>
+</div>
 
       {/* Pet Classifier Integration */}
       <div className="mt-6">

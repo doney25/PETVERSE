@@ -40,6 +40,8 @@ const BuyerPetCard = ({ pets }) => {
                         itemType: "Pet",
                         itemId: pet._id,
                         itemTypeRef: "Pet",
+                        category: pet.category,
+                        breed: pet.breed,
                         name: pet.name,
                         price: pet.price,
                         quantity: 1, // Ensure pets have quantity 1
