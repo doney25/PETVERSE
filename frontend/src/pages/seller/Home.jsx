@@ -83,6 +83,11 @@ export default function Home() {
       return;
     }
 
+    if (!gender) {
+      enqueueSnackbar("Please select a gender.", { variant: "error" });
+      return;
+    }
+
     const sellerId = localStorage.getItem("userId");
     const sellerName = localStorage.getItem("userName");
     const petData = {
@@ -254,6 +259,19 @@ export default function Home() {
                   {images.length} image(s) uploaded
                 </div>
               )}
+              {images.length > 0 && (
+                <Button
+                  className="mt-2"
+                  variant="outline"
+                  onClick={() => {
+                    setImages([]); // Clear the images
+                    setFirstImageUrl(""); // Clear the first image URL
+                    enqueueSnackbar("Images cleared successfully.", { variant: "info" });
+                  }}
+                >
+                  Clear Images
+                </Button>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -289,7 +307,7 @@ export default function Home() {
             className="mt-6 w-full"
             variant="default"
             onClick={handleSubmit}
-            disabled={images.length === 0 || !isBreedVerified || !breed.trim()}
+            disabled={images.length === 0 || !isBreedVerified || !breed.trim() || !gender}
           >
             <Plus className="mr-2" size={16} /> Sell
           </Button>

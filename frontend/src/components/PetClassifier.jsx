@@ -7,7 +7,7 @@ const PetClassifier = ({ imageUrl, onBreedDetected }) => {
     const [labels, setLabels] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const THRESHOLD = 0.8;
+    const THRESHOLD = 0.5;
 
     useEffect(() => {
         // Load the Teachable Machine Model and Metadata
