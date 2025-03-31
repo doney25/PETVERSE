@@ -17,12 +17,21 @@ const BuyerPetCard = ({ pets }) => {
             key={pet._id}
             className="bg-white rounded-lg shadow-sm overflow-hidden"
           >
-            <img
-              src={pet.images[0]}
-              alt={pet.name}
-              className="w-full h-48 object-cover cursor-pointer"
-              onClick={() => navigate(`/shop/pets/${pet.category}/${pet._id}`)}
-            />
+            <div className="relative w-full">
+              <img
+                src={pet.images[0]}
+                alt={pet.name}
+                className="w-full h-48 object-cover cursor-pointer"
+                onClick={() =>
+                  navigate(`/shop/pets/${pet.category}/${pet._id}`)
+                }
+              />
+              {pet.status !== "Available" && (
+                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-lg">
+                  <p className="text-white text-xl font-bold">Sold Out</p>
+                </div>
+              )}
+            </div>
             <div
               className="p-4 cursor-pointer bg-gray-100"
               onClick={() => navigate(`/shop/pets/${pet.category}/${pet._id}`)}
@@ -32,6 +41,7 @@ const BuyerPetCard = ({ pets }) => {
               <div className="flex justify-between items-center mt-4">
                 <span className="text-xl font-bold">₹{pet.price}</span>
                 <Button
+                  disabled={pet.status != "Available"}
                   size="sm"
                   onClick={async (e) => {
                     e.stopPropagation();

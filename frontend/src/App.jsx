@@ -15,9 +15,14 @@ import CartPage from "./pages/buyer/CartPage";
 import ProductDetails from "./pages/buyer/ProductDetails";
 import CheckoutPage from "./pages/buyer/CheckoutPage"
 import { CartProvider } from "./context/CartContext";
+import PredictBreed from "./pages/PetBreed";
 import OrderSuccessPage from "./pages/buyer/OrderSuccessPage";
 import MyOrdersPage from "./pages/buyer/MyOrdersPage";
 import SingleOrder from "./pages/buyer/SingleOrder";
+import AboutUs from "./pages/Aboutus";
+import ContactUs from "./pages/ContactUs";
+import BuyNow from "./pages/buyer/BuyNow";
+
 
 function App() {
   return (
@@ -25,12 +30,12 @@ function App() {
       {/* Public Routes */}
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<LoginPage />} />
-      {/* <Route path="/forgotpassword" element={<ForgotPassword />} /> */}
       <Route path="/signup" element={<SignupPage />} />
-      {/* <Route path="/pet-details/:id" element={<PetDetails />} /> */}
-      {/* <Route path="/chat" element={<ChatPage />} /> */}
-      {/* <Route path="/purchase/:id" element={<PurchasePage />} /> */}
+      <Route path="/predict-breed" element={<PredictBreed />} /> {/* New Route */}
+
       {/* Buyer Routes */}
+      <Route path="/aboutus" element={<AboutUs />} />
+      <Route path="/contactus" element={<ContactUs />} />
       <Route
         path="/shop/*"
         element={
@@ -61,8 +66,10 @@ function App() {
         <Route path="my-orders/:userId" element={<MyOrdersPage />} />
         <Route path="orders/:orderId" element={<SingleOrder />} />
         <Route path="checkout" element={<CheckoutPage />} />
+        <Route path="checkout/:itemId" element={<BuyNow />} />
         <Route path="order-success/:orderId" element={<OrderSuccessPage />} />
       </Route>
+
       {/* Seller and Admin routes */}
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<Dashboard />} />
