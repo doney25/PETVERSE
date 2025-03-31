@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Edit3 } from "lucide-react";
+import { Edit3, Trash2, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ImageUploader from "@/components/ImageUploader";
@@ -28,6 +28,8 @@ export default function EditPet({ onBack, pet }) { //Iwant this pet inside useEf
   const [price, setPrice] = useState("");
   const [images, setImages] = useState([]);
   const [description, setDescription] = useState("");
+  const [vaccinations, setVaccinations] = useState([]);
+  const [gender, setGender] = useState("");
 
   useEffect(() => {
     axios.get(`${API_BASE_URL}/api/pets/${pet}`)
@@ -36,13 +38,31 @@ export default function EditPet({ onBack, pet }) { //Iwant this pet inside useEf
         setName(res.data.data.name)
         setCategory(res.data.data.category)
         setBreed(res.data.data.breed)
+        setGender(res.data.data.gender)
         setColor(res.data.data.color)
         setAge(res.data.data.age)
         setLocation(res.data.data.location)
         setPrice(res.data.data.price)
         setDescription(res.data.data.description)
+        setVaccinations(res.data.data.vaccinations || []);
     })
   }, [pet])
+
+  const addVaccination = () => {
+    setVaccinations([...vaccinations, { name: "", dueDate: "" }]);
+  };
+
+  // Function to remove a vaccination entry
+  const removeVaccination = (index) => {
+    setVaccinations(vaccinations.filter((_, i) => i !== index));
+  };
+
+  // Function to update vaccination details
+  const updateVaccination = (index, field, value) => {
+    const updatedVaccinations = [...vaccinations];
+    updatedVaccinations[index][field] = value;
+    setVaccinations(updatedVaccinations);
+  };
 
   const handleSave = async () => {
     if (images.length === 0) return alert("Please upload at least one image.");
@@ -58,10 +78,12 @@ export default function EditPet({ onBack, pet }) { //Iwant this pet inside useEf
       color,
       location,
       images,
+      gender,
       description,
       status: "Available",
       sellerId: sellerId,
       seller: sellerName,
+      vaccinations,
     };
     axios
       .put(`${API_BASE_URL}/api/pets/${id}`, petData)
@@ -117,6 +139,22 @@ export default function EditPet({ onBack, pet }) { //Iwant this pet inside useEf
                 value={breed}
                 onChange={(e) => setBreed(e.target.value)}
               />
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium">Gender</label>
+              <Select
+                value={gender}
+                onValueChange={(value) => setGender(value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select Gender" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="male">Male</SelectItem>
+                  <SelectItem value="female">Female</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="flex flex-col space-y-2">
@@ -176,6 +214,41 @@ export default function EditPet({ onBack, pet }) { //Iwant this pet inside useEf
                 onChange={(e) => setDescription(e.target.value)}
               />
             </div>
+
+            <div className="space-y-2 mt-4">
+            <Label className="flex">Vaccination Details</Label>
+
+            {vaccinations.map((vaccination, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <Input
+                  placeholder="Vaccine Name"
+                  value={vaccination.vaccineName}
+                  onChange={(e) =>
+                    updateVaccination(index, "name", e.target.value)
+                  }
+                />
+                <Input
+                  type="date"
+                  value={vaccination.dueDate}
+                  min={new Date().toISOString().split("T")[0]} // Prevent past dates
+                  onChange={(e) =>
+                    updateVaccination(index, "dueDate", e.target.value)
+                  }
+                />
+                <Button
+                  variant="destructive"
+                  onClick={() => removeVaccination(index)}
+                >
+                  <Trash2 size={16} />
+                </Button>
+              </div>
+            ))}
+
+            <Button className="mt-2" variant="outline" onClick={addVaccination}>
+              <Plus className="mr-2" size={16} /> Add Vaccination
+            </Button>
+          </div>
+
           </div>
           <Button
             className="mt-6 w-full"
