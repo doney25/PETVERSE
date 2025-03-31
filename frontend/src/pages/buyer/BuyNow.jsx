@@ -1,17 +1,16 @@
 import Header from "@/components/layout/Header";
 import { Button } from "@/components/ui/button";
+import React, { useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import API_BASE_URL from "@/config";
-import { useCart } from "@/context/CartContext";
 import axios from "axios";
 import { enqueueSnackbar } from "notistack";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
-const CheckoutPage = () => {
+const BuyNow = () => {
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
   const [name, setName] = useState("");
@@ -21,39 +20,30 @@ const CheckoutPage = () => {
   const [pincode, setPincode] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
-  const [totalAmount, setTotalAmount] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
-
-  const { cart } = useCart();
-
-  useEffect(() => {
-    setTotalAmount(
-      cart.reduce((total, item) => total + item.price * item.quantity, 0)
-    );
-  });
+  const itemId = useParams();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const itemType = queryParams.get("itemType");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const fullAddress = `${address1}, ${address2}, ${city}, ${state}, ${pincode}`;
 
-    const newOrder = {
-      userId,
-      name,
-      phone,
-      address: fullAddress,
-      paymentMethod,
-      totalAmount,
-    };
-
     try {
       const orderResponse = await axios.post(
         `${API_BASE_URL}/api/orders/placeOrder`,
-        newOrder
+        {
+          userId,
+          name,
+          phone,
+          address: fullAddress,
+          paymentMethod,
+          itemId: itemId.itemId,
+          itemType, // or "Product"
+          quantity: 1, // Only required for products
+        }
       );
-
-      if (orderResponse.status !== 201)
-        throw new Error("Failed to create order");
-
       enqueueSnackbar("Order placed successfully!", { variant: "success" });
 
       navigate(`/shop/order-success/${orderResponse.data.order._id}`);
@@ -178,4 +168,4 @@ const CheckoutPage = () => {
   );
 };
 
-export default CheckoutPage;
+export default BuyNow;

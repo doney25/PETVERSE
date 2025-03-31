@@ -2,7 +2,7 @@ import Order from "../models/order.model.js";
 import Cart from "../models/cart.model.js";
 import Product from "../models/products.model.js";
 import Pet from "../models/pets.model.js";
-import User from "../models/user.model.js"
+import User from "../models/user.model.js";
 
 export const placeOrder = async (req, res) => {
   try {
@@ -12,7 +12,9 @@ export const placeOrder = async (req, res) => {
       phone,
       address,
       paymentMethod,
-      totalAmount,
+      itemId,
+      itemType,
+      quantity, // Only required for products
     } = req.body;
 
     const user = await User.findById(userId);
@@ -21,48 +23,108 @@ export const placeOrder = async (req, res) => {
     }
 
     const buyerEmail = user.email;
+    let orderItems = [];
+    let totalAmount = 0; // Declare totalAmount here so it can be used later
 
-    const cart = await Cart.findOne({ userId });
-    if (!cart || cart.items.length === 0) {
-      return res.status(400).json({ message: "Cart is empty" });
+    if (itemId && itemType) {
+      // "Buy Now" flow: Creating an order for a single item
+      if (itemType === "Product") {
+        const product = await Product.findById(itemId);
+        if (!product)
+          return res.status(404).json({ message: "Product not found" });
+        if (product.stock < quantity)
+          return res.status(400).json({ message: "Insufficient stock" });
+
+        orderItems.push({
+          itemId,
+          name: product.name,
+          image: product.images[0],
+          itemType: "Product",
+          quantity,
+          price: product.price,
+        });
+
+        totalAmount = product.price * quantity; // Calculate total price for products
+
+        // Reduce stock
+        await Product.findByIdAndUpdate(itemId, { $inc: { stock: -quantity } });
+        if (product.stock - quantity <= 0) {
+          await Product.findByIdAndUpdate(itemId, {
+            stock: 0,
+            status: "SoldOut",
+          });
+        }
+      } else if (itemType === "Pet") {
+        const pet = await Pet.findById(itemId);
+        if (!pet) return res.status(404).json({ message: "Pet not found" });
+        if (pet.status === "soldout")
+          return res.status(400).json({ message: "Pet already sold" });
+
+        orderItems.push({
+          itemId,
+          itemType: "Pet",
+          quantity: 1,
+          category: pet.category,
+          price: pet.price,
+          image: pet.images[0],
+          name:  pet.name,
+          breed: pet.breed
+        });
+
+        totalAmount = pet.price; // Set total price for a pet
+
+        // Mark pet as sold
+        await Pet.findByIdAndUpdate(itemId, { buyerEmail, status: "soldout" });
+      }
+    } else {
+      // "Cart Checkout" flow
+      const cart = await Cart.findOne({ userId });
+      if (!cart || cart.items.length === 0) {
+        return res.status(400).json({ message: "Cart is empty" });
+      }
+
+      orderItems = cart.items;
+      totalAmount = cart.items.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+      ); // Sum total price
+
+      // Process each item in the cart
+      for (const item of cart.items) {
+        if (item.itemType === "Product") {
+          await Product.findByIdAndUpdate(item.itemId, {
+            $inc: { stock: -item.quantity },
+          });
+          if (item.quantity === 0) {
+            await Product.findByIdAndUpdate(item.itemId, {
+              stock: 0,
+              status: "SoldOut",
+            });
+          }
+        } else if (item.itemType === "Pet") {
+          await Pet.findByIdAndUpdate(item.itemId, {
+            buyerEmail,
+            status: "soldout",
+          });
+        }
+      }
+
+      // Clear the cart
+      await Cart.deleteOne({ userId });
     }
-
-    console.log(cart.items)
 
     // Create new order
     const order = new Order({
       userId,
       name,
       phone,
-      items: cart.items,
+      items: orderItems,
       address,
       paymentMethod,
-      totalAmount,
+      totalAmount, // Now totalAmount is always defined
     });
 
     await order.save();
-
-    // Process each item in the order
-    for (const item of cart.items) {
-      if (item.itemType === 'Product') {
-        // Update stock for products
-        await Product.findByIdAndUpdate(item.itemId, {
-          $inc: { stock: -item.quantity },
-        });
-        if (item.quantity === 0) {
-          await Product.findByIdAndUpdate(item.itemId, { stock: 0, status: "SoldOut" });
-        }        
-      } else if (item.itemType === 'Pet') {
-        // Mark pet as soldout and assign buyerEmail
-        await Pet.findByIdAndUpdate(item.itemId, {
-          buyerEmail: buyerEmail,
-          status: "soldout",
-        });
-      }
-    }
-
-    // Clear the cart after successful order
-    await Cart.deleteOne({ userId });
 
     res.status(201).json({ message: "Order placed successfully", order });
   } catch (error) {
@@ -98,5 +160,68 @@ export const getOrders = async (req, res) => {
   } catch (error) {
     console.error("Error fetching order:", error);
     res.status(500).json({ message: "Error fetching order", error });
+  }
+};
+
+export const buyNow = async (req, res) => {
+  try {
+    const { userId, name, phone, address, paymentMethod, itemId, itemType } =
+      req.body;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const buyerEmail = user.email;
+
+    let item;
+    if (itemType === "Product") {
+      item = await Product.findById(itemId);
+    } else if (itemType === "Pet") {
+      item = await Pet.findById(itemId);
+    }
+
+    const price = item.price;
+
+    if (!item) {
+      return res.status(404).json({ message: "Item not found" });
+    }
+
+    if (itemType === "Product" && item.stock < quantity) {
+      return res.status(400).json({ message: "Insufficient stock" });
+    }
+
+    // Create new order
+    const order = new Order({
+      userId,
+      name,
+      phone,
+      items: [{ itemId, itemType, quantity: 1, price }],
+      address,
+      paymentMethod,
+      totalAmount: price,
+    });
+
+    await order.save();
+
+    // Update stock or mark pet as sold
+    if (itemType === "Product") {
+      await Product.findByIdAndUpdate(itemId, { $inc: { stock: -1 } });
+
+      if (item.stock - 1 <= 0) {
+        await Product.findByIdAndUpdate(itemId, {
+          stock: 0,
+          status: "SoldOut",
+        });
+      }
+    } else if (itemType === "Pet") {
+      await Pet.findByIdAndUpdate(itemId, { buyerEmail, status: "soldout" });
+    }
+
+    res.status(201).json({ message: "Purchase successful", order });
+  } catch (error) {
+    console.error("Error processing buy now:", error);
+    res.status(500).json({ message: "Error processing buy now", error });
   }
 };

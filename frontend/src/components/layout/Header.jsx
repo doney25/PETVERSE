@@ -75,11 +75,12 @@ export default function Header() {
           >
             Home
           </a>
-          <a href="#about" className="text-gray-600 hover:text-blue-500">
+
+          <a onClick={() => navigate('/aboutus')} className="text-gray-600 hover:text-blue-500">
             About Us
           </a>
-          <a href="#contact" className="text-gray-600 hover:text-blue-500">
-            Contact
+          <a onClick={() => navigate('/contactus')} className="text-gray-600 hover:text-blue-500">
+            Contact Us
           </a>
           <a
             onClick={() => navigate("/predict-breed")}

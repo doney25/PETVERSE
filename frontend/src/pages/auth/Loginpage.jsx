@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { AuthContext } from "@/context/Authcontext";
 import { enqueueSnackbar } from "notistack";
-import API_BASE_URL from "@/config.js"
+import API_BASE_URL from "@/config.js";
+import Header from "@/components/layout/Header";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -24,7 +25,6 @@ const LoginPage = () => {
     setSuccessMessage("");
 
     try {
-      // Validate the role
       const roleValidationResponse = await axios.post(
         `${API_BASE_URL}/api/users/validate_role`,
         { email, role }
@@ -36,11 +36,12 @@ const LoginPage = () => {
         return;
       }
 
-      // Proceed with login
-      const { data } = await axios.post(
-        `${API_BASE_URL}/api/users/login`,
-        { email, password, role }
-      );
+      const { data } = await axios.post(`${API_BASE_URL}/api/users/login`, {
+        email,
+        password,
+        role,
+      });
+
       localStorage.setItem("userId", data.user.id);
       localStorage.setItem("token", data.token);
       localStorage.setItem("userRole", data.user.role);
@@ -50,16 +51,12 @@ const LoginPage = () => {
       setUserRole(data.user.role);
       setSuccessMessage("Login successful!");
       setError("");
-      if (data.user.role === "admin") {
-        navigate("/dashboard");
-        enqueueSnackbar("Login Successful!", {variant:"success"}) 
-      } else if (data.user.role === "seller") {
-        navigate("/dashboard");
-        enqueueSnackbar("Login Successful!", {variant:"success"})
-      } else if (data.user.role === "buyer") {
-        navigate("/shop/home");
-        enqueueSnackbar("Login Successful!", {variant:"success"})
-      }
+
+      if (data.user.role === "admin") navigate("/dashboard");
+      else if (data.user.role === "seller") navigate("/dashboard");
+      else if (data.user.role === "buyer") navigate("/shop/home");
+
+      enqueueSnackbar("Login Successful!", { variant: "success" });
     } catch (err) {
       console.log(err);
       setError(err.response?.data?.error || "Login failed");
@@ -70,89 +67,80 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600">
-      <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Login</h2>
+    <>
+      <Header />
+      <div className="flex h-screen items-center justify-center bg-gradient-to-br from-gray-100 to-blue-300">
+        <div className="w-full max-w-md p-8 bg-white bg-opacity-80 backdrop-blur-lg shadow-xl rounded-2xl">
+          <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+            Login to Petverse
+          </h2>
 
-        {error && (
-          <p className="text-red-500 text-sm mt-2 text-center">{error}</p>
-        )}
+          {error && <p className="text-red-500 text-sm mt-2 text-center">{error}</p>}
+          {successMessage && <p className="text-green-500 text-sm mt-2 text-center">{successMessage}</p>}
 
-        {successMessage && (
-          <p className="text-green-500 text-sm mt-2 text-center">
-            {successMessage}
+          {/* Role Selection */}
+          <div className="flex justify-center mb-6">
+            {["buyer", "seller", "admin"].map((r) => (
+              <button
+                key={r}
+                onClick={() => setRole(r)}
+                className={`px-5 py-2 text-sm font-semibold rounded-lg mx-2 transition ${
+                  role === r
+                    ? "bg-blue-600 text-white shadow-lg"
+                    : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                }`}
+              >
+                {r.charAt(0).toUpperCase() + r.slice(1)}
+              </button>
+            ))}
+          </div>
+
+          <form onSubmit={handleLogin} className="mt-6">
+            <div className="mb-4">
+              <label className="block text-gray-700 font-medium">Email</label>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-gray-700 font-medium">Password</label>
+              <input
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+              />
+            </div>
+
+            <Button
+              className="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition shadow-md"
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? "Logging in..." : "Log In"}
+            </Button>
+          </form>
+
+          <p className="text-center text-gray-500 mt-4">
+            Don't have an account?{" "}
+            <span
+              onClick={() => navigate("/signup")}
+              className="text-blue-600 hover:underline cursor-pointer"
+            >
+              Sign up
+            </span>
           </p>
-        )}
-
-        <div className="flex justify-center mb-6">
-          <Button
-            onClick={() => setRole("buyer")}
-            className={`px-6 py-2 rounded-lg border cursor-pointer mx-2 ${
-              role === "buyer" ? "bg-blue-700 text-white" : "bg-gray-200"
-            }`}
-          >
-            Buyer
-          </Button>
-          <Button
-            onClick={() => setRole("seller")}
-            className={`px-6 py-2 rounded-lg border cursor-pointer mx-2 ${
-              role === "seller" ? "bg-blue-700 text-white" : "bg-gray-200"
-            }`}
-          >
-            Seller
-          </Button>
-          <Button
-            onClick={() => setRole("admin")}
-            className={`px-6 py-2 rounded-lg border cursor-pointer mx-2 ${
-              role === "admin" ? "bg-blue-700 text-white" : "bg-gray-200"
-            }`}
-          >
-            Admin
-          </Button>
         </div>
-
-        <form onSubmit={handleLogin} className="mt-6">
-          <div className="mb-4">
-            <label className="block text-gray-700 font-medium">Email</label>
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-4 py-2 mt-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 font-medium">Password</label>
-            <input
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full px-4 py-2 mt-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            />
-          </div>
-
-          <Button
-            className="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition"
-            type="submit"
-            disabled={loading}
-          >
-            {loading ? "Logging in..." : "Log In"}
-          </Button>
-        </form>
-
-        <p className="text-center text-gray-500 mt-4">
-          Don't have an account?{" "}
-          <a href="/signup" className="text-blue-600 hover:underline">
-            Sign up
-          </a>
-        </p>
       </div>
-    </div>
+    </>
   );
 };
 
