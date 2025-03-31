@@ -166,6 +166,8 @@ const PetDetails = () => {
                         itemId: pet._id,
                         itemTypeRef: "Pet",
                         name: pet.name,
+                        category: pet.category,
+                        breed: pet.breed,
                         price: pet.price,
                         quantity: 1, // Ensure pets have quantity 1
                         image: pet.images[0],

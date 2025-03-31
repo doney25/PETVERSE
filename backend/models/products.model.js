@@ -15,6 +15,11 @@ const productSchema = new mongoose.Schema(
       enum: ["food", "grooming", "toys", "other"],
       required: true,
     },
+    status: {
+      type: String,
+      enum: ["Available", "SoldOut"],
+      default: "Available"
+    },
     stock: {
       type: Number,
       required: true,
