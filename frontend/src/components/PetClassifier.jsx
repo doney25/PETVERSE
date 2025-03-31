@@ -76,12 +76,14 @@ const PetClassifier = ({ imageUrl, onBreedDetected }) => {
 
                 // Ensure bestMatchIndex is within bounds
                 if (bestMatchIndex >= 0 && bestMatchIndex < labels.length) {
-                    const predictedBreed = labels[bestMatchIndex];
-                    setPrediction(predictedBreed); // Update the prediction state
-                    console.log("Predicted Breed:", predictedBreed);
-
-                    // Notify the parent component about the detected breed
-                    onBreedDetected(predictedBreed);
+                    if (bestMatchProbability >= THRESHOLD) {
+                        const predictedBreed = labels[bestMatchIndex];
+                        setPrediction(predictedBreed); // Update the prediction state
+                        onBreedDetected(predictedBreed); // Notify the parent component
+                    } else {
+                        setPrediction("No matches found");
+                        onBreedDetected(""); // Notify the parent component with an empty value
+                    }
                 } else {
                     console.error("Best Match Index is out of bounds for labels array");
                     setPrediction("No matches found");
