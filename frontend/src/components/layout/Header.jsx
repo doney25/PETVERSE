@@ -71,16 +71,21 @@ export default function Header() {
         <nav className="hidden md:flex space-x-6">
           <a
             onClick={handleClick}
-            className="text-gray-600 hover:text-blue-500"
+            className="text-gray-600 hover:text-blue-500 cursor-pointer"
           >
             Home
           </a>
-
           <a href="#about" className="text-gray-600 hover:text-blue-500">
             About Us
           </a>
           <a href="#contact" className="text-gray-600 hover:text-blue-500">
             Contact
+          </a>
+          <a
+            onClick={() => navigate("/predict-breed")}
+            className="text-gray-600 hover:text-blue-500 cursor-pointer"
+          >
+            Predict Breed
           </a>
         </nav>
 
