@@ -13,7 +13,7 @@ const PetList = ({onNavigateToEdit}) => {
    axios
     .get(`${API_BASE_URL}/api/pets`)
     .then((res) => {
-      setPets(res.data.data);
+      setPets(res.data.data.filter((pet) => pet.status === 'Available'));
       setLoading(false);
      })
      .catch((error) => {

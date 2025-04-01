@@ -163,65 +163,31 @@ export const getOrders = async (req, res) => {
   }
 };
 
-export const buyNow = async (req, res) => {
+export const updateOrderStatus = async (req, res) => {
   try {
-    const { userId, name, phone, address, paymentMethod, itemId, itemType } =
-      req.body;
+    const { orderId } = req.params;
+    const { status } = req.body;
 
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+    // Check if the order exists
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
     }
 
-    const buyerEmail = user.email;
+    // Valid order statuses (Modify as needed)
+    const validStatuses = ["pending", "shipped", "delivered", "cancelled"];
 
-    let item;
-    if (itemType === "Product") {
-      item = await Product.findById(itemId);
-    } else if (itemType === "Pet") {
-      item = await Pet.findById(itemId);
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ message: "Invalid order status" });
     }
 
-    const price = item.price;
-
-    if (!item) {
-      return res.status(404).json({ message: "Item not found" });
-    }
-
-    if (itemType === "Product" && item.stock < quantity) {
-      return res.status(400).json({ message: "Insufficient stock" });
-    }
-
-    // Create new order
-    const order = new Order({
-      userId,
-      name,
-      phone,
-      items: [{ itemId, itemType, quantity: 1, price }],
-      address,
-      paymentMethod,
-      totalAmount: price,
-    });
-
+    // Update the order status
+    order.status = status;
     await order.save();
 
-    // Update stock or mark pet as sold
-    if (itemType === "Product") {
-      await Product.findByIdAndUpdate(itemId, { $inc: { stock: -1 } });
-
-      if (item.stock - 1 <= 0) {
-        await Product.findByIdAndUpdate(itemId, {
-          stock: 0,
-          status: "SoldOut",
-        });
-      }
-    } else if (itemType === "Pet") {
-      await Pet.findByIdAndUpdate(itemId, { buyerEmail, status: "soldout" });
-    }
-
-    res.status(201).json({ message: "Purchase successful", order });
+    res.status(200).json({ message: "Order status updated successfully", order });
   } catch (error) {
-    console.error("Error processing buy now:", error);
-    res.status(500).json({ message: "Error processing buy now", error });
+    console.error("Error updating order status:", error);
+    res.status(500).json({ message: "Error updating order status", error });
   }
 };

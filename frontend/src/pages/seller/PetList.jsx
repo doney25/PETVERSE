@@ -17,7 +17,7 @@ const PetList = ({onNavigateToEdit}) => {
       const filteredPets = res.data.data.filter(
         (pet) => String(pet.sellerId) === sellerId 
       );
-      setPets(filteredPets);
+      setPets(filteredPets.filter((pet) => pet.status === 'Available'));
       setLoading(false);
      })
      .catch((error) => {
