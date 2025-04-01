@@ -6,7 +6,11 @@ import { enqueueSnackbar } from "notistack";
 import API_BASE_URL from "@/config.js";
 import { useCart } from "@/context/CartContext";
 import Header from "@/components/layout/Header";
-import { Carousel, CarouselItem } from "@/components/ui/carousel";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ShoppingCart, ArrowLeft } from "lucide-react";
@@ -58,26 +62,26 @@ const ProductDetails = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Image Carousel */}
             <div className="relative w-full">
-              <div className="relative w-full">
-                <Card className="shadow-md">
-                  <Carousel>
+              <Card className="shadow-md">
+                <Carousel className="w-full">
+                  <CarouselContent>
                     {product.images.map((image, index) => (
-                      <CarouselItem key={index}>
+                      <CarouselItem key={index} className="basis-full">
                         <img
                           src={image}
                           alt={product.name}
-                          className="w-full h-80 object-cover rounded-lg"
+                          className="w-full h-80 object-cover rounded-lg shadow-md"
                         />
                       </CarouselItem>
                     ))}
-                  </Carousel>
-                </Card>
-                {product.status !== "Available" && (
-                  <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-lg">
-                    <p className="text-white text-xl font-bold">Out of Stock</p>
-                  </div>
-                )}
-              </div>
+                  </CarouselContent>
+                </Carousel>
+              </Card>
+              {product.status !== "Available" && (
+                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-lg">
+                  <p className="text-white text-xl font-bold">Out of Stock</p>
+                </div>
+              )}
             </div>
 
             {/* Product Details */}

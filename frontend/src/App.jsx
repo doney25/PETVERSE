@@ -19,7 +19,7 @@ import PredictBreed from "./pages/PetBreed";
 import OrderSuccessPage from "./pages/buyer/OrderSuccessPage";
 import MyOrdersPage from "./pages/buyer/MyOrdersPage";
 import SingleOrder from "./pages/buyer/SingleOrder";
-import AboutUs from "./pages/Aboutus";
+import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
 import BuyNow from "./pages/buyer/BuyNow";
 

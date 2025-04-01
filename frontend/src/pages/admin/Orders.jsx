@@ -81,11 +81,13 @@ const Orders = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-2">
+                    <p><strong>Order made by:</strong></p>
                     <p><strong>Name:</strong> {order.name}</p>
                     <p><strong>Phone:</strong> {order.phone}</p>
                     <p><strong>Address:</strong> {order.address}</p>
                     <p><strong>Total Amount:</strong> <span className="text-green-600 font-semibold">₹{order.totalAmount}</span></p>
                     <p><strong>Payment Method:</strong> {order.paymentMethod}</p>
+                    <p><strong>Items in this Order:</strong> {order.items.map((item) => item.name)}</p>
 
                     {/* Order Status with Badge */}
                     <div className="flex items-center gap-3 mt-4">

@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Alert } from "@/components/ui/alert";
-import { Carousel, CarouselItem } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { ShoppingCart, MessageCircle, ArrowLeft } from "lucide-react";
 import { CartContext } from "@/context/CartContext";
 import { enqueueSnackbar } from "notistack";
@@ -69,16 +69,18 @@ const PetDetails = () => {
           <Card className="flex flex-col md:flex-row gap-6 p-6 shadow-lg rounded-lg">
             {/* Image Carousel */}
             <div className="w-full md:w-1/2">
-              <Carousel>
-                {pet.images.map((image, index) => (
-                  <CarouselItem key={index}>
-                    <img
-                      src={image}
-                      alt={pet.name}
-                      className="w-full h-80 object-cover rounded-lg shadow-md"
-                    />
-                  </CarouselItem>
-                ))}
+              <Carousel className="w-full">
+                <CarouselContent>
+                  {pet.images.map((image, index) => (
+                    <CarouselItem key={index} className="basis-full">
+                      <img
+                        src={image}
+                        alt={pet.name}
+                        className="w-full h-80 object-cover rounded-lg shadow-md"
+                      />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
               </Carousel>
             </div>
 
