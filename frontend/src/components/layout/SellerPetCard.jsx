@@ -39,8 +39,7 @@ const SellerPetCard = ({ pets, onNavigate }) => {
               className="w-full h-48 object-cover cursor-pointer"
             />
             <div className="p-4 cursor-pointer bg-gray-100">
-              <h3 className="text-lg font-semibold">{pet.name}</h3>
-              <p className="text-sm text-muted-foreground">{pet.breed}</p>
+              <h3 className="text-lg font-semibold">{pet.breed}</h3>
               <div className="flex items-center mt-4 justify-between w-full">
                 <span className="text-xl font-bold">₹{pet.price}</span>
                 <div className="flex space-x-2">

@@ -31,7 +31,6 @@ const showPet = async (req, res) => {
 const createPet = async (req, res) => {
   try {
     if (
-      !req.body.name ||
       !req.body.category ||
       !req.body.breed ||
       !req.body.age ||
@@ -60,7 +59,6 @@ const createPet = async (req, res) => {
 const updatePet = async (req, res) => {
   try {
     if (
-      !req.body.name ||
       !req.body.category ||
       !req.body.breed ||
       !req.body.age ||
