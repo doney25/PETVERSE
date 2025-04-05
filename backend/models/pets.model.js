@@ -2,22 +2,15 @@ import mongoose from "mongoose";
 
 const petSchema = new mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: true,
-      trim: true,
-    },
     category: {
       type: String,
-      enum: ["dog", "cat", "bird", "other"],
-      default: "other",
+      enum: ["dog", "cat"],
     },
     breed: {
       type: String,
       required: true,
       trim: true,
     },
-    gender: String,
     age: {
       type: String,
       required: true,

@@ -18,7 +18,6 @@ import PetClassifier from "@/components/PetClassifier";
 import API_BASE_URL from "@/config.js";
 
 export default function Home() {
-  const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [breed, setBreed] = useState("");
   const [ageNumber, setAgeNumber] = useState("");
@@ -75,7 +74,7 @@ export default function Home() {
 
   // Function to add a new vaccination field
   const addVaccination = () => {
-    setVaccinations([...vaccinations, { vaccineName: "", dueDate: "" }]);
+    setVaccinations([...vaccinations, { vaccineName: "", dueDate: "", }]);
   };
 
   // Function to remove a vaccination field
@@ -124,7 +123,6 @@ export default function Home() {
     const sellerId = localStorage.getItem("userId");
     const sellerName = localStorage.getItem("userName");
     const petData = {
-      name,
       category,
       breed,
       age: finalAge,
@@ -146,7 +144,6 @@ export default function Home() {
       .then(() => {
         enqueueSnackbar("Pet Listed Successfully", { variant: "success" });
         // Reset form
-        setName("");
         setCategory("");
         setBreed("");
         setAge("");
@@ -178,32 +175,6 @@ export default function Home() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <label className="block text-sm font-medium">Pet Name</label>
-              <Input
-                placeholder="Pet Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-medium">Category</label>
-              <Select
-                value={category}
-                onValueChange={(value) => setCategory(value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="dog">Dog</SelectItem>
-                  <SelectItem value="cat">Cat</SelectItem>
-                  <SelectItem value="bird">Bird</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
 
             <div className="space-y-2">
               <label className="block text-sm font-medium">
@@ -228,6 +199,22 @@ export default function Home() {
                 }
               />
             </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium">Category</label>
+              <Select
+                value={category}
+                onValueChange={(value) => setCategory(value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select Category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="dog">Dog</SelectItem>
+                  <SelectItem value="cat">Cat</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
             <div className="space-y-2">
               <label className="block text-sm font-medium">Gender</label>
               <Select

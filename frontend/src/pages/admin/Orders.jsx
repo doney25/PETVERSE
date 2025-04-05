@@ -112,6 +112,7 @@ const Orders = () => {
                       <Select
                         onValueChange={(newStatus) => handleStatusChange(order._id, newStatus)}
                         defaultValue={order.status}
+                        disabled={order.status === "cancelled" || order.status === "delivered"}
                       >
                         <SelectTrigger className="w-full border border-gray-300 rounded-lg p-2">
                           <SelectValue placeholder="Update Status" />
@@ -130,7 +131,7 @@ const Orders = () => {
                     <Button
                       variant="destructive"
                       onClick={() => handleStatusChange(order._id, "cancelled")}
-                      disabled={order.status === "cancelled"}
+                      disabled={order.status === "cancelled" || order.status === "delivered"}
                     >
                       Cancel Order
                     </Button>

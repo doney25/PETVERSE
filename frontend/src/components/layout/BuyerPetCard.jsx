@@ -36,8 +36,7 @@ const BuyerPetCard = ({ pets }) => {
               className="p-4 cursor-pointer bg-gray-100"
               onClick={() => navigate(`/shop/pets/${pet.category}/${pet._id}`)}
             >
-              <h3 className="text-lg font-semibold">{pet.name}</h3>
-              <p className="text-sm text-muted-foreground">{pet.breed}</p>
+             <h3 className="text-lg font-semibold">{pet.breed}</h3>
               <div className="flex justify-between items-center mt-4">
                 <span className="text-xl font-bold">₹{pet.price}</span>
                 <Button
@@ -52,7 +51,6 @@ const BuyerPetCard = ({ pets }) => {
                         itemTypeRef: "Pet",
                         category: pet.category,
                         breed: pet.breed,
-                        name: pet.name,
                         price: pet.price,
                         quantity: 1, // Ensure pets have quantity 1
                         image: pet.images[0],

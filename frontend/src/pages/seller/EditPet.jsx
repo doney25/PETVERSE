@@ -21,7 +21,7 @@ import API_BASE_URL from "@/config.js";
 export default function EditPet({ onBack, pet }) {
   //Iwant this pet inside useEffect
   const [id, setId] = useState("");
-  const [name, setName] = useState("");
+  
   const [category, setCategory] = useState("");
   const [breed, setBreed] = useState("");
   const [age, setAge] = useState("");
@@ -37,7 +37,6 @@ export default function EditPet({ onBack, pet }) {
   useEffect(() => {
     axios.get(`${API_BASE_URL}/api/pets/${pet}`).then((res) => {
       setId(res.data.data._id);
-      setName(res.data.data.name);
       setCategory(res.data.data.category);
       setBreed(res.data.data.breed);
       setColor(res.data.data.color);
@@ -75,7 +74,6 @@ export default function EditPet({ onBack, pet }) {
     const sellerId = localStorage.getItem("userId");
     const sellerName = localStorage.getItem("userName");
     const petData = {
-      name,
       category,
       breed,
       age,
@@ -113,14 +111,6 @@ export default function EditPet({ onBack, pet }) {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 items-center">
-            <div className="flex flex-col space-y-2">
-              <Label>Name</Label>
-              <Input
-                placeholder="Pet Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
 
             <div className="flex flex-col space-y-2">
               <Label>Category</Label>
@@ -134,8 +124,6 @@ export default function EditPet({ onBack, pet }) {
                 <SelectContent>
                   <SelectItem value="dog">Dog</SelectItem>
                   <SelectItem value="cat">Cat</SelectItem>
-                  <SelectItem value="bird">Bird</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
                 </SelectContent>
               </Select>
             </div>
