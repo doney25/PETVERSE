@@ -20,7 +20,8 @@ import API_BASE_URL from "@/config.js";
 export default function Home() {
   const [category, setCategory] = useState("");
   const [breed, setBreed] = useState("");
-  const [age, setAge] = useState("");
+  const [ageNumber, setAgeNumber] = useState("");
+  const [ageUnit, setAgeUnit] = useState("");
   const [color, setColor] = useState("");
   const [location, setLocation] = useState("");
   const [price, setPrice] = useState("");
@@ -115,12 +116,16 @@ export default function Home() {
       return;
     }
 
+    const finalAge = `${ageNumber} ${
+      parseInt(ageNumber) === 1 ? ageUnit.slice(0, -1) : ageUnit
+    }`;    
+
     const sellerId = localStorage.getItem("userId");
     const sellerName = localStorage.getItem("userName");
     const petData = {
       category,
       breed,
-      age,
+      age: finalAge,
       price,
       color,
       location,
@@ -228,11 +233,8 @@ export default function Home() {
             <div className="space-y-2">
               <label className="block text-sm font-medium">Age</label>
               <div className="flex gap-2">
-                <Select
-                  onValueChange={(value) =>
-                    setAge(`${value} ${age.split(" ")[1] || "months"}`)
-                  }
-                >
+                {/* Number Dropdown */}
+                <Select onValueChange={(value) => setAgeNumber(value)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select Number" />
                   </SelectTrigger>
@@ -244,11 +246,9 @@ export default function Home() {
                     ))}
                   </SelectContent>
                 </Select>
-                <Select
-                  onValueChange={(value) =>
-                    setAge(`${age.split(" ")[0] || "1"} ${value}`)
-                  }
-                >
+
+                {/* Unit Dropdown */}
+                <Select onValueChange={(value) => setAgeUnit(value)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select Unit" />
                   </SelectTrigger>

@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 import API_BASE_URL from "@/config.js";
-import { useSnackbar } from "notistack";
+import { enqueueSnackbar, useSnackbar } from "notistack";
 
 // Create Context
 export const CartContext = createContext();
@@ -50,7 +50,7 @@ export const CartProvider = ({ children }) => {
   
       setCart(res.data?.cart?.items || []); // Handle missing data safely
     } catch (error) {
-      alert(error.response?.data?.message || error.message || "An error occurred");
+      throw (error.response?.data?.message || error.message || "An error occurred")
     }
   };
   

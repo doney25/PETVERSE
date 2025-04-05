@@ -34,7 +34,38 @@ const CheckoutPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (
+      !userId ||
+      !name ||
+      !phone ||
+      !paymentMethod ||
+      !totalAmount
+    ) {
+      return enqueueSnackbar("All Fields are required.", {
+        variant: "error",
+      });
+    }
+
+    if (/\d/.test(name)) {
+      return enqueueSnackbar("Name should not contain numbers!", {variant: "error"});
+    }
+
+    if (pincode.length !== 6) {
+      return enqueueSnackbar("Enter a valid 6 digit pincode.", {
+        variant: "error",
+      });
+    }
+
     const fullAddress = `${address1}, ${address2}, ${city}, ${state}, ${pincode}`;
+
+    if (
+      !fullAddress
+    ) {
+      return enqueueSnackbar("Enter a valid address", {
+        variant: "error",
+      });
+    }
 
     const newOrder = {
       userId,
@@ -58,8 +89,8 @@ const CheckoutPage = () => {
 
       navigate(`/shop/order-success/${orderResponse.data.order._id}`);
     } catch (error) {
-      console.error("Error placing order:", error);
-      alert("Something went wrong. Please try again.");
+      console.log(error);
+      enqueueSnackbar(error.response.data.message, { variant: "error" });
     }
   };
 
