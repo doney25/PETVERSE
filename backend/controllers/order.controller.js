@@ -17,6 +17,10 @@ export const placeOrder = async (req, res) => {
       quantity, // Only required for products
     } = req.body;
 
+    if (phone.length !== 10) {
+      return res.status(400).json({ message: "Enter a Valid 10 digit Phone number."})
+    }
+
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -128,7 +132,6 @@ export const placeOrder = async (req, res) => {
 
     res.status(201).json({ message: "Order placed successfully", order });
   } catch (error) {
-    console.error("Error placing order:", error);
     res.status(500).json({ message: "Error placing order", error });
   }
 };

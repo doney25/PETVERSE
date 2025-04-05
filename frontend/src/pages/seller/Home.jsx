@@ -21,7 +21,8 @@ export default function Home() {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [breed, setBreed] = useState("");
-  const [age, setAge] = useState("");
+  const [ageNumber, setAgeNumber] = useState("");
+  const [ageUnit, setAgeUnit] = useState("");
   const [color, setColor] = useState("");
   const [location, setLocation] = useState("");
   const [price, setPrice] = useState("");
@@ -74,7 +75,7 @@ export default function Home() {
 
   // Function to add a new vaccination field
   const addVaccination = () => {
-    setVaccinations([...vaccinations, { vaccineName: "", dueDate: "",  }]);
+    setVaccinations([...vaccinations, { vaccineName: "", dueDate: "" }]);
   };
 
   // Function to remove a vaccination field
@@ -116,13 +117,17 @@ export default function Home() {
       return;
     }
 
+    const finalAge = `${ageNumber} ${
+      parseInt(ageNumber) === 1 ? ageUnit.slice(0, -1) : ageUnit
+    }`;    
+
     const sellerId = localStorage.getItem("userId");
     const sellerName = localStorage.getItem("userName");
     const petData = {
       name,
       category,
       breed,
-      age,
+      age: finalAge,
       price,
       color,
       location,
@@ -241,11 +246,8 @@ export default function Home() {
             <div className="space-y-2">
               <label className="block text-sm font-medium">Age</label>
               <div className="flex gap-2">
-                <Select
-                  onValueChange={(value) =>
-                    setAge(`${value} ${age.split(" ")[1] || "months"}`)
-                  }
-                >
+                {/* Number Dropdown */}
+                <Select onValueChange={(value) => setAgeNumber(value)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select Number" />
                   </SelectTrigger>
@@ -257,11 +259,9 @@ export default function Home() {
                     ))}
                   </SelectContent>
                 </Select>
-                <Select
-                  onValueChange={(value) =>
-                    setAge(`${age.split(" ")[0] || "1"} ${value}`)
-                  }
-                >
+
+                {/* Unit Dropdown */}
+                <Select onValueChange={(value) => setAgeUnit(value)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select Unit" />
                   </SelectTrigger>
@@ -344,13 +344,13 @@ export default function Home() {
           </div>
 
           <div className="space-y-2">
-              <label className="block text-sm font-medium">Description</label>
-              <Textarea
-                placeholder="Short Description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </div>
+            <label className="block text-sm font-medium">Description</label>
+            <Textarea
+              placeholder="Short Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
 
           <div className="space-y-2 mt-4">
             <label className="block text-sm font-medium">

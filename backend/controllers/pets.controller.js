@@ -127,4 +127,4 @@ const setVaccinationDetails = async (req, res) => {
   }
 };
 
-export { createPet, updatePet, showPets, showPet, deletePet, setVaccinationDetails };
+export { createPet, updatePet, showPets, showPet, deletePet, setVaccinationDetails,};
