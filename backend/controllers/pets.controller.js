@@ -16,14 +16,15 @@ const showPets = async (req, res) => {
 // Show one pets
 const showPet = async (req, res) => {
   try {
-    const {id} = req.params
-    const pet = await Pet.findById(id);
-    return res.status(200).json({
-      data: pet,
-    });
+    const { id } = req.params;
+    const pet = await Pet.findById(id).populate("sellerId", "rating totalRatings"); // Populate sellerId with rating and totalRatings
+    if (!pet) {
+      return res.status(404).json({ message: "Pet not found" });
+    }
+    res.status(200).json({ data: pet });
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ message: error.message });
+    console.error("Error fetching pet:", error);
+    res.status(500).json({ message: "Error fetching pet", error });
   }
 };
 

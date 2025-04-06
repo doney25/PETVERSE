@@ -23,16 +23,18 @@ const PetDetails = () => {
   const buyerId = localStorage.getItem("userId");
 
   useEffect(() => {
-    axios
-      .get(`${API_BASE_URL}/api/pets/${petId}`)
-      .then((response) => {
-        setPet(response.data.data);
+    const fetchPet = async () => {
+      try {
+        const res = await axios.get(`${API_BASE_URL}/api/pets/${petId}`);
+        setPet(res.data.data);
         setLoading(false);
-      })
-      .catch(() => {
+      } catch (error) {
         setError("An error occurred while fetching pet details.");
         setLoading(false);
-      });
+      }
+    };
+
+    fetchPet();
   }, [petId]);
 
   return (
@@ -118,6 +120,12 @@ const PetDetails = () => {
                 {/* Seller Info */}
                 <div className="mt-6 border-t pt-4">
                   <p className="font-semibold text-lg">Seller: {pet.seller}</p>
+                  {pet.sellerId && (
+                    <p className="text-yellow-600 text-sm mt-2">
+                      Seller Rating: ⭐ {pet.sellerId.rating?.toFixed(1) || "Not rated yet"}
+                    </p>
+                  )}
+                 
                   {buyerId && (
                     <Button
                       size="sm"

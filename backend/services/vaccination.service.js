@@ -19,10 +19,10 @@ const sendReminderEmail = async (pet, vaccine) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: pet.buyerEmail,
-    subject: `Vaccination Reminder for ${pet.name}`,
+    subject: `Vaccination Reminder for ${pet.breed}`,
     text: `Dear Pet Owner,
 
-This is a reminder that your pet, ${pet.name}, is due for the ${
+This is a reminder that your pet, ${pet.breed}, is due for the ${
       vaccine.vaccineName
     } vaccine on ${new Date(vaccine.dueDate).toDateString()}.
 

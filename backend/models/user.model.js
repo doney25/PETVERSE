@@ -27,6 +27,14 @@ const UserSchema = new mongoose.Schema({
         enum: ["buyer", "seller", "admin"], 
         required: true 
     },
+    rating: {
+        type: Number,
+        default: false
+      },
+    totalRatings: {
+        type: Number,
+        default: false
+      },
     isVerified: {
         type: Boolean,
         default: false

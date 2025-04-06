@@ -9,19 +9,44 @@ import { useNavigate, useParams } from "react-router-dom";
 const MyOrdersPage = () => {
   const { userId } = useParams();
   const [orders, setOrders] = useState([]);
+  const [ratingValues, setRatingValues] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get(`${API_BASE_URL}/api/orders/get`)
-      .then((res) => {
+    const fetchOrders = async () => {
+      try {
+        const res = await axios.get(`${API_BASE_URL}/api/orders/get`);
         const filteredOrders = res.data.order.filter(
           (order) => order.userId === userId
         );
         setOrders(filteredOrders);
-      })
-      .catch((err) => console.error("Error fetching orders:", err));
+      } catch (err) {
+        console.error("Error fetching orders:", err);
+      }
+    };
+
+    fetchOrders();
   }, [userId]);
+
+  const handleRatingChange = (orderId, value) => {
+    setRatingValues((prev) => ({ ...prev, [orderId]: value }));
+  };
+
+  const submitRating = async (orderId) => {
+    try {
+      await axios.post(`${API_BASE_URL}/api/orders/rate/${orderId}`, {
+        rating: ratingValues[orderId],
+      });
+      alert("Rating submitted!");
+      // Optionally, re-fetch orders to update the state
+      const updatedOrders = orders.map((order) =>
+        order._id === orderId ? { ...order, isRated: true, rating: ratingValues[orderId] } : order
+      );
+      setOrders(updatedOrders);
+    } catch (err) {
+      alert("Error submitting rating.");
+    }
+  };
 
   return (
     <>
@@ -82,6 +107,40 @@ const MyOrdersPage = () => {
                       View Details
                     </button>
                   </div>
+
+                  {/* Rating Section */}
+                  {order.status === "delivered" && !order.isRated && (
+                    <div className="mt-4">
+                      <label>Rate the Seller:</label>
+                      <select
+                        className="ml-2 border p-1 rounded"
+                        value={ratingValues[order._id] || ""}
+                        onChange={(e) =>
+                          handleRatingChange(order._id, Number(e.target.value))
+                        }
+                      >
+                        <option value="">Select</option>
+                        {[1, 2, 3, 4, 5].map((r) => (
+                          <option key={r} value={r}>
+                            {r} ⭐
+                          </option>
+                        ))}
+                      </select>
+
+                      <button
+                        className="ml-3 bg-blue-500 text-white px-3 py-1 rounded"
+                        onClick={() => submitRating(order._id)}
+                      >
+                        Submit
+                      </button>
+                    </div>
+                  )}
+
+                  {order.isRated && (
+                    <p className="text-green-600 mt-2">
+                      You rated this seller ⭐ {order.rating}
+                    </p>
+                  )}
                 </Card>
               ))
             )}

@@ -112,7 +112,6 @@ export const placeOrder = async (req, res) => {
       // Clear the cart
       await Cart.deleteOne({ userId });
     }
-
     // Create new order
     const order = new Order({
       userId,
@@ -189,5 +188,51 @@ export const updateOrderStatus = async (req, res) => {
   } catch (error) {
     console.error("Error updating order status:", error);
     res.status(500).json({ message: "Error updating order status", error });
+  }
+};
+export const rateSeller = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { rating } = req.body;
+
+    const order = await Order.findById(orderId);
+    if (!order) return res.status(404).json({ message: "Order not found" });
+
+    if (order.status !== "delivered") {
+      return res.status(403).json({ message: "Rating allowed only after delivery" });
+    }
+
+    if (order.isRated) {
+      return res.status(400).json({ message: "Order already rated" });
+    }
+
+    // Loop through each item and update corresponding seller rating
+    for (const item of order.items) {
+      if (item.itemType === "Pet") {
+        const pet = await Pet.findById(item.itemId);
+        if (pet) {
+          const seller = await User.findById(pet.sellerId); // sellerId should be in pet model
+          if (seller) {
+            // update seller rating
+            if (seller.totalRatings === 0) {
+              seller.rating = rating; // Set the first rating
+            } else {
+              seller.rating = ((seller.rating * seller.totalRatings) + rating) / (seller.totalRatings + 1);
+            }
+            seller.totalRatings += 1;
+            await seller.save();
+          }
+        }
+      }
+    }
+
+    order.rating = rating;
+    order.isRated = true;
+    await order.save();
+
+    res.status(200).json({ message: "Rating submitted successfully" });
+  } catch (error) {
+    console.error("Error submitting rating:", error);
+    res.status(500).json({ message: "Error submitting rating", error });
   }
 };
