@@ -34,13 +34,13 @@ const ProductCard = ({ products }) => {
               )}
             </div>
             <div
-              className="p-4 cursor-pointer bg-gray-100"
+              className="flex flex-col p-4 cursor-pointer bg-gray-100 min-h-full"
               onClick={() =>
                 navigate(`/shop/products/${product.category}/${product._id}`)
               }
             >
               <h3 className="text-lg font-semibold">{product.name}</h3>
-              <div className="flex justify-between items-center mt-4">
+              <div className="flex align-text-bottom justify-between mt-4">
                 <span className="text-xl font-bold">₹{product.price}</span>
                 <Button
                   disabled={product.status !== "Available"}

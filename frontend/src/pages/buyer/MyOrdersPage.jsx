@@ -40,7 +40,9 @@ const MyOrdersPage = () => {
       alert("Rating submitted!");
       // Optionally, re-fetch orders to update the state
       const updatedOrders = orders.map((order) =>
-        order._id === orderId ? { ...order, isRated: true, rating: ratingValues[orderId] } : order
+        order._id === orderId
+          ? { ...order, isRated: true, rating: ratingValues[orderId] }
+          : order
       );
       setOrders(updatedOrders);
     } catch (err) {
@@ -52,11 +54,7 @@ const MyOrdersPage = () => {
     <>
       <Header />
       <div className="max-w-3xl mx-auto p-6">
-        <Button
-          variant="outline"
-          onClick={() => navigate(-1)}
-          className="mb-4"
-        >
+        <Button variant="outline" onClick={() => navigate(-1)} className="mb-4">
           Back
         </Button>
         <Card>
@@ -90,10 +88,10 @@ const MyOrdersPage = () => {
                         <p>
                           <strong>Total Price: </strong>₹{order.totalAmount}
                         </p>
-                        <p>
+                        <p className="capitalize">
                           <strong>Items:</strong> {order.items.length}
                         </p>
-                        <p>
+                        <p className="capitalize">
                           <strong>Order Status:</strong> {order.status}
                         </p>
                       </CardContent>
@@ -109,36 +107,49 @@ const MyOrdersPage = () => {
                   </div>
 
                   {/* Rating Section */}
-                  {order.status === "delivered" && !order.isRated && (
-                    <div className="mt-4">
-                      <label>Rate the Seller:</label>
-                      <select
-                        className="ml-2 border p-1 rounded"
-                        value={ratingValues[order._id] || ""}
-                        onChange={(e) =>
-                          handleRatingChange(order._id, Number(e.target.value))
-                        }
-                      >
-                        <option value="">Select</option>
-                        {[1, 2, 3, 4, 5].map((r) => (
-                          <option key={r} value={r}>
-                            {r} ⭐
-                          </option>
-                        ))}
-                      </select>
+                  {order.items.map((item) => {
+                    if (
+                      item.itemType === "Pet" &&
+                      order.status === "delivered" &&
+                      !order.isRated
+                    ) {
+                      return (
+                        <div className="mt-4" key={item._id}>
+                          <label>Rate the Seller:</label>
+                          <select
+                            className="ml-2 border p-1 rounded"
+                            value={ratingValues[order._id] || ""}
+                            onChange={(e) =>
+                              handleRatingChange(
+                                order._id,
+                                Number(e.target.value)
+                              )
+                            }
+                          >
+                            <option value="">Select</option>
+                            {[1, 2, 3, 4, 5].map((r) => (
+                              <option key={r} value={r}>
+                                {r} ⭐
+                              </option>
+                            ))}
+                          </select>
 
-                      <button
-                        className="ml-3 bg-blue-500 text-white px-3 py-1 rounded"
-                        onClick={() => submitRating(order._id)}
-                      >
-                        Submit
-                      </button>
-                    </div>
-                  )}
+                          <button
+                            className="ml-3 bg-blue-500 text-white px-3 py-1 rounded"
+                            onClick={() => submitRating(order._id)}
+                          >
+                            Submit
+                          </button>
+                        </div>
+                      );
+                    }
+
+                    return null;
+                  })}
 
                   {order.isRated && (
                     <p className="text-green-600 mt-2">
-                      You rated this seller ⭐ {order.rating}
+                      You rated this seller {order.rating}⭐
                     </p>
                   )}
                 </Card>

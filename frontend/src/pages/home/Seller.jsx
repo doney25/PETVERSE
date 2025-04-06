@@ -72,7 +72,7 @@ export default function Seller() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-10 ml-64 bg-orange-50 shadow-inner overflow-y-auto min-h-screen">
+      <div className="flex-1 p-10 ml-64 bg-orange-50 shadow-inner overflow-hidden min-h-screen">
         {activeTab === "home" && <ListingPage />}
         {activeTab === "sellPets" && <Home />}
         {activeTab === "chats" && <ChatPage />}
