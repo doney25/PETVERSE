@@ -22,10 +22,11 @@ const PetListing = () => {
 
   const [ageRangeFilter, setAgeRangeFilter] = useState("all");
   const [priceFilter, setPriceFilter] = useState([0, 40000]);
+  const [hideSoldOut, setHideSoldOut] = useState(false);
 
   const dogBreeds = [
     { id: "german shepherd", label: "German Shepherd" },
-    { id: "golden retriever", label: "Golden Retriever" },
+    { id: "labrador retriever", label: "Labrador Retriever" },
     { id: "poodle", label: "Poodle" },
     { id: "shih tzu", label: "Shih Tzu" },
   ];
@@ -90,8 +91,26 @@ const PetListing = () => {
       (pet) => pet.price >= priceFilter[0] && pet.price <= priceFilter[1]
     );
 
+    results.sort((a, b) => {
+      const isASoldOut = a.status === "soldout";
+      const isBSoldOut = b.status === "soldout";
+
+      return isASoldOut - isBSoldOut;
+    });
+
+    if (hideSoldOut) {
+      results = results.filter((pet) => !(pet.status === "soldout"));
+    }
+
     setFilteredPets(results);
-  }, [searchQuery, pets, selectedBreeds, ageRangeFilter, priceFilter]);
+  }, [
+    searchQuery,
+    pets,
+    selectedBreeds,
+    ageRangeFilter,
+    priceFilter,
+    hideSoldOut,
+  ]);
 
   const handleBreedChange = (breed) => {
     setSelectedBreeds((prev) =>
@@ -128,6 +147,15 @@ const PetListing = () => {
         <div className="flex gap-8">
           <div className="w-72 bg-white p-6 rounded-xl shadow-lg border border-blue-100">
             <h3 className="text-xl font-bold mb-4">Filters</h3>
+            <div className="flex items-center space-x-2 mt-4 mb-2">
+              <Checkbox
+                className="w-5 h-5 text-blue-600 border-blue-500"
+                id="hideSoldOut"
+                checked={hideSoldOut}
+                onCheckedChange={() => setHideSoldOut((prev) => !prev)}
+              />
+              <Label htmlFor="hideSoldOut">Hide Unavailable Pets</Label>
+            </div>
             <h4 className="font-semibold mb-2">Category</h4>
             <RadioGroup className="space-y-2" value={selectedCategory}>
               {[
@@ -213,7 +241,7 @@ const PetListing = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 items-start">
+          <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 items-start">
             {pets.length === 0 ? (
               <p>No Pets found.</p>
             ) : (

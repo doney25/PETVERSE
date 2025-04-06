@@ -65,10 +65,10 @@ const MyOrdersPage = () => {
                         <p>
                           <strong>Total Price: </strong>₹{order.totalAmount}
                         </p>
-                        <p>
+                        <p className="capitalize">
                           <strong>Items:</strong> {order.items.length}
                         </p>
-                        <p>
+                        <p className="capitalize">
                           <strong>Order Status:</strong> {order.status}
                         </p>
                       </CardContent>

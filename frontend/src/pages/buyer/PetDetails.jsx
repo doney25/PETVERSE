@@ -112,12 +112,12 @@ const PetDetails = () => {
                 {/* Status */}
                 <div className="mt-4">
                   <p className="font-semibold">Status:</p>
-                  <Badge variant="outline">{pet.status}</Badge>
+                  <Badge className="capitalize" variant="outline">{pet.status}</Badge>
                 </div>
 
                 {/* Seller Info */}
                 <div className="mt-6 border-t pt-4">
-                  <p className="font-semibold text-lg">Seller: {pet.seller}</p>
+                  <p className="capitalize font-semibold text-lg">Seller: {pet.seller}</p>
                   {buyerId && (
                     <Button
                       size="sm"
@@ -140,7 +140,7 @@ const PetDetails = () => {
                     <ul className="list-disc ml-4 text-sm text-gray-600">
                       {pet.vaccinations.map((vaccine, index) => (
                         <li key={index}>
-                          <span className="font-semibold">
+                          <span className="capitalize font-semibold">
                             {vaccine.vaccineName}
                           </span>
                           : {vaccine.completed ? "Completed" : "Pending"} (Due:{" "}
