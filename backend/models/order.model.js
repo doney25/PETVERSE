@@ -8,11 +8,11 @@ const orderSchema = new mongoose.Schema({
   },
   name: {
     type: String,
-    required: true
+    required: true,
   },
   phone: {
     type: Number,
-    required: true
+    required: true,
   },
   items: [
     {
@@ -25,16 +25,22 @@ const orderSchema = new mongoose.Schema({
       price: Number,
       quantity: Number,
       image: String,
+      sellerId: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // To track seller per item
+      rating: { type: Number, min: 1, max: 5 }, // Optional
     },
   ],
+  isRated: {
+    type: Boolean,
+    default: false, // Default value is false
+  },
   address: {
     type: String,
-    required: true
+    required: true,
   },
   paymentMethod: {
     type: String,
     enum: ["COD", "Credit/Debit Card", "Net Banking", "UPI"],
-    required: true
+    required: true,
   },
   totalAmount: Number,
   status: {
@@ -46,4 +52,5 @@ const orderSchema = new mongoose.Schema({
 });
 
 const Order = mongoose.model("Order", orderSchema);
+
 export default Order;
