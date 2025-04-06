@@ -1,9 +1,9 @@
 import React from "react";
 import { Card, CardContent } from "../ui/card";
 
-const Section = ({ categoriesWithIcon, handleNavigateToListingPage }) => {
+const Section = ({ categoriesWithIcon, handleNavigateToListingPage, className }) => {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 justify-center">
+    <div className={`grid ${className}`}>
       {categoriesWithIcon.map((categoryItem) => (
         <Card
           key={categoryItem.id}

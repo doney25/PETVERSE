@@ -7,7 +7,6 @@ import Section from "@/components/buyer/Section";
 import {
   Dog,
   CatIcon,
-  Bird,
   Bone,
   Scissors,
   Shapes,
@@ -38,7 +37,6 @@ const Buyer = () => {
   const petCategoriesWithIcon = [
     { id: "dog", label: "Dogs", icon: Dog },
     { id: "cat", label: "Cats", icon: CatIcon },
-    { id: "bird", label: "Birds", icon: Bird },
     { id: "", label: "Browse All", icon: Search },
   ];
 
@@ -79,6 +77,7 @@ const Buyer = () => {
               Shop Pets by Category
             </h2>
             <Section
+              className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 justify-center"
               categoriesWithIcon={petCategoriesWithIcon}
               handleNavigateToListingPage={handlePetNavigateToListingPage}
             />
@@ -92,6 +91,7 @@ const Buyer = () => {
               Shop Products by Category
             </h2>
             <Section
+              className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 justify-center"
               categoriesWithIcon={productsCategoriesWithIcon}
               handleNavigateToListingPage={handleProductNavigateToListingPage}
             />
@@ -108,7 +108,10 @@ const Buyer = () => {
           <p className="mt-3 text-lg">
             Adopt or buy pets from verified sellers near you.
           </p>
-          <button className="mt-4 bg-white text-orange-500 font-semibold py-2 px-6 rounded-full" onClick={() => navigate('/shop/pets')}>
+          <button
+            className="mt-4 bg-white text-orange-500 font-semibold py-2 px-6 rounded-full"
+            onClick={() => navigate("/shop/pets")}
+          >
             Explore Now
           </button>
         </div>
@@ -117,29 +120,31 @@ const Buyer = () => {
         <div className="max-w-6xl mx-auto py-10">
           <h2 className="text-3xl font-bold text-center mb-6">Trending Pets</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {pets.slice(0,6).map((pet) => (
-              <div
-                key={pet._id}
-                className="bg-white p-4 shadow-lg rounded-lg text-center"
-              >
-                <img
-                  src={pet.images[0]}
-                  alt={pet.name}
-                  className="w-full h-48 object-cover rounded-lg mb-4"
-                />
-                <h2 className="text-xl font-semibold">{pet.name}</h2>
-                <p className="text-gray-600">{pet.breed}</p>
-                <p className="text-gray-500 mt-2">{pet.description}</p>
-                <button
-                  className="mt-4 bg-orange-500 text-white py-2 px-6 rounded-full shadow-md hover:bg-orange-600"
-                  onClick={() =>
-                    navigate(`/shop/checkout/${pet._id}?itemType=Pet`)
-                  }
+            {pets
+              .filter((pet) => pet.status === "Available")
+              .slice(0, 6)
+              .map((pet) => (
+                <div
+                  key={pet._id}
+                  className="bg-white p-4 shadow-lg rounded-lg text-center"
                 >
-                  Buy Now
-                </button>
-              </div>
-            ))}
+                  <img
+                    src={pet.images[0]}
+                    alt={pet.name}
+                    className="w-full h-48 object-cover rounded-lg mb-4"
+                  />
+                  <p className="text-xl font-semibold">{pet.breed}</p>
+                  <p className="text-gray-500 mt-2">{pet.description}</p>
+                  <button
+                    className="mt-4 bg-orange-500 text-white py-2 px-6 rounded-full shadow-md hover:bg-orange-600"
+                    onClick={() =>
+                      navigate(`/shop/checkout/${pet._id}?itemType=Pet`)
+                    }
+                  >
+                    Buy Now
+                  </button>
+                </div>
+              ))}
           </div>
         </div>
 
