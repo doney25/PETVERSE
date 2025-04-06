@@ -33,6 +33,10 @@ const orderSchema = new mongoose.Schema({
     type: Boolean,
     default: false, // Default value is false
   },
+  rating: {
+    type: Number,
+    default: 0
+  },
   address: {
     type: String,
     required: true,
