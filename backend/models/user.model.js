@@ -27,6 +27,12 @@ const UserSchema = new mongoose.Schema({
         enum: ["buyer", "seller", "admin"], 
         required: true 
     },
+    resetPasswordToken: {
+        type: String,
+      },
+      resetPasswordExpires: {
+        type: Date,
+      },
     rating: {
         type: Number,
         default: false
