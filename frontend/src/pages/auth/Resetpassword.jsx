@@ -37,7 +37,7 @@ const ResetPassword = () => {
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-xl">
         <h2 className="text-2xl font-bold text-center text-gray-800">Reset Password</h2>
-        <p className="text-center text-gray-500 mt-2">Enter your new password below.</p>
+        <p className="text-center text-gray-500 mt-2">Enter your new password below</p>
 
         {message && <p className="text-green-500 text-center mt-4">{message}</p>}
         {error && <p className="text-red-500 text-center mt-4">{error}</p>}
