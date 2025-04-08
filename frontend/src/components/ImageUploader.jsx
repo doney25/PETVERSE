@@ -7,7 +7,6 @@ import API_BASE_URL from "@/config.js"
 
 const ImageUploader = ({ onUpload }) => {
   const [images, setImages] = useState([]);
-  // const [imageUrls, setImageUrls] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e) => {
@@ -18,7 +17,6 @@ const ImageUploader = ({ onUpload }) => {
     if (images.length === 0) return enqueueSnackbar("Please select images.", {variant:"warning"})
 
     setLoading(true);
-    const uploadedUrls = [];
     const formData = new FormData();
 
     images.forEach((image) => formData.append("images", image));

@@ -32,16 +32,16 @@ export default function Home() {
   const [firstImageUrl, setFirstImageUrl] = useState("");
   const [healthCertImages, setHealthCertImages] = useState([]);
   const [gender, setGender] = useState("");
+  const [vaccinations, setVaccinations] = useState([]);
+  const [imageUploaderResetKey, setImageUploaderResetKey] = useState(0);
 
   useEffect(() => {
-    // Check if the entered breed matches the detected breed based on the length of the detected breed
     if (detectedBreed && breed) {
       const breedMatches =
         breed.slice(0, detectedBreed.length).toLowerCase() ===
         detectedBreed.toLowerCase();
       setIsBreedVerified(breedMatches);
     } else if (!detectedBreed) {
-      // If no breed was detected, don't block submission
       setIsBreedVerified(false);
     }
   }, [breed, detectedBreed]);
@@ -49,44 +49,51 @@ export default function Home() {
   const handleImageUpload = (newImages) => {
     setImages((prev) => {
       const updatedImages = [...prev, ...newImages];
-
-      // If this is the first image, set it for the breed classifier
       if (updatedImages.length > 0 && !firstImageUrl) {
         setFirstImageUrl(updatedImages[0]);
       }
-
       return updatedImages;
     });
   };
 
   const handleBreedDetected = (breed) => {
     setDetectedBreed(breed);
-
-    // If breed field is empty and we detected a breed, auto-fill it
-    if (!breed && breed) {
-      setBreed(breed);
+    if (!breed && detectedBreed) {
+      setBreed(detectedBreed);
       setIsBreedVerified(true);
     }
   };
 
-  // Add this to state
-  const [vaccinations, setVaccinations] = useState([]);
-
-  // Function to add a new vaccination field
   const addVaccination = () => {
-    setVaccinations([...vaccinations, { vaccineName: "", dueDate: "", }]);
+    setVaccinations([...vaccinations, { vaccineName: "", dueDate: "" }]);
   };
 
-  // Function to remove a vaccination field
   const removeVaccination = (index) => {
     setVaccinations(vaccinations.filter((_, i) => i !== index));
   };
 
-  // Function to update vaccination details
   const updateVaccination = (index, field, value) => {
     const updatedVaccinations = [...vaccinations];
     updatedVaccinations[index][field] = value;
     setVaccinations(updatedVaccinations);
+  };
+
+  const handleReset = () => {
+    setCategory("");
+    setBreed("");
+    setAgeNumber("");
+    setAgeUnit("");
+    setColor("");
+    setLocation("");
+    setPrice("");
+    setImages([]);
+    setHealthCertImages([]);
+    setDescription("");
+    setFirstImageUrl("");
+    setDetectedBreed("");
+    setVaccinations([]);
+    setGender("");
+    setImageUploaderResetKey((prev) => prev+1)
   };
 
   const handleSubmit = async () => {
@@ -118,7 +125,7 @@ export default function Home() {
 
     const finalAge = `${ageNumber} ${
       parseInt(ageNumber) === 1 ? ageUnit.slice(0, -1) : ageUnit
-    }`;    
+    }`;
 
     const sellerId = localStorage.getItem("userId");
     const sellerName = localStorage.getItem("userName");
@@ -143,19 +150,7 @@ export default function Home() {
       .post(`${API_BASE_URL}/api/pets`, petData)
       .then(() => {
         enqueueSnackbar("Pet Listed Successfully", { variant: "success" });
-        // Reset form
-        setCategory("");
-        setBreed("");
-        setAge("");
-        setColor("");
-        setLocation("");
-        setPrice("");
-        setImages([]);
-        setHealthCertImages([]);
-        setDescription("");
-        setFirstImageUrl("");
-        setDetectedBreed("");
-        setVaccinations([]);
+        handleReset();
       })
       .catch((error) => {
         enqueueSnackbar(error.message, { variant: "error" });
@@ -164,18 +159,16 @@ export default function Home() {
 
   return (
     <div className="p-6 space-y-6">
-      {/* Header */}
-      <h2 className="text-2xl mb-4">Sell Pets</h2>
+      <h2 className="text-2xl mb-3">Sell Pets</h2>
 
-      <Card>
+      <Card className="shadow-xl rounded-2xl">
         <CardHeader>
           <CardTitle className="text-lg font-semibold">
             Add New Pet Listing
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
             <div className="space-y-2">
               <label className="block text-sm font-medium">
                 Pet Breed
@@ -199,6 +192,7 @@ export default function Home() {
                 }
               />
             </div>
+
             <div className="space-y-2">
               <label className="block text-sm font-medium">Category</label>
               <Select
@@ -217,10 +211,7 @@ export default function Home() {
 
             <div className="space-y-2">
               <label className="block text-sm font-medium">Gender</label>
-              <Select
-                value={gender}
-                onValueChange={(value) => setGender(value)}
-              >
+              <Select value={gender} onValueChange={(value) => setGender(value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select Gender" />
                 </SelectTrigger>
@@ -230,11 +221,11 @@ export default function Home() {
                 </SelectContent>
               </Select>
             </div>
+
             <div className="space-y-2">
               <label className="block text-sm font-medium">Age</label>
               <div className="flex gap-2">
-                {/* Number Dropdown */}
-                <Select onValueChange={(value) => setAgeNumber(value)}>
+                <Select value={ageNumber} onValueChange={(value) => setAgeNumber(value)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select Number" />
                   </SelectTrigger>
@@ -247,8 +238,7 @@ export default function Home() {
                   </SelectContent>
                 </Select>
 
-                {/* Unit Dropdown */}
-                <Select onValueChange={(value) => setAgeUnit(value)}>
+                <Select value={ageUnit} onValueChange={(value) => setAgeUnit(value)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select Unit" />
                   </SelectTrigger>
@@ -290,7 +280,7 @@ export default function Home() {
 
             <div className="space-y-2">
               <label className="block text-sm font-medium">Pet Images</label>
-              <ImageUploader onUpload={handleImageUpload} />
+              <ImageUploader key={`petimage-${imageUploaderResetKey}`} onUpload={handleImageUpload} />
               {images.length > 0 && (
                 <div className="mt-2 text-sm text-green-600">
                   {images.length} image(s) uploaded
@@ -301,8 +291,8 @@ export default function Home() {
                   className="mt-2"
                   variant="outline"
                   onClick={() => {
-                    setImages([]); // Clear the images
-                    setFirstImageUrl(""); // Clear the first image URL
+                    setImages([]);
+                    setFirstImageUrl("");
                     enqueueSnackbar("Images cleared successfully.", {
                       variant: "info",
                     });
@@ -318,6 +308,7 @@ export default function Home() {
                 Health Certificate
               </label>
               <ImageUploader
+                key={`healthcert-${imageUploaderResetKey}`}
                 onUpload={(newImages) =>
                   setHealthCertImages((prev) => [...prev, ...newImages])
                 }
@@ -343,12 +334,11 @@ export default function Home() {
             <label className="block text-sm font-medium">
               Vaccination Details
             </label>
-
             {vaccinations.map((vaccination, index) => (
               <div key={index} className="flex items-center gap-2">
                 <Input
                   placeholder="Vaccine Name"
-                  value={vaccinations.vaccineName}
+                  value={vaccination.vaccineName}
                   onChange={(e) =>
                     updateVaccination(index, "vaccineName", e.target.value)
                   }
@@ -369,7 +359,6 @@ export default function Home() {
                 </Button>
               </div>
             ))}
-
             <Button className="mt-2" variant="outline" onClick={addVaccination}>
               <Plus className="mr-2" size={16} /> Add Vaccination
             </Button>
@@ -384,19 +373,32 @@ export default function Home() {
             </div>
           )}
 
-          <Button
-            className="mt-6 w-full"
-            variant="default"
-            onClick={handleSubmit}
-            disabled={
-              images.length === 0 ||
-              !isBreedVerified ||
-              !breed.trim() ||
-              !gender
-            }
-          >
-            <Plus className="mr-2" size={16} /> Sell
-          </Button>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+            <Button
+              className="w-full"
+              variant="default"
+              onClick={handleSubmit}
+              disabled={
+                images.length === 0 ||
+                !isBreedVerified ||
+                !breed.trim() ||
+                !gender
+              }
+            >
+              <Plus className="mr-2" size={16} /> Sell
+            </Button>
+
+            <Button
+              className="w-full"
+              variant="outline"
+              onClick={() => {
+                handleReset()
+                enqueueSnackbar("Form reset.", { variant: "info" });
+              }}
+            >
+              Reset Form
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>

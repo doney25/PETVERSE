@@ -4,9 +4,9 @@ import Header from "@/components/layout/Header";
 
 const AboutUs = () => {
   return (
-    <>
+    <div className="overflow-hidden">
       <Header />
-      <div className="bg-gradient-to-b from-blue-50 to-blue-100 py-16 px-6 min-h-screen">
+      <div className="bg-gradient-to-b from-blue-50 to-blue-100 py-20 px-6 max-h-screen">
         <div className="max-w-6xl mx-auto text-center">
           {/* Hero Section */}
           <motion.h1
@@ -23,7 +23,12 @@ const AboutUs = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            At PetVerse, we believe in <span className="font-semibold">connecting loving homes with furry friends</span> while ensuring safe and ethical adoption practices. Join us on our mission to make pet adoption responsible and joyful.
+            At PetVerse, we believe in{" "}
+            <span className="font-semibold">
+              connecting loving homes with furry friends
+            </span>{" "}
+            while ensuring safe and ethical adoption practices. Join us on our
+            mission to make pet adoption responsible and joyful.
           </motion.p>
         </div>
 
@@ -45,12 +50,18 @@ const AboutUs = () => {
           >
             <h2 className="text-3xl font-bold text-gray-800 mb-4">Our Story</h2>
             <p className="text-gray-700 text-lg leading-relaxed">
-              What started as a small initiative to help pet lovers find ethical breeders has grown into a thriving <span className="text-blue-600 font-semibold">community of responsible pet owners</span>. We are committed to providing a seamless and trustworthy adoption experience.
+              What started as a small initiative to help pet lovers find ethical
+              breeders has grown into a thriving{" "}
+              <span className="text-blue-600 font-semibold">
+                community of responsible pet owners
+              </span>
+              . We are committed to providing a seamless and trustworthy
+              adoption experience.
             </p>
           </motion.div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

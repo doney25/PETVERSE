@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Send } from "lucide-react"
+import { Send } from "lucide-react";
 import API_BASE_URL from "@/config";
 
 const socket = io(API_BASE_URL);
@@ -14,14 +14,14 @@ const SellerChatComponent = ({ buyerId, sellerId, onBack, buyerName }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
   const chatEndRef = useRef(null);
+
   useEffect(() => {
     socket.emit("start_chat", { buyerId, sellerId });
 
     socket.on("chat_history", (history) => {
       setMessages(history);
-      setLoading(false)
+      setLoading(false);
     });
 
     socket.on("receive_message", (newMessages) => {
@@ -30,6 +30,10 @@ const SellerChatComponent = ({ buyerId, sellerId, onBack, buyerName }) => {
 
     return () => socket.off();
   }, [buyerId, sellerId]);
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const sendMessage = () => {
     if (input.trim() === "") return;
@@ -44,48 +48,60 @@ const SellerChatComponent = ({ buyerId, sellerId, onBack, buyerName }) => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
+    <div className="max-w-3xl mx-auto p-6">
       <Button variant="outline" onClick={onBack} className="mb-6">
         ← Back
       </Button>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Chat with {buyerName}</CardTitle>
+      <Card className="border shadow-md">
+        <CardHeader className="border-b">
+          <CardTitle className="text-xl">Chat with {buyerName}</CardTitle>
         </CardHeader>
-        <CardContent className="h-96 overflow-y-auto border p-4 flex flex-col">
+
+        <CardContent className="h-96 overflow-y-auto px-4 py-2 flex flex-col space-y-2 bg-gray-50">
           {loading ? (
-            <Skeleton className="h-6 w-full mb-2" />
+            <>
+              <Skeleton className="h-6 w-3/4" />
+              <Skeleton className="h-6 w-2/3 ml-auto" />
+              <Skeleton className="h-6 w-1/2" />
+            </>
           ) : messages.length > 0 ? (
             messages.map((msg, index) => (
               <div
                 key={index}
-                className={`p-2 rounded-lg max-w-xs ${
+                className={`max-w-xs p-3 rounded-xl text-sm shadow-md ${
                   msg.sender === sellerId
-                    ? "bg-blue-500 text-white self-end"
-                    : "bg-gray-300 text-black self-start"
+                    ? "bg-blue-500 text-white self-end rounded-br-none"
+                    : "bg-gray-300 text-gray-900 self-start rounded-bl-none"
                 }`}
               >
                 {msg.message}
               </div>
             ))
           ) : (
-            <p className="text-gray-500">
+            <p className="text-gray-500 self-center mt-8">
               No messages yet. Start the conversation!
             </p>
           )}
           <div ref={chatEndRef} />
         </CardContent>
 
-        <div className="p-4 border-t flex items-center gap-2">
+        <div className="p-4 border-t flex items-center gap-3 bg-white">
           <Input
             type="text"
             className="flex-1"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type a message..."
+            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
           />
-          <Button onClick={sendMessage}><Send /></Button>
+          <Button
+            onClick={sendMessage}
+            className="p-3 rounded-xl"
+            disabled={!input.trim()}
+          >
+            <Send className="w-4 h-4" />
+          </Button>
         </div>
       </Card>
     </div>
