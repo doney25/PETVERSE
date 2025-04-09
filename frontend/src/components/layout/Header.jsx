@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { Button } from "../ui/button";
-import { LogOut, UserCog, MessageCircle, BoxIcon } from "lucide-react";
+import { LogOut, MessageCircle, BoxIcon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,7 +18,6 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { AuthContext } from "@/context/Authcontext";
-import { enqueueSnackbar } from "notistack";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -76,10 +75,16 @@ export default function Header() {
             Home
           </a>
 
-          <a onClick={() => navigate('/aboutus')} className="text-gray-600 hover:text-blue-500">
+          <a
+            onClick={() => navigate("/aboutus")}
+            className="text-gray-600 hover:text-blue-500"
+          >
             About Us
           </a>
-          <a onClick={() => navigate('/contactus')} className="text-gray-600 hover:text-blue-500">
+          <a
+            onClick={() => navigate("/contactus")}
+            className="text-gray-600 hover:text-blue-500"
+          >
             Contact Us
           </a>
           <a
@@ -100,7 +105,9 @@ export default function Header() {
               <Button
                 variant="outline"
                 className="md:flex sm:hidden flex items-center space-x-2 text-gray-600 hover:text-blue-500"
-                onClick={() => {navigate('/shop/cart')}}
+                onClick={() => {
+                  navigate("/shop/cart");
+                }}
               >
                 <ShoppingCartIcon className="w-5 h-5" />
                 <span>Cart</span>
@@ -117,7 +124,13 @@ export default function Header() {
                 <DropdownMenuContent side="right" className="w-56">
                   <DropdownMenuLabel>Logged in as {userName}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => navigate(`/shop/my-orders/${localStorage.getItem("userId")}`)}>
+                  <DropdownMenuItem
+                    onClick={() =>
+                      navigate(
+                        `/shop/my-orders/${localStorage.getItem("userId")}`
+                      )
+                    }
+                  >
                     <BoxIcon className="mr-2 h-4 w-4" />
                     My Orders
                   </DropdownMenuItem>
@@ -130,13 +143,7 @@ export default function Header() {
                     Messages
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onClick={async () => {
-                      await logout();
-                      enqueueSnackbar("Logout Successful!", {variant:"success"})
-                      navigate("/");
-                    }}
-                  >
+                  <DropdownMenuItem onClick={logout}>
                     <LogOut className="mr-2 h-4 w-4" />
                     Logout
                   </DropdownMenuItem>

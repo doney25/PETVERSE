@@ -31,7 +31,7 @@ const SingleOrder = () => {
       <Header />
       <div className="max-w-3xl mx-auto p-6">
         <Button variant="outline" onClick={() => navigate(-1)} className="mb-4">
-            Back
+          Back
         </Button>
 
         {/* Order Summary */}
@@ -52,8 +52,17 @@ const SingleOrder = () => {
               })}
             </p>
             <p className="text-gray-600">
-              <span className="font-semibold">Shipped To:</span> {order.name},{" "}
-              {order.address}, {order.phone}
+              {order.status !== "pending" ? (
+                <p>
+                  <span className="font-semibold">Shipped To:</span>{" "}
+                  {order.name}, {order.address}, {order.phone}
+                </p>
+              ) : (
+                <p>
+                  <span className="font-semibold">Shipping To:</span>{" "}
+                  {order.name}, {order.address}, {order.phone}
+                </p>
+              )}
             </p>
             <p className="text-gray-600">
               <span className="font-semibold">Payment Method:</span>{" "}
