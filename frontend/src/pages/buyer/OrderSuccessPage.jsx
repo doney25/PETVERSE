@@ -107,14 +107,13 @@ const OrderSuccessPage = () => {
                   {item.itemType === "Product" ? (
                     <h2 className="text-lg font-semibold">{item.name}</h2>
                   ) : (
-                    <h2 className="text-lg font-semibold">{item.breed}</h2>
+                    <h2 className="text-lg font-semibold">{item.itemType}</h2>
                   )}
-                  <h2 className="text-lg font-semibold">{item.name}</h2>
                   {item.itemType === "Product" && (
                     <p className="text-gray-500">Quantity: {item.quantity}</p>
                   )}
                   {item.itemType === "Pet" && (
-                    <p className="text-gray-500">Breed: {item.itemType}</p>
+                    <p className="text-gray-500">Breed: {item.breed}</p>
                   )}
                   {item.itemType === "Product" && (
                     <p className="flex justify-end text-gray-700 font-bold text-lg">
