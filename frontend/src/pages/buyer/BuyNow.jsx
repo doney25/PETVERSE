@@ -29,7 +29,7 @@ const BuyNow = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!userId || !name || !phone || !paymentMethod || !totalAmount) {
+    if (!userId || !name || !phone || !paymentMethod) {
       return enqueueSnackbar("All Fields are required.", {
         variant: "error",
       });
