@@ -62,7 +62,7 @@ const BuyerChatComponent = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Chat with {sellerName}</CardTitle>
+          <CardTitle>Chat with <span className="capitalize">{sellerName}</span></CardTitle>
         </CardHeader>
         <CardContent className="h-96 overflow-y-auto border p-4 flex flex-col">
           {loading ? (
@@ -71,7 +71,7 @@ const BuyerChatComponent = () => {
             messages.map((msg, index) => (
               <div
                 key={index}
-                className={`p-2 rounded-lg max-w-xs ${
+                className={`p-2 my-2 rounded-lg max-w-xs ${
                   msg.sender === buyerId
                     ? "bg-blue-500 text-white self-end"
                     : "bg-gray-300 text-black self-start"

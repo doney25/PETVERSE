@@ -4,11 +4,13 @@ import { Button } from "@/components/ui/button";
 import ImageUploader from "@/components/ImageUploader";
 import { enqueueSnackbar } from "notistack";
 import API_BASE_URL from "@/config.js";
+import Loading from "@/components/ui/Loading";
 
 const ManageProducts = () => {
   const [products, setProducts] = useState([]);
   const [editingProduct, setEditingProduct] = useState(null);
-  const [deleteTarget, setDeleteTarget] = useState(null); // 🆕
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [loading, setLoading] = useState(false); // 🆕
   const sellerId = localStorage.getItem("userId");
 
   useEffect(() => {
@@ -16,15 +18,17 @@ const ManageProducts = () => {
   }, []);
 
   const fetchProducts = async () => {
+    setLoading(true); // 🆕
     try {
       const res = await axios.get(`${API_BASE_URL}/api/products?sellerId=${sellerId}`);
       setProducts(res.data.data);
     } catch (error) {
       console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false); // 🆕
     }
   };
 
-  // 🆕 Separated confirm logic from trigger
   const confirmDelete = async () => {
     try {
       await axios.delete(`${API_BASE_URL}/api/products/${deleteTarget}`, {
@@ -63,7 +67,9 @@ const ManageProducts = () => {
     <div className="mt-6 bg-white p-6 rounded-lg shadow-md">
       <h2 className="text-2xl font-semibold mb-4">Manage Your Products</h2>
 
-      {products.length === 0 ? (
+      {loading ? (
+        <Loading />
+      ) : products.length === 0 ? (
         <p className="text-gray-500">No products added yet.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -78,7 +84,7 @@ const ManageProducts = () => {
                 <Button className="bg-blue-500 text-white" onClick={() => handleEditClick(product)}>
                   Edit
                 </Button>
-                <Button className="bg-red-500 text-white" onClick={() => setDeleteTarget(product._id)}> {/* 🆕 */}
+                <Button className="bg-red-500 text-white" onClick={() => setDeleteTarget(product._id)}>
                   Delete
                 </Button>
               </div>
@@ -87,7 +93,7 @@ const ManageProducts = () => {
         </div>
       )}
 
-      {/* 🆕 Delete Confirmation Modal */}
+      {/* Delete Confirmation Modal */}
       {deleteTarget && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-xl shadow-lg w-[90%] max-w-md text-center">
@@ -107,7 +113,7 @@ const ManageProducts = () => {
         </div>
       )}
 
-      {/* Edit Product Modal (unchanged) */}
+      {/* Edit Product Modal */}
       {editingProduct && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded shadow-lg w-96">

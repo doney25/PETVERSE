@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
+import Loading from "@/components/ui/Loading";
 
 const PetListing = () => {
   const { category } = useParams();
@@ -242,7 +243,9 @@ const PetListing = () => {
           </div>
 
           <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 items-start">
-            {pets.length === 0 ? (
+            {loading ? (
+              <Loading />
+            ) : filteredPets.length === 0 ? (
               <p>No Pets found.</p>
             ) : (
               <PetCard pets={filteredPets} className="mx-auto" />

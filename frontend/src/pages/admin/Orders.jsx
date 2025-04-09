@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { enqueueSnackbar } from "notistack";
+import Loading from "@/components/ui/Loading";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -27,7 +28,10 @@ const Orders = () => {
     axios
       .get(`${API_BASE_URL}/api/orders/get`)
       .then((res) => {
-        setOrders(res.data.order);
+        const sortedOrders = res.data.order.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setOrders(sortedOrders);
         setLoading(false);
       })
       .catch((error) => {
@@ -57,13 +61,15 @@ const Orders = () => {
     }
   };
 
-  if (loading) return <p className="text-center mt-6">Loading orders...</p>;
+  if (loading) return <Loading />;
 
   return (
     <div className="container mx-auto p-6 max-w-5xl">
       <h2 className="text-3xl font-semibold mb-6">Orders</h2>
 
-      {orders.length === 0 ? (
+      {loading ? (
+        <Loading />
+      ) : orders.length === 0 ? (
         <p className="text-center text-gray-500">No orders found.</p>
       ) : (
         <div className="grid gap-6">
@@ -140,7 +146,14 @@ const Orders = () => {
                     </div>
 
                     {/* Status Update Dropdown */}
-                    <div className={order.status === "cancelled" || order.status === "delivered" ? "hidden" : "mt-4"}>
+                    <div
+                      className={
+                        order.status === "cancelled" ||
+                        order.status === "delivered"
+                          ? "hidden"
+                          : "mt-4"
+                      }
+                    >
                       <Select
                         onValueChange={(newStatus) =>
                           handleStatusChange(order._id, newStatus)
@@ -165,8 +178,13 @@ const Orders = () => {
 
                   {/* Footer Actions */}
                   <CardFooter className="flex justify-end mt-4">
-                    <Button  
-                      className={order.status === "cancelled" || order.status === "delivered" ? "hidden" : ""}
+                    <Button
+                      className={
+                        order.status === "cancelled" ||
+                        order.status === "delivered"
+                          ? "hidden"
+                          : ""
+                      }
                       variant="destructive"
                       onClick={() => handleStatusChange(order._id, "cancelled")}
                       disabled={

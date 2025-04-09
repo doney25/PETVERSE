@@ -77,7 +77,7 @@ const OrderSuccessPage = () => {
               })}
             </p>
             <p className="text-gray-600">
-              <span className="font-semibold">Shipped To:</span> {order.name},{" "}
+              <span className="font-semibold">Shipping To:</span> {order.name},{" "}
               {order.address}, +91{order.phone}
             </p>
             <p className="text-gray-600">
@@ -104,7 +104,11 @@ const OrderSuccessPage = () => {
                   className="w-28 h-28 object-cover rounded-lg"
                 />
                 <div className="ml-6 flex-1">
-                  <h2 className="text-lg font-semibold">{item.name}</h2>
+                  {item.itemType === "Product" ? (
+                    <h2 className="text-lg font-semibold">{item.name}</h2>
+                  ) : (
+                    <h2 className="capitalize text-lg font-semibold">{item.category}</h2>
+                  )}
                   {item.itemType === "Product" && (
                     <p className="text-gray-500">Quantity: {item.quantity}</p>
                   )}
@@ -113,13 +117,14 @@ const OrderSuccessPage = () => {
                   )}
                   {item.itemType === "Product" && (
                     <p className="flex justify-end text-gray-700 font-bold text-lg">
-                    ₹{item.price.toFixed(2)} x {item.quantity} = ₹{item.price.toFixed(2) * item.quantity}
-                  </p>
+                      ₹{item.price.toFixed(2)} x {item.quantity} = ₹
+                      {item.price.toFixed(2) * item.quantity}
+                    </p>
                   )}
                   {item.itemType === "Pet" && (
                     <p className="flex justify-end text-gray-700 font-bold text-lg">
-                    ₹{item.price.toFixed(2)}
-                  </p>
+                      ₹{item.price.toFixed(2)}
+                    </p>
                   )}
                 </div>
               </div>

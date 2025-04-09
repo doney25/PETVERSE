@@ -77,7 +77,7 @@ const CheckoutPage = () => {
       );
 
       if (orderResponse.status !== 201)
-        throw new Error("Failed to create order");
+        throw new Error("Failed to place order");
 
       enqueueSnackbar("Order placed successfully!", { variant: "success" });
 
