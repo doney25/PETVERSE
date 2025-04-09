@@ -3,18 +3,14 @@ import { Button } from "@/components/ui/button";
 import {
   ViewListIcon,
   ClipboardIcon,
-  HeartIcon,
   LogoutIcon,
   HomeIcon,
 } from "@heroicons/react/outline";
-import { Shield, Bell, BoxIcon } from "lucide-react";
+import { Shield, BoxIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "@/context/Authcontext";
-import PetListings from "@/pages/admin/Home";
 import ListProducts from "../admin/ListProducts";
 import ManageProducts from "../admin/ManageProducts";
-import ListingPage from "../seller/ListingPage";
-import PetListing from "../buyer/PetListings";
 import Home from "@/pages/admin/Home";
 import Orders from "../admin/Orders";
 
@@ -40,9 +36,14 @@ export default function Admin() {
 
           {/* Sidebar Menu */}
           <div className="space-y-4">
-            {[{ tab: "home", icon: HomeIcon, label: "Home" },
+            {[
+              { tab: "home", icon: HomeIcon, label: "Home" },
               { tab: "listProducts", icon: BoxIcon, label: "List Products" },
-              { tab: "manageProducts", icon: ViewListIcon, label: "Manage Product Listings" },
+              {
+                tab: "manageProducts",
+                icon: ViewListIcon,
+                label: "Manage Product Listings",
+              },
               { tab: "orders", icon: ClipboardIcon, label: "Orders" },
             ].map(({ tab, icon: Icon, label }) => (
               <Button
@@ -62,10 +63,7 @@ export default function Admin() {
         <div className="mt-auto">
           <Button
             className="w-full flex items-center gap-3 py-3 px-4 rounded-lg shadow-sm bg-red-600 text-white font-medium hover:bg-[#e57373] transition-all duration-300"
-            onClick={async () => {
-              await logout();
-              navigate("/");
-            }}
+            onClick={logout}
           >
             <LogoutIcon className="w-5 h-5" />
             Logout

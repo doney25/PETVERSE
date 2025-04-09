@@ -130,7 +130,7 @@ const Home = () => {
           transition={{ duration: 0.6, delay: 0.3 }}
         >
           <a
-            onClick={() => navigate('/signup')}
+            onClick={() => navigate("/signup")}
             className="bg-orange-600 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-orange-700 transition duration-300 hover:scale-105"
           >
             Get Started 🐶🐱
@@ -167,6 +167,19 @@ const Home = () => {
           </p>
           <p className="text-lg font-semibold text-gray-800 mt-1">
             📞 +91 9292929292
+          </p>
+        </div>
+
+        {/* Disclaimer Section */}
+        <div className="max-w-4xl mx-auto my-10 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 p-6 rounded-md shadow">
+          <h3 className="text-lg font-semibold mb-2">Disclaimer</h3>
+          <p className="text-sm leading-relaxed">
+            Petverse is a platform that connects buyers with independent pet
+            sellers. While we aim to list only verified sellers, we are not
+            responsible for any inaccuracies regarding pet breeds, health
+            status, or other attributes claimed by the sellers. Buyers are
+            encouraged to verify all details and health records before making a
+            purchase or adoption decision.
           </p>
         </div>
 

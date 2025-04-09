@@ -121,9 +121,19 @@ export default function PredictBreed() {
         </div>
 
         <div className="mt-10 text-center text-sm text-amber-700/80">
-          <p>Our pet detective AI has a 94% accuracy rate for purebred identification</p>
+          <p>Our pet detective AI has a 70-80% accuracy rate for purebred identification</p>
           <p className="mt-1">Clear, well-lit photos work best for accurate results</p>
         </div>
+
+        <div className="mt-6 text-xs text-center text-red-500 bg-red-100 p-4 rounded-lg border border-red-300">
+  <p className="font-semibold mb-1">Disclaimer:</p>
+  <p>
+    This breed detection model is trained on a limited dataset and may not be accurate for all pets. 
+    It is intended for general guidance only and does not guarantee precise breed identification. 
+    For official verification, please consult a licensed veterinarian or pet expert.
+  </p>
+</div>
+
       </div>
     </div>
   );

@@ -78,7 +78,7 @@ const OrderSuccessPage = () => {
             </p>
             <p className="text-gray-600">
               <span className="font-semibold">Shipped To:</span> {order.name},{" "}
-              {order.address}, {order.phone}
+              {order.address}, +91{order.phone}
             </p>
             <p className="text-gray-600">
               <span className="font-semibold">Payment Method:</span>{" "}

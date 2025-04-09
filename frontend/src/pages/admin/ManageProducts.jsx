@@ -3,12 +3,13 @@ import axios from "axios";
 import { Button } from "@/components/ui/button";
 import ImageUploader from "@/components/ImageUploader";
 import { enqueueSnackbar } from "notistack";
-import API_BASE_URL from "@/config.js"
+import API_BASE_URL from "@/config.js";
 
 const ManageProducts = () => {
   const [products, setProducts] = useState([]);
   const [editingProduct, setEditingProduct] = useState(null);
-  const sellerId = localStorage.getItem("userId"); // ✅ Get seller ID from local storage
+  const [deleteTarget, setDeleteTarget] = useState(null); // 🆕
+  const sellerId = localStorage.getItem("userId");
 
   useEffect(() => {
     fetchProducts();
@@ -23,20 +24,19 @@ const ManageProducts = () => {
     }
   };
 
-  // ✅ Delete a product (with seller verification)
-  const handleDelete = async (productId) => {
-    if (!window.confirm("Are you sure you want to delete this product?")) return;
-
+  // 🆕 Separated confirm logic from trigger
+  const confirmDelete = async () => {
     try {
-      await axios.delete(`${API_BASE_URL}/api/products/${productId}`, {
-        data: { sellerId }, // ✅ Send seller ID for verification
+      await axios.delete(`${API_BASE_URL}/api/products/${deleteTarget}`, {
+        data: { sellerId },
       });
-
-      setProducts(products.filter((product) => product._id !== productId));
-      alert("Product deleted successfully!");
+      setProducts(products.filter((product) => product._id !== deleteTarget));
+      enqueueSnackbar("Product deleted successfully!", { variant: "success" });
+      setDeleteTarget(null);
     } catch (error) {
       console.error("Error deleting product:", error);
-      alert("Failed to delete product.");
+      enqueueSnackbar("Failed to delete product.", { variant: "error" });
+      setDeleteTarget(null);
     }
   };
 
@@ -44,27 +44,25 @@ const ManageProducts = () => {
     setEditingProduct(product);
   };
 
-  // ✅ Update a product (with seller verification)
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(editingProduct)
       await axios.put(`${API_BASE_URL}/api/products/${editingProduct._id}`, {
-        ...editingProduct
+        ...editingProduct,
       });
-
       setEditingProduct(null);
       fetchProducts();
-      enqueueSnackbar("Product updated successfully!", {variant:"success"})
+      enqueueSnackbar("Product updated successfully!", { variant: "success" });
     } catch (error) {
       console.error("Error updating product:", error);
-      enqueueSnackbar("Error updating product.", {variant:"warning"})
+      enqueueSnackbar("Error updating product.", { variant: "warning" });
     }
   };
 
   return (
     <div className="mt-6 bg-white p-6 rounded-lg shadow-md">
       <h2 className="text-2xl font-semibold mb-4">Manage Your Products</h2>
+
       {products.length === 0 ? (
         <p className="text-gray-500">No products added yet.</p>
       ) : (
@@ -80,7 +78,7 @@ const ManageProducts = () => {
                 <Button className="bg-blue-500 text-white" onClick={() => handleEditClick(product)}>
                   Edit
                 </Button>
-                <Button className="bg-red-500 text-white" onClick={() => handleDelete(product._id)}>
+                <Button className="bg-red-500 text-white" onClick={() => setDeleteTarget(product._id)}> {/* 🆕 */}
                   Delete
                 </Button>
               </div>
@@ -89,7 +87,27 @@ const ManageProducts = () => {
         </div>
       )}
 
-      {/* Edit Product Modal */}
+      {/* 🆕 Delete Confirmation Modal */}
+      {deleteTarget && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-xl shadow-lg w-[90%] max-w-md text-center">
+            <h2 className="text-xl font-semibold mb-4 text-gray-800">
+              Are you sure you want to delete this product?
+            </h2>
+            <p className="text-gray-600 mb-6">This action cannot be undone.</p>
+            <div className="flex justify-center space-x-4">
+              <Button variant="destructive" onClick={confirmDelete}>
+                Yes, Delete
+              </Button>
+              <Button variant="secondary" onClick={() => setDeleteTarget(null)}>
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Product Modal (unchanged) */}
       {editingProduct && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded shadow-lg w-96">
