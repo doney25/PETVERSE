@@ -6,12 +6,6 @@ import ProductCard from "@/components/layout/ProductCard";
 import API_BASE_URL from "@/config.js";
 import Loading from "@/components/ui/Loading";
 
-const Loading = () => (
-  <div className="flex justify-center items-center h-96 w-full">
-    <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500 border-solid"></div>
-  </div>
-);
-
 const ProductListings = () => {
   const { category } = useParams();
   const [products, setProducts] = useState([]);
