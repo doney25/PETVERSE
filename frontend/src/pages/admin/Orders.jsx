@@ -28,7 +28,10 @@ const Orders = () => {
     axios
       .get(`${API_BASE_URL}/api/orders/get`)
       .then((res) => {
-        setOrders(res.data.order);
+        const sortedOrders = res.data.order.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setOrders(sortedOrders);
         setLoading(false);
       })
       .catch((error) => {
