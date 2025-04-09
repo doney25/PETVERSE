@@ -19,6 +19,7 @@ const ProductListings = () => {
     axios
       .get(`${API_BASE_URL}/api/products`)
       .then((res) => {
+        console.log(category)
         const filtered = category
           ? res.data.data.filter((product) => product.category === category)
           : res.data.data;
@@ -100,9 +101,9 @@ const ProductListings = () => {
             {loading ? (
               <Loading />
             ) : filteredProducts.length === 0 ? (
-              <p>No Pets found.</p>
+              <p>No Products found.</p>
             ) : (
-              <ProductCard pets={filteredProducts} className="mx-auto" />
+              <ProductCard products={filteredProducts} className="mx-auto" />
             )}
           </div>
         </div>
