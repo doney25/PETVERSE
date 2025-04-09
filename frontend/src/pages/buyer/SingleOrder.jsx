@@ -55,12 +55,12 @@ const SingleOrder = () => {
               {order.status !== "pending" ? (
                 <p>
                   <span className="font-semibold">Shipped To:</span>{" "}
-                  {order.name}, {order.address}, {order.phone}
+                  {order.name}, {order.address}, +91{order.phone}
                 </p>
               ) : (
                 <p>
                   <span className="font-semibold">Shipping To:</span>{" "}
-                  {order.name}, {order.address}, {order.phone}
+                  {order.name}, {order.address}, +91{order.phone}
                 </p>
               )}
             </p>
@@ -88,7 +88,12 @@ const SingleOrder = () => {
                   className="w-28 h-28 object-cover rounded-lg"
                 />
                 <div className="ml-6 flex-1">
-                  <h2 className="text-lg font-semibold">{item.name}</h2>
+                  {item.itemType === "Product" && (
+                    <h2 className="text-lg font-semibold">{item.name}</h2>
+                  )}
+                  {item.itemType === "Pet" && (
+                    <h2 className="capitalize text-lg font-semibold">{item.category}</h2>
+                  )}
                   {item.itemType === "Product" && (
                     <p className="text-gray-500">Quantity: {item.quantity}</p>
                   )}

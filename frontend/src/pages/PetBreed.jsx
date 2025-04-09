@@ -121,7 +121,7 @@ export default function PredictBreed() {
         </div>
 
         <div className="mt-10 text-center text-sm text-amber-700/80">
-          <p>Our pet detective AI has a 94% accuracy rate for purebred identification</p>
+          <p>Our pet detective AI has a 70-80% accuracy rate for purebred identification</p>
           <p className="mt-1">Clear, well-lit photos work best for accurate results</p>
         </div>
       </div>

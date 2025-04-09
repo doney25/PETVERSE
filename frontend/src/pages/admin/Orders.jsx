@@ -97,7 +97,7 @@ const Orders = () => {
                       <strong>Name:</strong> {order.name}
                     </p>
                     <p>
-                      <strong>Phone:</strong> {order.phone}
+                      <strong>Phone:</strong> +91{order.phone}
                     </p>
                     <p className="capitalize">
                       <strong>Address:</strong> {order.address}
