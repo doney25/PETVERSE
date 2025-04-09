@@ -22,6 +22,8 @@ import SingleOrder from "./pages/buyer/SingleOrder";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
 import BuyNow from "./pages/buyer/BuyNow";
+import ForgotPassword from "./pages/auth/ForgotPassword"; 
+import ResetPassword from "./pages/auth/Resetpassword";
 
 
 function App() {
@@ -32,7 +34,8 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/predict-breed" element={<PredictBreed />} /> {/* New Route */}
-
+      <Route path="/forgotpassword" element={<ForgotPassword />} /> {/* Forgot Password Route */}
+      <Route path="/reset-password/:resetToken" element={<ResetPassword />} /> {/* Reset Password Route */}
       {/* Buyer Routes */}
       <Route path="/aboutus" element={<AboutUs />} />
       <Route path="/contactus" element={<ContactUs />} />

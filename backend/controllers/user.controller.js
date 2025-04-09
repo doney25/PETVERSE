@@ -3,6 +3,8 @@ import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 import { supabase } from "../utils/supabaseClient.js";
 import dotenv from "dotenv";
+import crypto from "crypto";
+import nodemailer from "nodemailer";
 
 dotenv.config();
 
@@ -147,6 +149,94 @@ const logout = (req, res) => {
     success: true,
     message: "Logged out successfully!",
   });
+};
+
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Check if the user exists
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User with this email does not exist." });
+    }
+
+    // Generate a reset token
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const resetTokenHash = crypto.createHash("sha256").update(resetToken).digest("hex");
+
+    // Set the reset token and expiration in the user's document
+    user.resetPasswordToken = resetTokenHash;
+    user.resetPasswordExpires = Date.now() + 3600000; // Token valid for 1 hour
+    await user.save();
+
+    // Send the reset link via email
+    const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+    const transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const mailOptions = {
+      to: user.email,
+      from: process.env.EMAIL_USER,
+      subject: "Password Reset Request",
+      html: `
+        <p>You requested a password reset. Click the link below to reset your password:</p>
+        <a href="${resetUrl}" target="_blank">${resetUrl}</a>
+        <p>If you did not request this, please ignore this email.</p>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({ message: "Password reset link sent to your email." });
+  } catch (error) {
+    console.error("Error in forgotPassword:", error);
+    res.status(500).json({ message: "Error sending password reset link." });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const { resetToken, password } = req.body;
+
+    // Hash the reset token to match the stored hash
+    const resetTokenHash = crypto.createHash("sha256").update(resetToken).digest("hex");
+
+    // Find the user with the matching reset token and check if it's still valid
+    const user = await User.findOne({
+      resetPasswordToken: resetTokenHash,
+      resetPasswordExpires: { $gt: Date.now() }, // Ensure the token is not expired
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid or expired reset token." });
+    }
+     // Check if the new password is the same as the current password
+     const isSamePassword = await bcrypt.compare(password, user.password);
+     if (isSamePassword) {
+       return res.status(400).json({ message: "New password cannot be the same as the current password." });
+     }
+
+    // Hash the new password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Update the user's password and clear the reset token fields
+    user.password = hashedPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.status(200).json({ message: "Password reset successfully. You can now log in." });
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    res.status(500).json({ message: "Error resetting password." });
+  }
 };
 
 export { signUp, confirmEmail, validate_role, verify_breed, login, logout };

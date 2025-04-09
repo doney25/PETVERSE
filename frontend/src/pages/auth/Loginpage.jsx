@@ -149,19 +149,25 @@ const LoginPage = () => {
                 </Button>
               </form>
 
-              <p className="text-center text-gray-500 mt-4">
-                Don't have an account?{" "}
-                <span
-                  onClick={() => navigate("/signup")}
-                  className="text-blue-600 hover:underline cursor-pointer"
-                >
-                  Sign up
-                </span>
-              </p>
-            </div>
+          <div className="flex justify-between items-center mt-4">
+            <p className="text-gray-500">
+              Don't have an account?{" "}
+              <span
+                onClick={() => navigate("/signup")}
+                className="text-blue-600 hover:underline cursor-pointer"
+              >
+                Sign up
+              </span>
+            </p>
+            <p
+              onClick={() => navigate("/forgotpassword")}
+              className="text-blue-600 hover:underline cursor-pointer"
+            >
+              Forgot Password?
+            </p>
           </div>
-        </>
-      )}
+        </div>
+      </div>
     </>
   );
 };
