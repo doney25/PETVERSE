@@ -89,7 +89,7 @@ const PetDetails = () => {
             {/* Pet Info Section */}
             <div className="w-full md:w-1/2">
               <CardHeader>
-                <CardTitle className="text-3xl font-bold">{pet.name}</CardTitle>
+                <CardTitle className="text-3xl font-bold">{pet.breed}</CardTitle>
               </CardHeader>
 
               <CardContent className="space-y-4">
@@ -130,10 +130,11 @@ const PetDetails = () => {
                     <Button
                       size="sm"
                       className="mt-2 flex items-center gap-2"
-                      onClick={() =>
-                        navigate(`/shop/chat/${buyerId}/${pet.sellerId}`, {
+                      onClick={() =>{
+                        navigate(`/shop/chat/${buyerId}/${pet.sellerId._id}`, {
                           state: { seller: pet.seller },
                         })
+                      }
                       }
                     >
                       <MessageCircle size={16} /> Contact Seller

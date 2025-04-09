@@ -49,7 +49,7 @@ const BuyerChatList = () => {
                     <User className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="text-lg font-semibold text-gray-800">
+                    <p className="capitalize text-lg font-semibold text-gray-800">
                       {chat.sellerName}
                     </p>
                   </div>

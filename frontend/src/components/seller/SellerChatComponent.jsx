@@ -55,7 +55,7 @@ const SellerChatComponent = ({ buyerId, sellerId, onBack, buyerName }) => {
 
       <Card className="border shadow-md">
         <CardHeader className="border-b">
-          <CardTitle className="text-xl">Chat with {buyerName}</CardTitle>
+        <CardTitle>Chat with <span className="capitalize">{buyerName}</span></CardTitle>
         </CardHeader>
 
         <CardContent className="h-96 overflow-y-auto px-4 py-2 flex flex-col space-y-2 bg-gray-50">
