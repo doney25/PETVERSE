@@ -107,7 +107,7 @@ const OrderSuccessPage = () => {
                   {item.itemType === "Product" ? (
                     <h2 className="text-lg font-semibold">{item.name}</h2>
                   ) : (
-                    <h2 className="text-lg font-semibold">{item.category}</h2>
+                    <h2 className="capitalize text-lg font-semibold">{item.category}</h2>
                   )}
                   {item.itemType === "Product" && (
                     <p className="text-gray-500">Quantity: {item.quantity}</p>
