@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import API_BASE_URL from "@/config";
 import axios from "axios";
+import { enqueueSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -21,7 +22,9 @@ const MyOrdersPage = () => {
         const filteredOrders = res.data.order.filter(
           (order) => order.userId === userId
         );
-        setOrders(filteredOrders);
+        setOrders(filteredOrders.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        ));
       } catch (err) {
         console.error("Error fetching orders:", err);
       } finally {
@@ -41,7 +44,7 @@ const MyOrdersPage = () => {
       await axios.post(`${API_BASE_URL}/api/orders/rate/${orderId}`, {
         rating: ratingValues[orderId],
       });
-      alert("Rating submitted!");
+      enqueueSnackbar("Rating submitted successfully!", {variant: "success"})
 
       const updatedOrders = orders.map((order) =>
         order._id === orderId
@@ -50,7 +53,7 @@ const MyOrdersPage = () => {
       );
       setOrders(updatedOrders);
     } catch (err) {
-      alert("Error submitting rating.");
+      enqueueSnackbar("Error submitting rating.s", {variant: "error"})
     }
   };
 
