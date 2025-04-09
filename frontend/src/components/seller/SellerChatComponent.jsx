@@ -55,7 +55,7 @@ const SellerChatComponent = ({ buyerId, sellerId, onBack, buyerName }) => {
 
       <Card className="border shadow-md">
         <CardHeader className="border-b">
-          <CardTitle className="text-xl">Chat with {buyerName}</CardTitle>
+        <CardTitle>Chat with <span className="capitalize">{buyerName}</span></CardTitle>
         </CardHeader>
 
         <CardContent className="h-96 overflow-y-auto px-4 py-2 flex flex-col space-y-2 bg-gray-50">
@@ -86,22 +86,25 @@ const SellerChatComponent = ({ buyerId, sellerId, onBack, buyerName }) => {
           <div ref={chatEndRef} />
         </CardContent>
 
-        <div className="p-4 border-t flex items-center gap-3 bg-white">
-          <Input
-            type="text"
-            className="flex-1"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Type a message..."
-            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-          />
-          <Button
-            onClick={sendMessage}
-            className="p-3 rounded-xl"
-            disabled={!input.trim()}
+        <div className="p-4 border-t flex items-center gap-2">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              sendMessage();
+            }}
+            className="flex items-center gap-2 w-full"
           >
-            <Send className="w-4 h-4" />
-          </Button>
+            <Input
+              type="text"
+              className="flex-1 w-full"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Type a message..."
+            />
+            <Button type="submit">
+              <Send />
+            </Button>
+          </form>
         </div>
       </Card>
     </div>

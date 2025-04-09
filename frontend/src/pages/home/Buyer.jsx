@@ -4,14 +4,7 @@ import Header from "@/components/layout/Header";
 import axios from "axios";
 import CarouselList from "@/components/buyer/CarouselList";
 import Section from "@/components/buyer/Section";
-import {
-  Dog,
-  CatIcon,
-  Bone,
-  Scissors,
-  Shapes,
-  Search,
-} from "lucide-react";
+import { Dog, CatIcon, Bone, Scissors, Shapes, Search } from "lucide-react";
 import API_BASE_URL from "@/config.js";
 
 const Buyer = () => {

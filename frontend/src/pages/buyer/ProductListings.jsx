@@ -3,7 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Header from "@/components/layout/Header";
 import ProductCard from "@/components/layout/ProductCard";
-import API_BASE_URL from "@/config.js"
+import API_BASE_URL from "@/config.js";
+import Loading from "@/components/ui/Loading";
 
 const ProductListings = () => {
   const { category } = useParams();
@@ -18,6 +19,7 @@ const ProductListings = () => {
     axios
       .get(`${API_BASE_URL}/api/products`)
       .then((res) => {
+        console.log(category)
         const filtered = category
           ? res.data.data.filter((product) => product.category === category)
           : res.data.data;
@@ -95,11 +97,13 @@ const ProductListings = () => {
           </div>
 
           {/* Product Listings */}
-          <div className="flex-grow grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 items-start">
             {loading ? (
-              <p>Loading...</p>
+              <Loading />
+            ) : filteredProducts.length === 0 ? (
+              <p>No Products found.</p>
             ) : (
-              <ProductCard products={filteredProducts} />
+              <ProductCard products={filteredProducts} className="mx-auto" />
             )}
           </div>
         </div>

@@ -30,9 +30,7 @@ export default function Seller() {
           {/* Sidebar Header */}
           <div className="flex items-center space-x-2 mb-6">
             <Store className="w-6 h-6" />
-            <span className="text-lg font-semibold">
-              Seller Dashboard
-            </span>
+            <span className="text-lg font-semibold">Seller Dashboard</span>
           </div>
 
           {/* Sidebar Menu */}
@@ -60,10 +58,7 @@ export default function Seller() {
         <div className="mt-auto">
           <Button
             className="w-full flex items-center gap-3 py-3 px-4 rounded-lg shadow-sm bg-red-600 text-white font-medium hover:bg-[#e57373] transition-all duration-300"
-            onClick={async () => {
-              await logout();
-              navigate("/");
-            }}
+            onClick={logout}
           >
             <LogoutIcon className="w-5 h-5" />
             Logout

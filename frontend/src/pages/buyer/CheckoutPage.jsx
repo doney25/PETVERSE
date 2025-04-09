@@ -65,9 +65,7 @@ const CheckoutPage = () => {
     } 
     const fullAddress = `${address1}, ${address2}, ${city}, ${state}, ${pincode}`;
 
-    if (
-      !fullAddress
-    ) {
+    if (!fullAddress) {
       return enqueueSnackbar("Enter a valid address", {
         variant: "error",
       });
@@ -89,7 +87,7 @@ const CheckoutPage = () => {
       );
 
       if (orderResponse.status !== 201)
-        throw new Error("Failed to create order");
+        throw new Error("Failed to place order");
 
       enqueueSnackbar("Order placed successfully!", { variant: "success" });
 
@@ -129,16 +127,22 @@ const CheckoutPage = () => {
               </div>
               <div className="flex flex-col space-y-2">
                 <Label>Phone Number</Label>
-                <Input
-                  type="text"
-                  placeholder="Enter phone number"
-                  maxLength={10}
-                  onChange={(e) => {
-                    const value = e.target.value.replace(/\D/g, "");
-                    e.target.value = value.slice(0, 10);
-                    setPhone(e.target.value);
-                  }}
-                />
+                <div className="flex items-center border border-input rounded-md overflow-hidden bg-white focus-within:ring-2 focus-within:ring-blue-500">
+                  <span className="px-3 py-2 text-gray-700 bg-gray-100 font-medium border-r border-gray-300 select-none text-sm">
+                    +91
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="Enter phone number"
+                    maxLength={10}
+                    className="flex-1 px-3 py-2 text-sm text-gray-800 placeholder-gray-400 focus:outline-none"
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, "");
+                      e.target.value = value.slice(0, 10);
+                      setPhone(e.target.value);
+                    }}
+                  />
+                </div>
               </div>
               <div className="flex flex-col space-y-2">
                 <Label>Flat, House no., Building, Company, Apartment</Label>

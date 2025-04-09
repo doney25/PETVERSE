@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Send } from "lucide-react"
+import { Send } from "lucide-react";
 import API_BASE_URL from "@/config";
 
 const socket = io(API_BASE_URL);
@@ -45,7 +45,12 @@ const BuyerChatComponent = () => {
 
   const sendMessage = () => {
     if (input.trim() === "") return;
-    socket.emit("send_message", { buyerId, sellerId, sender: buyerId, message: input });
+    socket.emit("send_message", {
+      buyerId,
+      sellerId,
+      sender: buyerId,
+      message: input,
+    });
     setInput("");
   };
 
@@ -55,10 +60,9 @@ const BuyerChatComponent = () => {
         ← Back
       </Button>
 
-
       <Card>
         <CardHeader>
-          <CardTitle>Chat with {sellerName}</CardTitle>
+          <CardTitle>Chat with <span className="capitalize">{sellerName}</span></CardTitle>
         </CardHeader>
         <CardContent className="h-96 overflow-y-auto border p-4 flex flex-col">
           {loading ? (
@@ -67,27 +71,41 @@ const BuyerChatComponent = () => {
             messages.map((msg, index) => (
               <div
                 key={index}
-                className={`p-2 rounded-lg max-w-xs ${
-                  msg.sender === buyerId ? "bg-blue-500 text-white self-end" : "bg-gray-300 text-black self-start"
+                className={`p-2 my-2 rounded-lg max-w-xs ${
+                  msg.sender === buyerId
+                    ? "bg-blue-500 text-white self-end"
+                    : "bg-gray-300 text-black self-start"
                 }`}
               >
                 {msg.message}
               </div>
             ))
           ) : (
-            <p className="text-gray-500">No messages yet. Start the conversation!</p>
+            <p className="text-gray-500">
+              No messages yet. Start the conversation!
+            </p>
           )}
           <div ref={chatEndRef} />
         </CardContent>
         <div className="p-4 border-t flex items-center gap-2">
-          <Input
-            type="text"
-            className="flex-1"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Type a message..."
-          />
-          <Button onClick={sendMessage}><Send /></Button>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              sendMessage();
+            }}
+            className="flex items-center gap-2 w-full"
+          >
+            <Input
+              type="text"
+              className="flex-1 w-full"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Type a message..."
+            />
+            <Button type="submit">
+              <Send />
+            </Button>
+          </form>
         </div>
       </Card>
     </div>
