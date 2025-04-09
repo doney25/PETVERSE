@@ -104,22 +104,28 @@ const OrderSuccessPage = () => {
                   className="w-28 h-28 object-cover rounded-lg"
                 />
                 <div className="ml-6 flex-1">
+                  {item.itemType === "Product" ? (
+                    <h2 className="text-lg font-semibold">{item.name}</h2>
+                  ) : (
+                    <h2 className="text-lg font-semibold">{item.breed}</h2>
+                  )}
                   <h2 className="text-lg font-semibold">{item.name}</h2>
                   {item.itemType === "Product" && (
                     <p className="text-gray-500">Quantity: {item.quantity}</p>
                   )}
                   {item.itemType === "Pet" && (
-                    <p className="text-gray-500">Breed: {item.breed}</p>
+                    <p className="text-gray-500">Breed: {item.itemType}</p>
                   )}
                   {item.itemType === "Product" && (
                     <p className="flex justify-end text-gray-700 font-bold text-lg">
-                    ₹{item.price.toFixed(2)} x {item.quantity} = ₹{item.price.toFixed(2) * item.quantity}
-                  </p>
+                      ₹{item.price.toFixed(2)} x {item.quantity} = ₹
+                      {item.price.toFixed(2) * item.quantity}
+                    </p>
                   )}
                   {item.itemType === "Pet" && (
                     <p className="flex justify-end text-gray-700 font-bold text-lg">
-                    ₹{item.price.toFixed(2)}
-                  </p>
+                      ₹{item.price.toFixed(2)}
+                    </p>
                   )}
                 </div>
               </div>
